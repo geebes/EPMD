@@ -5,7 +5,7 @@ Evolutionary Plankton Metacommunity Dynamics (EPMD) is MATLAB software package t
 
 Created by Ben Ward (b.a.ward@soton.ac.uk) The code is **unpublished** and very much **unfinished!**
 
-NOTE: The full model (including environmental forcing data) can only be downloaded with Git LFS (Git LFS)
+NOTE: The full model (including environmental forcing data) can only be downloaded with Git LFS (https://git-lfs.github.com)
 
 
   
