@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2017)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: EPMD.aux
+The style file: /Users/baw103/Latex/elsart-harv.bst.bst
+Database file #1: /Users/baw103/GoogleDrive/biblio1.bib
+You've used 8 entries,
+            2825 wiz_defined-function locations,
+            697 strings with 5849 characters,
+and the built_in function-call counts, 4146 in all, are:
+= -- 434
+> -- 149
+< -- 5
++ -- 64
+- -- 48
+* -- 356
+:= -- 719
+add.period$ -- 24
+call.type$ -- 8
+change.case$ -- 55
+chr.to.int$ -- 8
+cite$ -- 8
+duplicate$ -- 138
+empty$ -- 325
+format.name$ -- 70
+if$ -- 855
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 9
+newline$ -- 31
+num.names$ -- 32
+pop$ -- 47
+preamble$ -- 1
+purify$ -- 48
+quote$ -- 0
+skip$ -- 109
+stack$ -- 0
+substring$ -- 393
+swap$ -- 15
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 69
+warning$ -- 0
+while$ -- 31
+width$ -- 0
+write$ -- 93
