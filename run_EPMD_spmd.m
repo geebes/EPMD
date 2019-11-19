@@ -17,8 +17,7 @@ run_options.annual_cycle    = 'static';     % 'static' or 'seasonal'
 % (this will be overwritten if using depth-integrated biomass-weighted transport)
 run_options.DARWIN_pop      = 'X01'; 
 
-run_options.selection       = true;
-run_options.save_data       = false;
+run_options.save_data       = true;
 
 run_options.nyear           = 100;          
 run_options.nday        	= 365;          

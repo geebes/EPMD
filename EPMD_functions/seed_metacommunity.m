@@ -51,7 +51,8 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             
             run_options.resident  = false;
             run_options.solver    = 'serial';	% serial or parallel
-            run_options.mutation  = 'true';	
+            run_options.mutation  = true;	
+            run_options.selection = true;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'equal'
@@ -60,7 +61,8 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             
             run_options.resident  = false;
             run_options.solver    = 'serial';	% serial or parallel
-            run_options.mutation  = 'true';	
+            run_options.mutation  = true;	
+            run_options.selection = true;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'neutral'
@@ -102,6 +104,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.T_opt     = repmat(T_opt,1,npopn); % replicate T_opt for ancestral species
             run_options.nlineages = run_options.npopn;
             run_options.mutation  = true;
+            run_options.selection = true;
             run_options.solver    = 'parallel';	% serial or parallel
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
