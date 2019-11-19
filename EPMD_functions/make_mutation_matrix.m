@@ -18,8 +18,6 @@ function [run_options] = make_mutation_matrix(run_options);
 
     mutmat_I=mutmat+speye(size(mutmat));
 
-
-
     run_options.mutmat_I = mutmat_I;
     run_options.mutmat   = mutmat;
 

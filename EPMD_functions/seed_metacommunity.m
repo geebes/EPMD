@@ -16,22 +16,20 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
         
     switch run_options.annual_cycle
         case 'static'
-                ocean.forcing_temp       = repmat(mean(ocean.theta,2),1,run_options.nday);
-                ocean.forcing_PCapacity  = repmat(mean(run_options.PCapacity,2),1,run_options.nday);
+            ocean.forcing_temp       = repmat(mean(ocean.theta,2),1,run_options.nday);
+            ocean.forcing_PCapacity  = repmat(mean(run_options.PCapacity,2),1,run_options.nday);
         case 'seasonal'
-            ocean.forcing_temp        = ...
-                interp1(0:12,[ocean.theta           ocean.theta(:,1)          ]',linspace(0,12,run_options.nday))';
-            ocean.forcing_PCapacity   = ...
-                interp1(0:12,[run_options.PCapacity run_options.PCapacity(:,1)]',linspace(0,12,run_options.nday))';
+            ocean.forcing_temp        = interp1(0:12,[ocean.theta ocean.theta(:,1)]',linspace(0,12,run_options.nday))';
+            ocean.forcing_PCapacity   = interp1(0:12,[run_options.PCapacity run_options.PCapacity(:,1)]',linspace(0,12,run_options.nday))';
     end
     
     T_opt       = run_options.T_opt;
     delta_Topt  = run_options.delta_Topt;
     npopn       = run_options.npopn;
-    nancestral  = run_options.nancestral;
     K           = ocean.sample_points;
     B           = ocean.B;
     
+    run_options.nlineages	= 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -44,7 +42,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             % bin  temperature according to T_opt range
             [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
             % initialise EiE matrix
-            x=zeros(length(B),npopn.*nancestral);
+            x=zeros(length(B),npopn);
             % find matching seed locations in EiE matrix
             iseed=sub2ind(size(x),ocean.Ib,bin);
             % set type abundance of best adapted type to 1 in each location
@@ -52,6 +50,8 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             x=sparse(x);
             
             run_options.resident  = false;
+            run_options.solver    = 'serial';	% serial or parallel
+            run_options.mutation  = 'true';	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'equal'
@@ -59,6 +59,8 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             x=ones(length(B),npopn)./npopn;
             
             run_options.resident  = false;
+            run_options.solver    = 'serial';	% serial or parallel
+            run_options.mutation  = 'true';	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'neutral'
@@ -74,14 +76,33 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.T_opt     = zeros(1,run_options.npopn);
             run_options.selection = false;
             run_options.mutation  = false;
-            run_options.rel_s     = 1;
-            
             run_options.resident  = true;
+            run_options.rel_s     = 1;
+            run_options.solver    = 'parallel';	% serial or parallel
+            
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%         case 'lineages'
-%             T_opt2=repmat(T_opt,1,nxc); % replicate T_opt for ancestral species
-%             T_opt2=T_opt2(:)'; % reshape to row vector
+        case 'lineages' % set locally addapted phenotype as x=1 in each location
+            % bin  temperature according to T_opt range
+            [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
+            % initialise EiE matrix
+            x1=sparse(length(B),npopn);
+            % find matching seed locations in EiE matrix
+            iseed=sub2ind(size(x1),ocean.Ib,bin);
+            % set type abundance of best adapted type to 1 in each location
+            x1(iseed)=1;
+            
+            ilin    = (1:npopn);
+            linindx = (ilin-1).*npopn + ilin;
+            
+            x=sparse(length(B),npopn^2);
+            x(:,linindx) = x1;
+            
+            run_options.resident  = false;
+            run_options.T_opt     = repmat(T_opt,1,npopn); % replicate T_opt for ancestral species
+            run_options.nlineages = run_options.npopn;
+            run_options.mutation  = true;
+            run_options.solver    = 'parallel';	% serial or parallel
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     end
@@ -89,7 +110,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+    
     run_options.nxr =size(x,1); % n grid cells
     run_options.nxc =size(x,2); % n phenotypes
     

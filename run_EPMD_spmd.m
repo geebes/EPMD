@@ -9,8 +9,7 @@ addpath EPMD_functions
 
 % set options
 run_options.TM_scheme       = 'GUD_X01_weighted_transport'; % 'surface_transport' or 'GUD_X01_weighted_transport', or similar
-run_options.solver          = 'serial';	% serial or parallel
-run_options.seed_dist       = 'preadapted';    % 'preadapted', 'equal', 'singleancestor', 'neutral', 'mutation_dispersal'
+run_options.seed_dist       = 'lineages';    % 'preadapted', 'equal', 'lineages', 'neutral'
 run_options.trajectory      = 'stochastic'; % 'stochastic' or 'deterministic'
 run_options.annual_cycle    = 'static';     % 'static' or 'seasonal'
 
@@ -18,17 +17,13 @@ run_options.annual_cycle    = 'static';     % 'static' or 'seasonal'
 % (this will be overwritten if using depth-integrated biomass-weighted transport)
 run_options.DARWIN_pop      = 'X01'; 
 
-run_options.mutation        = true;      	% allow mutations
 run_options.selection       = true;
-run_options.save_data       = true;
+run_options.save_data       = false;
 
 run_options.nyear           = 100;          
 run_options.nday        	= 365;          
 
-run_options.nlevel          = 1;            % number of levels inhabite
-
 % N.B. not applicable for neutral model
-run_options.nancestral      = 1;           % number of distinct ancestral lineages
 run_options.npopn           = 77;           % number of phenotypes
 run_options.w               = 6;           	% Niche breadth
 run_options.sigma_m         = 0.1;
@@ -74,7 +69,7 @@ for yr=1:run_options.nyear
 
             if run_options.selection
                 % CALCULATE SELECTION COEFFICIENT (s) AS FUNCTION OF TEMPERATURE AND PREFERENCE (s<=1)
-                s = exp(-((ocean.forcing_temp(:,dy)-run_options.T_opt)./run_options.w).^2);  % Seasonal Temperature limitation
+                s = exp(-((ocean.forcing_temp(:,dy)-T_opt)./run_options.w).^2);  % Seasonal Temperature limitation
             else
                 s = 1;
             end
@@ -84,7 +79,7 @@ for yr=1:run_options.nyear
 
                 if run_options.mutation
                     % TRAIT DIFFUSION
-                    dxdt = x * run_options.mutmat;   % Redistribute mutants
+                    dxdt = x * mutmat;   % Redistribute mutants
                     x    = x + dxdt;
                 end
                 
@@ -163,8 +158,10 @@ for yr=1:run_options.nyear
     run_options.t_occupied   = gather(t_occD);
     
     disp('----------------------------------')
-    [cmat] = write_output(yr,xG,tseries_xG,run_options,cmat);
-    disp('----------------------------------')
+    if run_options.save_data
+        [cmat] = write_output(yr,xG,tseries_xG,run_options,cmat);
+        disp('----------------------------------')
+    end
 end % end year loop
 
 %%

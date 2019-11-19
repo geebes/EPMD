@@ -40,10 +40,10 @@ clf
 mean_abundance = mean(ocean.forcing_PCapacity,2);
 [ax] = plot_vector(mean_abundance,'log',mygrid,ocean);
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
-caxis([0 24]);
+caxis([0 25]);
 % th=title(['Prochlorococcus']);
 ch=colorbar;
-% ch.TickLabels={'10^{0}','10^{2}','10^{4}','10^{6}','10^{8}','10^{10}','10^{12}'};
+ch.TickLabels={'10^{0}','10^{5}','10^{10}','10^{15}','10^{20}','10^{25}'};
 drawnow
 
 sname=[pathname input_filename '/abundance.png'];
