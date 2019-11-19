@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.4.6)  6 NOV 2019 11:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.4.6)  19 NOV 2019 14:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -180,6 +180,12 @@ LaTeX Info: Redefining \cite on input line 694.
 )
 (./EPMD_0.2.aux
 
+LaTeX Warning: Label `Schematic' multiply defined.
+
+
+LaTeX Warning: Label `Schematic' multiply defined.
+
+
 LaTeX Warning: Label ` ' multiply defined.
 
 
@@ -342,106 +348,106 @@ ne 49.
 [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<../Figures/Schematic.png, id=13, 590.9277pt x 566.3559pt>
+File: ../Figures/Schematic.png Graphic file (type png)
 
-Package natbib Warning: Citation `Khatiwala:2005' on page 2 undefined on input 
-line 60.
+<use ../Figures/Schematic.png>
+Package pdftex.def Info: ../Figures/Schematic.png used on input line 59.
+(pdftex.def)             Requested size: 334.60422pt x 320.7003pt.
 
+<../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_times
+_map.png, id=14, 429.5247pt x 208.3785pt>
+File: ../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_
+times_map.png Graphic file (type png)
 
-Package natbib Warning: Citation `Khatiwala:2005' on page 2 undefined on input 
-line 60.
+<use ../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_t
+imes_map.png>
+Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_surface_tr
+ansport/connection_times_map.png used on input line 68.
+(pdftex.def)             Requested size: 209.12683pt x 101.45453pt.
 
-[2] <figures/Abundance_GUD_01.png, id=18, 5186.37625pt x 2605.735pt>
-File: figures/Abundance_GUD_01.png Graphic file (type png)
+<../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_time
+s_map.png, id=15, 429.5247pt x 208.3785pt>
+File: ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection
+_times_map.png Graphic file (type png)
 
-<use figures/Abundance_GUD_01.png>
-Package pdftex.def Info: figures/Abundance_GUD_01.png used on input line 146.
-(pdftex.def)             Requested size: 198.66985pt x 99.79825pt.
+<use ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_
+times_map.png>
+Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_weighted_t
+ransport/connection_times_map.png used on input line 72.
+(pdftex.def)             Requested size: 209.12683pt x 101.45453pt.
 
-<figures/connectivity_GUD_C01.png, id=19, 5042.84pt x 2381.89874pt>
-File: figures/connectivity_GUD_C01.png Graphic file (type png)
+<../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_time
+s_map.png, id=16, 429.5247pt x 208.3785pt>
+File: ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection
+_times_map.png Graphic file (type png)
 
-<use figures/connectivity_GUD_C01.png>
-Package pdftex.def Info: figures/connectivity_GUD_C01.png used on input line 15
-1.
-(pdftex.def)             Requested size: 198.66985pt x 93.80592pt.
+<use ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_
+times_map.png>
+Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X17_weighted_t
+ransport/connection_times_map.png used on input line 76.
+(pdftex.def)             Requested size: 209.12683pt x 101.45453pt.
+File: ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection
+_times_map.png Graphic file (type png)
 
-<figures/Abundance_GUD_19.png, id=20, 2456.17625pt x 1200.485pt>
-File: figures/Abundance_GUD_19.png Graphic file (type png)
+<use ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_
+times_map.png>
+Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X17_weighted_t
+ransport/connection_times_map.png used on input line 80.
+(pdftex.def)             Requested size: 209.12683pt x 101.45453pt.
 
-<use figures/Abundance_GUD_19.png>
-Package pdftex.def Info: figures/Abundance_GUD_19.png used on input line 156.
-(pdftex.def)             Requested size: 198.66985pt x 97.08488pt.
-
-<figures/connectivity_GUD_C19.png, id=21, 7355.48pt x 3546.24875pt>
-File: figures/connectivity_GUD_C19.png Graphic file (type png)
-
-<use figures/connectivity_GUD_C19.png>
-Package pdftex.def Info: figures/connectivity_GUD_C19.png used on input line 16
-1.
-(pdftex.def)             Requested size: 198.66985pt x 95.77705pt.
-
-Overfull \hbox (2.61107pt too wide) in paragraph at lines 144--164
+Overfull \hbox (2.61107pt too wide) in paragraph at lines 67--83
 []$[]$ $[]$
  []
 
 
-Overfull \hbox (2.61107pt too wide) in paragraph at lines 144--164
+Overfull \hbox (2.61107pt too wide) in paragraph at lines 67--83
 []$ $[]$ 
  []
 
-[3]
-<figures/Connectivity_cluster_GUD_C01.png, id=30, 1968.35374pt x 4059.165pt>
-File: figures/Connectivity_cluster_GUD_C01.png Graphic file (type png)
 
-<use figures/Connectivity_cluster_GUD_C01.png>
-Package pdftex.def Info: figures/Connectivity_cluster_GUD_C01.png used on input
- line 176.
-(pdftex.def)             Requested size: 198.66985pt x 409.65656pt.
+<../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_matr
+ix.png, id=17, 497.2176pt x 566.5968pt>
+File: ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection
+_matrix.png Graphic file (type png)
 
-<figures/Connectivity_cluster_GUD_C19.png, id=31, 1968.35374pt x 4059.165pt>
-File: figures/Connectivity_cluster_GUD_C19.png Graphic file (type png)
+<use ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_
+matrix.png>
+Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_weighted_t
+ransport/connection_matrix.png used on input line 91.
+(pdftex.def)             Requested size: 209.12683pt x 238.3062pt.
 
-<use figures/Connectivity_cluster_GUD_C19.png>
-Package pdftex.def Info: figures/Connectivity_cluster_GUD_C19.png used on input
- line 181.
-(pdftex.def)             Requested size: 198.66985pt x 409.65656pt.
+<../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_matr
+ix.png, id=18, 497.2176pt x 566.5968pt>
+File: ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection
+_matrix.png Graphic file (type png)
 
-Overfull \hbox (2.61107pt too wide) in paragraph at lines 174--183
+<use ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_
+matrix.png>
+Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X17_weighted_t
+ransport/connection_matrix.png used on input line 95.
+(pdftex.def)             Requested size: 209.12683pt x 238.3062pt.
+
+Overfull \hbox (2.61107pt too wide) in paragraph at lines 90--98
 []$[]$ $[]$ 
  []
 
-<figures/Connectivity_maps_GUD_C01.png, id=32, 4558.02875pt x 4423.52625pt>
-File: figures/Connectivity_maps_GUD_C01.png Graphic file (type png)
+[2 <../Figures/Schematic.png (PNG copy)>] [3 <../Output/neutral_stochastic_stat
+ic_GUD_X01_surface_transport/connection_times_map.png (PNG copy)> <../Output/ne
+utral_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png (PN
+G copy)> <../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connec
+tion_times_map.png (PNG copy)> <../Output/neutral_stochastic_static_GUD_X01_wei
+ghted_transport/connection_matrix.png (PNG copy)> <../Output/neutral_stochastic
+_static_GUD_X17_weighted_transport/connection_matrix.png (PNG copy)>]
 
-<use figures/Connectivity_maps_GUD_C01.png>
-Package pdftex.def Info: figures/Connectivity_maps_GUD_C01.png used on input li
-ne 192.
-(pdftex.def)             Requested size: 198.66985pt x 192.77283pt.
+Package natbib Warning: Citation `Khatiwala:2005' on page 4 undefined on input 
+line 108.
 
-<figures/Connectivity_maps_GUD_C19.png, id=33, 4558.02875pt x 4423.52625pt>
-File: figures/Connectivity_maps_GUD_C19.png Graphic file (type png)
 
-<use figures/Connectivity_maps_GUD_C19.png>
-Package pdftex.def Info: figures/Connectivity_maps_GUD_C19.png used on input li
-ne 197.
-(pdftex.def)             Requested size: 198.66985pt x 192.77283pt.
+Package natbib Warning: Citation `Khatiwala:2005' on page 4 undefined on input 
+line 108.
 
-Overfull \hbox (2.61107pt too wide) in paragraph at lines 190--199
-[]$[]$ $[]$ 
- []
-
-<figures/Time_connections.png, id=34, 3049.3925pt x 2419.0375pt>
-File: figures/Time_connections.png Graphic file (type png)
-
-<use figures/Time_connections.png>
-Package pdftex.def Info: figures/Time_connections.png used on input line 205.
-(pdftex.def)             Requested size: 276.04895pt x 218.95897pt.
- [4 <./figures/Abundance_GUD_01.png (PNG copy)> <./figures/connectivity_GUD_C01
-.png (PNG copy)> <./figures/Abundance_GUD_19.png (PNG copy)> <./figures/connect
-ivity_GUD_C19.png (PNG copy)>] [5 <./figures/Connectivity_cluster_GUD_C01.png (
-PNG copy)> <./figures/Connectivity_cluster_GUD_C19.png (PNG copy)>] [6 <./figur
-es/Connectivity_maps_GUD_C01.png (PNG copy)> <./figures/Connectivity_maps_GUD_C
-19.png (PNG copy)> <./figures/Time_connections.png (PNG copy)>]
+[4] [5] [6]
 No file EPMD_0.2.bbl.
 
 Package natbib Warning: There were undefined citations.
@@ -454,13 +460,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 4199 strings out of 492995
- 62852 string characters out of 6132705
- 136155 words of memory out of 5000000
- 7690 multiletter control sequences out of 15000+600000
+ 4185 strings out of 492995
+ 63437 string characters out of 6132705
+ 136163 words of memory out of 5000000
+ 7679 multiletter control sequences out of 15000+600000
  16339 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,12n,40p,877b,388s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,12n,40p,877b,359s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
@@ -475,10 +481,10 @@ live/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texl
 ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texliv
 e/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/
 2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on EPMD_0.2.pdf (7 pages, 8376991 bytes).
+Output written on EPMD_0.2.pdf (7 pages, 2378384 bytes).
 PDF statistics:
- 93 PDF objects out of 1000 (max. 8388607)
+ 90 PDF objects out of 1000 (max. 8388607)
  60 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 46 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -53,6 +53,54 @@ Stochastic approach that accounts for the enormous and variable size of plankton
 
 \section{Methods}
 
+
+\begin{figure}[htp!]
+\centering
+\includegraphics[width=0.8\linewidth]{../Figures/Schematic.png}
+\caption{}
+\label{Schematic}
+\end{figure}
+
+
+\begin{figure}[htp!]
+%%
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_times_map.png}
+\end{subfigure}
+%%
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png}
+\end{subfigure}
+%%
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_times_map.png}
+\end{subfigure}
+%%
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_times_map.png}
+\end{subfigure}
+%%
+\caption{}
+\label{Schematic}
+\end{figure}
+
+
+\begin{figure}[htp!]
+%%
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_matrix.png}
+\end{subfigure}
+%%
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_matrix.png}
+\end{subfigure}
+%%
+\caption{}
+\label{Schematic}
+\end{figure}
+
+
+
 \subsection{Plankton as passive tracers}
 
 We consider the global abundance of a plankton population with $K$ genotypes within $J$ spatial boxes of an ocean general circulation model (GCM). Local cell abundances within each genotype are thus represented in the $[J\times K]$ population matrix.
@@ -140,27 +188,7 @@ Seed subset of ocean regions with one tracer each. Examine time until globally d
 
 
 \begin{figure}[htp!]
-%%
-\begin{subfigure}{0.5\textwidth}
-\centering
-\includegraphics[width=0.95\linewidth]{figures/Abundance_GUD_01.png}
-\end{subfigure}
-%%
-\begin{subfigure}{0.5\textwidth}
-\centering
-\includegraphics[width=0.95\linewidth]{figures/connectivity_GUD_C01.png}
-\end{subfigure}
-%%
-\begin{subfigure}{0.5\textwidth}
-\centering
-\includegraphics[width=0.95\linewidth]{figures/Abundance_GUD_19.png}
-\end{subfigure}
-%%
-\begin{subfigure}{0.5\textwidth}
-\centering
-\includegraphics[width=0.95\linewidth]{figures/connectivity_GUD_C19.png}
-\end{subfigure}
-%%
+
 \caption{Left-hand side: global abundance distribution of prochlorococcus (top) and diatoms (bottom). Right-hand side: timescales of ocean connectivity for the same two groups. Background colour: shortest timescales over which particles from 95\% of the seed locations (indicated by dots) are expected to have arrived at each point (i.e. immigration timescales). Dots: timescales over which particles from that seed location are expected to have arrived at 95\% of the ocean surface (i.e. emigration timescales).}
 \label{connectivity_90_prctile}
 \end{figure}
@@ -171,15 +199,7 @@ Seed subset of ocean regions with one tracer each. Examine time until globally d
 
 
 \begin{figure}[htp!]
-\begin{subfigure}{0.5\textwidth}
-\centering
-\includegraphics[width=0.95\linewidth]{figures/Connectivity_cluster_GUD_C01.png}%
-\end{subfigure}
-%%
-\begin{subfigure}{0.5\textwidth}
-\centering
-\includegraphics[width=0.95\linewidth]{figures/Connectivity_cluster_GUD_C19.png}%
-\end{subfigure}
+
 \caption{Pairwise global minimum connectivity and clustering. Upper panel: matrix of the connectivity times between seed locations. Columns of the matrix correspond to source locations (such that row values represent emigration timescales), while rows correspond to target locations (such that column values represent immigration timescales). Lower panel: Clustering of the seed locations on the basis of the average of the immigration and emigration timescales between each location. Coloured boxes in the upper panel indicate clusters defined by the average timescales of connectivity (as shown in the lower panel).}
 \label{connectivity_matrices}
 \end{figure}
@@ -187,22 +207,13 @@ Seed subset of ocean regions with one tracer each. Examine time until globally d
 
 
 \begin{figure}[htp!]
-\begin{subfigure}{0.5\textwidth}
-\centering
-  \makebox[\textwidth][c]{\includegraphics[width=0.95\linewidth]{figures/Connectivity_maps_GUD_C01.png}}%
-\end{subfigure}
-%%
-\begin{subfigure}{0.5\textwidth}
-\centering
-  \makebox[\textwidth][c]{\includegraphics[width=0.95\linewidth]{figures/Connectivity_maps_GUD_C19.png}}%
-\end{subfigure}
+
 \caption{Spatial distribution of the 15 connectivity clusters. Colours and numbers correspond to those used in Figure~\ref{connectivity_matrices}.}
 \label{Connectivity_maps}
 \end{figure}
 
 \begin{figure}[htp!]
-\centering
-\makebox[\textwidth][c]{\includegraphics[width=0.66\linewidth]{figures/Time_connections.png}}%
+
 \caption{Number of globally unconnected points through time}
 \label{Connectivity_maps}
 \end{figure}

@@ -3,9 +3,9 @@ clc
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
-input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
+% input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
-% input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
+input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
 
 pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
@@ -48,8 +48,8 @@ ch.TickLabels={'10^{0}','10^{5}','10^{10}','10^{15}','10^{20}','10^{25}'};
 drawnow
 
 sname=[pathname input_filename '/abundance.png'];
-set(gcf,'Color','w')
-export_fig(sname,'-r300')
+export_fig(sname,'-r300','-transparent')
+
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f2=figure(2);
 clf
@@ -71,8 +71,7 @@ scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),25,log10(
 scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),25,'k','LineWidth',0.1)
 
 sname=[pathname input_filename '/connection_times_map.png'];
-set(gcf,'Color','w')
-export_fig(sname,'-r300')
+print(f2,'-r300','-dpng',sname);
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f3=figure(3);
 f3.Position = [75 130 560 715];
@@ -133,8 +132,7 @@ ch.FontSize=11;
 axis square
 
 sname=[pathname input_filename '/connection_matrix.png'];
-set(gcf,'Color','w')
-export_fig(sname,'-r300')
+print(f3,'-r300','-dpng',sname);
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -152,8 +150,7 @@ ylabel('Connectance')
 
 
 sname=[pathname input_filename '/cummulative_connections.png'];
-set(gcf,'Color','w')
-export_fig(sname,'-r300')
+print(f4,'-r300','-dpng',sname);
 
 return
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
