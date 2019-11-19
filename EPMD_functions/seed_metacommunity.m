@@ -70,9 +70,6 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             x(:,end+1)=1;
             x(ocean.sample_points,end)=0;
             
-            % initialise array for connectivity times
-            run_options.t_occupied=zeros(size(x));
-            
             run_options.npopn     = npopn+1;
             run_options.T_opt     = zeros(1,run_options.npopn);
             run_options.selection = false;
@@ -96,6 +93,8 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
     run_options.nxr =size(x,1); % n grid cells
     run_options.nxc =size(x,2); % n phenotypes
     
+    % initialise array for connectivity times
+    run_options.t_occupied=zeros(size(x));
 
 end
 

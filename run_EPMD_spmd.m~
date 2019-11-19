@@ -59,6 +59,7 @@ switch run_options.solver
         nxc                     = run_options.nxc;
         indx                    = 1:nxc;
 end
+t_occ = 
 
 %%
 
