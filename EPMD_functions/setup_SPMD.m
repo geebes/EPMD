@@ -49,4 +49,3 @@ spmd(run_options.parp_size)
     
 end
 
-who
