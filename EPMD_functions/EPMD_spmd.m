@@ -113,7 +113,7 @@ for yr=1:run_options.nyear
             end
 
             switch seed_dist
-                case 'neutral'
+                case {'neutral','selective_dispersal'}
                     occdate=(yr-1 + dy./nday);
                     isoccupied = find(x & t_occ==0);
                     t_occ(isoccupied) = occdate;

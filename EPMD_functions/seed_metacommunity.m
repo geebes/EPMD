@@ -30,6 +30,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
     B           = ocean.B;
     
     run_options.nlineages	= 1;
+    run_options.t_occupied  = [];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -82,6 +83,9 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.resident  = true;
             run_options.rel_s     = 1;
             run_options.solver    = 'parallel';	% serial or parallel
+            
+            % initialise array for connectivity times
+            run_options.t_occupied=zeros(size(x));
             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -185,6 +189,9 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             ilabel = num2str(iseed);
             ilabel=replace(ilabel,'  ','-');
             run_options.seed_dist = [run_options.seed_dist '_' ilabel];
+            
+        % initialise array for connectivity times
+        run_options.t_occupied=sparse(size(x));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     end
@@ -196,8 +203,6 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
     run_options.nxr =size(x,1); % n grid cells
     run_options.nxc =size(x,2); % n phenotypes
     
-    % initialise array for connectivity times
-    run_options.t_occupied=zeros(size(x));
 
 end
 

@@ -3,7 +3,7 @@ clc
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
-input_filename = 'selective_dispersal_1-17_stochastic_static_GUD_X01_weighted_transport';
+input_filename = 'selective_dispersal_1-341_stochastic_static_GUD_X01_weighted_transport';
 
 pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
@@ -20,7 +20,7 @@ i_lastyr    = matObj.yrs_saved;
 disp([num2str(i_lastyr) ' years evaluated.'])
 %% 
 
-grid_load('EPMD/nctiles_grid/',5,'nctiles')
+grid_load('~/GitHub/EPMD/nctiles_grid/',5,'nctiles')
 gcmfaces_global
 load coastlines
 land = shaperead('landareas', 'UseGeoCoords', true);
