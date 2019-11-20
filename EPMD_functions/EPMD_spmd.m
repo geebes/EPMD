@@ -79,13 +79,13 @@ for yr=1:run_options.nyear
                         mu_x   =N_l.*p_l;
                         sigma_x=sqrt(N_l.*p_l.*(1-p_l));
                         X_l=normrnd(mu_x,sigma_x); % sample population
-                        % multinomial (~normal)
+                        % Set abundance to integer value
+                        X_l=floor(X_l);
                     case 'deterministic'
                         X_l=N_l.*p_l;
                 end 
 
-                % Set abundance to positive integer value
-                X_l=floor(X_l);
+                % Set abundance to positive value
                 X_l(X_l<0)=0;
 
                 % Calculate as fraction of local carrying capacity
