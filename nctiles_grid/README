@@ -1,0 +1,50 @@
+
+--------------------------------------------------------------------------------------------------------------------------
+ECCO Version 4: Second Release       [ECCO v4-r2] [ftp://mit.ecco-group.org/ecco_for_las/version_4/release2/nctiles_grid/]
+--------------------------------------------------------------------------------------------------------------------------
+
+- This directory contains the LLC90 grid in nctiles format (*.nc) that can be read 
+  using Matlab or any netcdf enabled software and in MITgcm input format (*.mitgrid).
+
+- Notes:
+ Each of the 13 nctiles (tiled netcdf) files contains one 90x90 subdomain in a netcdf file.
+  Tile locations are displayed in 
+  ftp://mit.ecco-group.org/ecco_for_las/version_4/release2/doc/nctiles90x90.jpg
+ Individual files can be read directly in Matlab or any other netcdf enabled
+  software (http://www.unidata.ucar.edu/software/netcdf/software.html)
+  such as Panoply (http://www.giss.nasa.gov/tools/panoply/).
+ In Matlab each group of 13 files can also be read collectively using read_nctiles.m
+  (http://mitgcm.org/viewvc/MITgcm/MITgcm_contrib/gael/matlab_class/gcmfaces_IO/)
+  as part of the gcmfaces toolbox (see gcmfaces.pdf indicated below).
+
+- References:
+ Forget, G., J.-M. Campin, P. Heimbach, C. N. Hill, R. M. Ponte, and C. Wunsch, 2015: 
+  ECCO version 4: an integrated framework for non-linear inverse modeling and global ocean 
+  state estimation. Geoscientific Model Development, 8, 3071-3104, doi:10.5194/gmd-8-3071-2015
+ Forget, G., J.-M. Campin, P. Heimbach, C. N. Hill, R. M. Ponte, and C. Wunsch, 2016:
+  ECCO version 4: Second Release, http://hdl.handle.net/1721.1/102062
+ The contents permanent archive inside the 'ECCO version 4 release 2
+  dataverse' can be accessessed via the following citable identifier:
+  http://dx.doi.org/10.7910/DVN/H8W5VW
+
+- Software:
+ The ECCO v4-r2 files were produced using the ’checkpoint64u’ versions of the general circulation 
+  model (MITgcm and ECCO v4 settings) and Matlab analysis toolboxes (gcmfaces and MITprof).
+ These software versions are available at http://mitgcm.org/download/other_checkpoints/
+  and http://mit.ecco-group.org/opendap/ecco_for_las/version_4/checkpoints/contents.html
+ The up to date software documentations are available at 
+  http://mitgcm.org/public/r2_manual/latest/online_documents/manual.pdf
+  http://mitgcm.org/viewvc/*checkout*/MITgcm/MITgcm_contrib/gael/verification/eccov4.pdf
+  http://mitgcm.org/viewvc/*checkout*/MITgcm/MITgcm_contrib/gael/matlab_class/gcmfaces.pdf
+
+- Contact Us:
+ ecco-support@mit.edu (please subscribe via http://mailman.mit.edu/mailman/listinfo/ecco-support)
+
+-----------------------------
+README file revision history:
+-----------------------------
+
+- add reference to dataverse archive               [Gael Forget] [2016/09/04]
+- add reference to nctiles90x90.jpg                [Gael Forget] [2016/05/05]
+- README file creation                             [Gael Forget] [2016/05/02]
+
