@@ -1,6 +1,6 @@
 
 % Do not use more processsors than model has independent lineages
-run_options.parp_size = min(run_options.parp_size,run_options.nlineages);
+run_options.parp_size = min(run_options.parp_size,run_options.nlineages)
 
 % open parallel pool
 open_parallel(run_options.parp_size);
@@ -32,24 +32,24 @@ spmd(run_options.parp_size)
 
     T_optD=codistributed(T_opt,codistr); % distribute
 
-    % replicate mutation array along diagonal according to size of block
-    if run_options.mutation
-        mutmat=kron(eye(idiv(labindex)./nphen),mutmat); % order is important (identity first)
-    end
-    
-    % indexing needs to be done manually 
-    % https://uk.mathworks.com/help/parallel-computing/codistributed.colon.html
-    indx=(ii(labindex)+1):(ii(labindex+1));
-    
-    tseries_xD  = codistributed(zeros(n_tseries_loc,nxc,nday),codistr);
-    
-    % Initialise local arrays
-    x      = getLocalPart(xD);
-    X      = getLocalPart(XD);
-    T_opt  = getLocalPart(T_optD);
-    tser_x = getLocalPart(tseries_xD);
-    t_occ  = getLocalPart(t_occD);
-    nxc    = size(x,2);
-    
+%     % replicate mutation array along diagonal according to size of block
+%     if run_options.mutation
+%         mutmat=kron(eye(idiv(labindex)./npopn),mutmat); % order is important (identity first)
+%     end
+%     
+%     % indexing needs to be done manually 
+%     % https://uk.mathworks.com/help/parallel-computing/codistributed.colon.html
+%     indx=(ii(labindex)+1):(ii(labindex+1));
+%     
+%     tseries_xD  = codistributed(zeros(n_tseries_loc,nxc,nday),codistr);
+%     
+%     % Initialise local arrays
+%     x      = getLocalPart(xD);
+%     X      = getLocalPart(XD);
+%     T_opt  = getLocalPart(T_optD);
+%     tser_x = getLocalPart(tseries_xD);
+%     t_occ  = getLocalPart(t_occD);
+%     nxc    = size(x,2);
+%     
 end
 

@@ -139,7 +139,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'selective_dispersal'
 
-            iseed = 1:17;
+            iseed = 1:18;
             
             nlineages   = size(ocean.sample_points(iseed),1);
             
@@ -179,11 +179,8 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.resident  = true;
             run_options.rel_s     = 1;
             run_options.solver    = 'parallel';	% serial or parallel
-            
-            iseed = unique([min(iseed),max(iseed)]);
-            ilabel = num2str(iseed);
-            ilabel=replace(ilabel,'  ','-');
-            run_options.seed_dist = [run_options.seed_dist '_' ilabel];
+            label = unique([min(iseed),max(iseed)
+            run_options.seed_dist = [run_options.seed_dist '_' num2str(iseed)];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     end

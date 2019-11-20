@@ -1,6 +1,6 @@
 function [run_options] = make_mutation_matrix(run_options);
 
-    run_options.T_opt = linspace(-2,36,run_options.npopn);
+    run_options.T_opt = linspace(-2,36,run_options.nphen);
 
     % Mutation matrix
 
@@ -12,7 +12,7 @@ function [run_options] = make_mutation_matrix(run_options);
     d1=find(abs(T_opt-T_opt')==0); % find diagonals
     d2=find(abs(T_opt-T_opt')==run_options.delta_Topt); % find adjacents
 
-    mutmat=spalloc(run_options.npopn,run_options.npopn,3*run_options.npopn);
+    mutmat=spalloc(run_options.nphen,run_options.nphen,3*run_options.nphen);
     mutmat(d2)=mutmat(d2)+run_options.delta_m;
     mutmat(d1)=0-sum(mutmat,1);
 
