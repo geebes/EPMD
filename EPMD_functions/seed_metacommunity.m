@@ -38,6 +38,16 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
     switch run_options.seed_dist
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        case 'equal'
+            % share initial abundance among all types equally
+            x=ones(length(B),npopn)./npopn;
+            
+            run_options.resident  = false;
+            run_options.solver    = 'serial';	% serial or parallel
+            run_options.mutation  = true;	
+            run_options.selection = true;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'preadapted' % set one completely dominant type preadapted to each location
             % bin  temperature according to T_opt range
             [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
@@ -48,16 +58,6 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             % set type abundance of best adapted type to 1 in each location
             x(iseed)=1;
             x=sparse(x);
-            
-            run_options.resident  = false;
-            run_options.solver    = 'serial';	% serial or parallel
-            run_options.mutation  = true;	
-            run_options.selection = true;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        case 'equal'
-            % share initial abundance among all types equally
-            x=ones(length(B),npopn)./npopn;
             
             run_options.resident  = false;
             run_options.solver    = 'serial';	% serial or parallel
@@ -81,6 +81,31 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.resident  = true;
             run_options.rel_s     = 1;
             run_options.solver    = 'parallel';	% serial or parallel
+            
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        case 'neutral_lineages' % set locally addapted phenotype as x=1 in each location
+            % bin  temperature according to T_opt range
+            [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
+            % initialise EiE matrix
+            x1=sparse(length(B),npopn);
+            % find matching seed locations in EiE matrix
+            iseed=sub2ind(size(x1),ocean.Ib,bin);
+            % set type abundance of best adapted type to 1 in each location
+            x1(iseed)=1;
+            
+            ilin    = (1:npopn);
+            linindx = (ilin-1).*npopn + ilin;
+            
+            x=sparse(length(B),npopn^2);
+            x(:,linindx) = x1;
+            
+            run_options.resident  = false;
+            run_options.T_opt     = repmat(T_opt,1,npopn); % replicate T_opt for ancestral species
+            run_options.nlineages = run_options.npopn;
+            run_options.mutation  = true;
+            run_options.selection = false;
+            run_options.solver    = 'parallel';	% serial or parallel           
             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

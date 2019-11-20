@@ -28,7 +28,7 @@ function [cmat,run_options] = initialise_output(run_options,ocean)
         delete(['Output/' fname]);
         warning('on')
 
-        cmat = matfile(['Output/' fname],'Writable', true);
+        cmat = matfile(['~/GitHub/EPMD/Output/' fname],'Writable', true);
 
         % Forcing (Climatological)
         cmat.Temperature        =ocean.forcing_temp;
