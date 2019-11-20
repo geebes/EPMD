@@ -140,7 +140,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'selective_dispersal'
 
-            iseed = 1:17;
+            iseed = 1:3*36-1;
             
             nlineages   = size(ocean.sample_points(iseed),1);
             

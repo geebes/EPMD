@@ -21,6 +21,15 @@ idiv = sort(diff(ii),'descend');       % get size of blocks on each proc
 ii=[0 cumsum(idiv)];                   % sort ii as for idiv
 
 %%
+
+if run_options.mutation
+    % replicate mutation array along diagonal according to size of block
+    spmd(run_options.parp_size)
+        nrep=idiv(labindex)./nphen;
+        mutmat=kron(eye(nrep),mutmat); % order is important (identity first)
+    end
+end
+    
 spmd(run_options.parp_size)
     % create index to assign 'x' to workers
     codistr = codistributor1d(2, idiv, [nxr nxc]);
@@ -31,11 +40,6 @@ spmd(run_options.parp_size)
     t_occD = XD; % and t_occupied
 
     T_optD=codistributed(T_opt,codistr); % distribute
-
-    % replicate mutation array along diagonal according to size of block
-    if run_options.mutation
-        mutmat=kron(eye(idiv(labindex)./nphen),mutmat); % order is important (identity first)
-    end
     
     % indexing needs to be done manually 
     % https://uk.mathworks.com/help/parallel-computing/codistributed.colon.html
@@ -53,3 +57,15 @@ spmd(run_options.parp_size)
     
 end
 
+
+
+
+
+
+
+
+
+
+
+    
+    
