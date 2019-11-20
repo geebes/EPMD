@@ -75,6 +75,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             x(ocean.sample_points,end)=0;
             
             run_options.nlineages = nlineages+1;
+            run_options.nphen     = 1;
             run_options.T_opt     = zeros(1,run_options.nlineages);
             run_options.selection = false;
             run_options.mutation  = false;
