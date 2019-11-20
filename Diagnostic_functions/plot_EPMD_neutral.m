@@ -3,8 +3,8 @@ clc
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
-input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
-% input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
+% input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
+input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
 
 pathname   = '~/GitHub/EPMD/Output/';
@@ -155,21 +155,26 @@ sname=[pathname input_filename '/cummulative_connections.png'];
 set(gcf,'Color','w')
 export_fig(sname,'-r300')
 
-return
+
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure(6)
 clf
-iplot = randsample(numel(ocean.sample_points),25)';
 
-for i = iplot
-    x_i=x{i_lastyr}(:,i);
+iyr = 3;
+
+% get abundance data
+x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
+
+pind=[1:17 size(x,2)];
+
+for i = 1:18
+    x_i=x(:,pind(i));
     
-    
-    subplot(5,5,find(iplot==i))
+    subplot(3,6,i)
     [ax] = plot_vector(x_i,'log',mygrid,ocean);
     geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
-    caxis([-25 0])
+    caxis([0 25])
     hold on
     scatterm(ocean.lat(ocean.sample_points(i)),ocean.lon(ocean.sample_points(i)),25,'m')
     
