@@ -21,7 +21,7 @@ i_lastyr    = matObj.yrs_saved;
 disp([num2str(i_lastyr) ' years evaluated.'])
 %% 
 
-grid_load('~/GitHub/nctiles_grid/',5,'nctiles')
+grid_load('EPMD/nctiles_grid/',5,'nctiles')
 gcmfaces_global
 load coastlines
 land = shaperead('landareas', 'UseGeoCoords', true);
