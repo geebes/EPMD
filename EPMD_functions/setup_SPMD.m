@@ -11,7 +11,7 @@ nlineages       = run_options.nlineages;
 nxc             = run_options.nxc;
 nxr             = run_options.nxr;
 T_opt           = run_options.T_opt;
-mutmat          = run_options.mutmat;
+mutmat1         = run_options.mutmat;
 nday            = run_options.nday;
 n_tseries_loc   = run_options.n_tseries_loc;
 t_occupied      = run_options.t_occupied;
@@ -22,11 +22,12 @@ ii=[0 cumsum(idiv)];                   % sort ii as for idiv
 
 %%
 
+
 if run_options.mutation
     % replicate mutation array along diagonal according to size of block
     spmd(run_options.parp_size)
         nrep=idiv(labindex)./nphen;
-        mutmat=kron(eye(nrep),mutmat); % order is important (identity first)
+        mutmat=kron(eye(nrep),mutmat1); % order is important (identity first)
     end
 end
     

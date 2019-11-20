@@ -26,37 +26,53 @@ switch run_options.solver
         indx                    = 1:nxc;
 end
 
-%%
+%% Extract data from structural arrays for use inside SPMD block
+nday                = run_options.nday;
+n_tseries_loc       = run_options.n_tseries_loc;
+selection           = run_options.selection;
+w                   = run_options.w;
+mutation            = run_options.mutation;
+nxr                 = run_options.nxr;
+trajectory          = run_options.trajectory;
+seed_dist           = run_options.seed_dist;
+save_data           = run_options.save_data;
+site_indices        = run_options.site_indices;
+
+forcing_PCapacity   = ocean.forcing_PCapacity;
+forcing_temp        = ocean.forcing_temp;
+dt_sec              = ocean.dt_sec;
+nsubtime            = ocean.nsubtime;
+B                   = ocean.B;
 
 for yr=1:run_options.nyear
 
     spmd(run_options.parp_size)
-        tseries_x  = zeros(run_options.n_tseries_loc,nxc,run_options.nday);
-
-        for dy = 1:run_options.nday
+        tser_x = zeros(n_tseries_loc,nxc,nday);
+        
+        for dy = 1:nday
             tday=tic;
             % DAILY-RESOLVED CARRYING CAPACITY
-            N=ocean.forcing_PCapacity(:,dy);
+            N=forcing_PCapacity(:,dy);
 
-            if run_options.selection
+            if selection
                 % CALCULATE SELECTION COEFFICIENT (s) AS FUNCTION OF TEMPERATURE AND PREFERENCE (s<=1)
-                s = exp(-((ocean.forcing_temp(:,dy)-T_opt)./run_options.w).^2);  % Seasonal Temperature limitation
+                s = exp(-((forcing_temp(:,dy)-T_opt)./w).^2);  % Seasonal Temperature limitation
             else
                 s = 1;
             end
             
             % GENERATION time steps in each day
-            for t=1:(3600/(ocean.dt_sec*4))*24 
+            for t=1:(3600/(dt_sec*4))*24 
 
-                if run_options.mutation
+                if mutation
                     % TRAIT DIFFUSION
                     dxdt = x * mutmat;   % Redistribute mutants
                     x    = x + dxdt;
                 end
                 
                 % PHYSICAL TRANSPORT
-                for st=1:ocean.nsubtime   % nsubtime transport timesteps per generation
-                    x=ocean.B*x;          % calculate probability of each population in each grid cell
+                for st=1:nsubtime   % nsubtime transport timesteps per generation
+                    x=B*x;          % calculate probability of each population in each grid cell
                 end
 
                 % SELECTION (abundance and fitness weighted or just abundance weighted)
@@ -74,7 +90,7 @@ for yr=1:run_options.nyear
                 N_l         = full(N(loc));       % carrying capacities for extant populations
                 
                 % STOCHASTIC OR DETERMINISTIC POPULATION DYNAMICS
-                switch run_options.trajectory
+                switch trajectory
                     case 'stochastic'
                         mu_x   =N_l.*p_l;
                         sigma_x=sqrt(N_l.*p_l.*(1-p_l));
@@ -92,13 +108,13 @@ for yr=1:run_options.nyear
                 x_l = X_l./N_l;
   
                 % convert x and X from vector to matrix form
-                x=sparse(loc,trc,x_l,run_options.nxr,nxc);
-                X=sparse(loc,trc,X_l,run_options.nxr,nxc);
+                x=sparse(loc,trc,x_l,nxr,nxc);
+                X=sparse(loc,trc,X_l,nxr,nxc);
             end
 
-            switch run_options.seed_dist
+            switch seed_dist
                 case 'neutral'
-                    occdate=(yr-1 + dy./run_options.nday);
+                    occdate=(yr-1 + dy./nday);
                     isoccupied = find(x & t_occ==0);
                     t_occ(isoccupied) = occdate;
             end
@@ -106,8 +122,8 @@ for yr=1:run_options.nyear
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % COLLATE TIMESERIES OUTPUT (DAILY) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            if run_options.save_data & ~run_options.resident
-                tser_x(:,:,dy) = full(x(run_options.site_indices,:));
+            if save_data 
+                tser_x(:,:,dy) = full(x(site_indices,:));
             end
             
             if labindex==1
@@ -122,7 +138,8 @@ for yr=1:run_options.nyear
         tseries_xD(:,indx,:) = tser_x;
         
     end  % end spmd block (exiting to write data)
-    
+
+    %%
     % Gather x data
     xG                       = gather(xD);
     tseries_xG               = gather(tseries_xD);
