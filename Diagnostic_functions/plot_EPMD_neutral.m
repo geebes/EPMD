@@ -4,8 +4,8 @@ addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
 % input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
-input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
-% input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
+% input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
+input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
 
 pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
@@ -158,26 +158,31 @@ export_fig(sname,'-r300')
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-figure(6)
-clf
 
-iyr = 3;
+figure(6)
+
+seed_ID=1;
 
 % get abundance data
-x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
 
-pind=[1:17 size(x,2)];
-
-for i = 1:18
-    x_i=x(:,pind(i));
+for iyr = 1:i_lastyr
+    clf
+    x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
     
-    subplot(3,6,i)
+    x_i=x(:,seed_ID);
+    
     [ax] = plot_vector(x_i,'log',mygrid,ocean);
     geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
     caxis([0 25])
     hold on
-    scatterm(ocean.lat(ocean.sample_points(i)),ocean.lon(ocean.sample_points(i)),25,'m')
+    title(['Year ' num2str(iyr)])
+    scatterm(ocean.lat(ocean.sample_points(seed_ID)),ocean.lon(ocean.sample_points(seed_ID)),25,'m')
+    colorbar
+    drawnow
     
+    sname=[pathname input_filename '/Seed_' num2str(seed_ID,'%03i') '_Year_'  num2str(iyr,'%03i') '.png'];
+    set(gcf,'Color','w')
+    export_fig(sname,'-r300')
 end
 
 

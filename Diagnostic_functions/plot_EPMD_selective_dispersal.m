@@ -3,7 +3,8 @@ clc
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
-input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport';
+% input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport';
+input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport';
 
 pathname   = '~/GitHub/EPMD/Output/';pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
@@ -29,7 +30,7 @@ K = ocean.forcing_PCapacity(:,end);
 T = ocean.forcing_temp;
 
 t_occupied3=reshape(full(t_occupied),[],run_options.nphen,run_options.nlineages);
-t_occupied3(t_occupied3==0)=NaN; % VERY SLOW!!!
+t_occupied3(t_occupied3==0)=NaN; % QUITE SLOW!!!
 t_occupied_lin=squeeze(min(t_occupied3,[],2));
 
 t_occ=t_occupied_lin(:,1:end-1);
@@ -149,16 +150,45 @@ hold on
 [N,edges] = histcounts(t_occ(:),0:(1/12):i_lastyr);
 
 clr=rand(1,3);
-plot([0 edges],[0 cumsum(N)./numel(t_occ) sum(N)./numel(t_occ)],'Color',clr,'LineW',2)
+plot([0 edges],[0 cumsum(N)./numel(t_occ) NaN],'Color',clr,'LineW',2)
 ylim([0 1])
 box on
 xlabel('Time (years)')
 ylabel('Connectance')
-
+set(gca,'XScale','log')
 
 sname=[pathname input_filename '/cummulative_connections.png'];
 set(gcf,'Color','w')
 export_fig(sname,'-r300')
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+figure(6)
+clf
+
+seed_ID=1;
+
+% get abundance data
+
+for iyr = 1:i_lastyr
+    x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
+    
+    x_i=x(:,seed_ID);
+    
+    [ax] = plot_vector(x_i,'log',mygrid,ocean);
+    geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
+    caxis([0 25])
+    hold on
+    title(['Year ' num2str(iyr)])
+    scatterm(ocean.lat(ocean.sample_points(seed_ID)),ocean.lon(ocean.sample_points(seed_ID)),25,'m')
+    colorbar
+    drawnow
+    
+    sname=[pathname input_filename '/Seed_' num2str(seed_ID,'%03i') '_Year_'  num2str(iyr,'%03i') '.png'];
+    set(gcf,'Color','w')
+    export_fig(sname,'-r300')
+end
 
 
 return
