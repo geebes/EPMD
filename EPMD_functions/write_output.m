@@ -10,8 +10,9 @@ function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
         switch run_options.seed_dist
             case 'selective_dispersal'
                 % Integrate cell numbers across all phenotypes in each lineage
+                % (N.B. exclude resident)
                 xx=reshape(full(x),[],run_options.nphen,run_options.nlineages);
-                xx=squeeze(sum(xx,2));
+                xx=squeeze(sum(xx(:,:,1:end-1),2));
                 xx=sparse(xx);
             otherwise
                 xx=x;
@@ -20,8 +21,8 @@ function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
         
         switch run_options.seed_dist
             case {'neutral','selective_dispersal'}
-                % Write dispersal times
-                cmat.t_occupied   = run_options.t_occupied;
+                % Write dispersal times (excluding resident)
+                cmat.t_occupied   = run_options.t_occupied(:,1:run_options.nphen*(run_options.nlineages-1));
         end
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
