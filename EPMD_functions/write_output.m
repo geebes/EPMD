@@ -27,8 +27,8 @@ function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
             case 'selective_dispersal'
                 % Do not write x time-series for huge selective_dispersal runs
             otherwise
-            disp('Saving time-series ...')
-            cmat.tseries_x(yr,1)       = {[tseries_x]};
+                disp('Saving time-series ...')
+                cmat.tseries_x(yr,1)       = {[tseries_x]};
         end
     end
 
