@@ -33,7 +33,7 @@ t_occupied3=reshape(full(t_occupied),[],run_options.nphen,run_options.nlineages)
 t_occupied3(t_occupied3==0)=NaN; % QUITE SLOW!!!
 t_occupied_lin=squeeze(min(t_occupied3,[],2));
 
-t_occ=t_occupied_lin(:,1:end-1);
+t_occ=t_occupied_lin(:,1:numel(ocean.sample_points));
 t_occ(isnan(t_occ))=0;
    
 disp(['ocean is ' num2str(100.*nnz(t_occ)/numel(t_occ),'%2.0f') '% connected.'])
