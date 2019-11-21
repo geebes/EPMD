@@ -21,8 +21,19 @@ function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
         
         switch run_options.seed_dist
             case {'neutral','selective_dispersal'}
-                % Write dispersal times (excluding resident)
-                cmat.t_occupied   = run_options.t_occupied(:,1:run_options.nphen*(run_options.nlineages-1));
+                % find minimum occupancy time across all phenotypes in each lineage
+                % (N.B. exclude resident)
+                t_occ = run_options.t_occupied;
+                % reshape into 3D array
+                tt=reshape(full(t_occ),[],run_options.nphen,run_options.nlineages);
+                % set zeros to NaN
+                tt(tt==0)=NaN;
+                % find minimum time for each lineage/location (excluding resident)
+                tt=squeeze(min(tt(:,:,1:end-1),[],2));
+                % put back zeros
+                tt(isnan(tt))=0;
+                % Write dispersal times
+                cmat.t_occupied   = sparse(tt);
         end
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

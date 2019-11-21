@@ -46,6 +46,7 @@ B                   = ocean.B;
 
 for yr=1:run_options.nyear
 
+    disp('Opening SPMD block')
     spmd(run_options.parp_size)
         tser_x = zeros(n_tseries_loc,nxc,nday);
         
@@ -142,6 +143,8 @@ for yr=1:run_options.nyear
         t_occD(:,indx)       = t_occ;
         
     end  % end spmd block (exiting to write data)
+    disp('----------------------------------')
+    disp('Closed SPMD block to write output data')
 
     %%
     % Gather x data
@@ -149,7 +152,6 @@ for yr=1:run_options.nyear
     tseries_xG               = gather(tseries_xD);
     run_options.t_occupied   = gather(t_occD);
     
-    disp('----------------------------------')
     if run_options.save_data
         [cmat] = write_output(yr,xG,tseries_xG,run_options,cmat);
         disp('----------------------------------')

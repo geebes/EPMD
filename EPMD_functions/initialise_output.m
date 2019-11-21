@@ -25,11 +25,9 @@ function [cmat,run_options] = initialise_output(run_options,ocean)
 
         % create Matfile object
         warning('off')
-        delete(['Output/' fname]);
-        warning('on')
-
         filename = ['~/GitHub/EPMD/Output/' fname];
         delete(filename);
+        warning('on')
         cmat  = matfile(filename,'Writable', true);
 
         % Forcing (Climatological)
