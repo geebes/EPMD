@@ -22,6 +22,7 @@ ii=[0 cumsum(idiv)];                   % sort ii as for idiv
 
 %%
 
+
 if run_options.mutation
     % replicate mutation array along diagonal according to size of block
     spmd(run_options.parp_size)
@@ -37,7 +38,7 @@ spmd(run_options.parp_size)
     % assign 'x' to workers according to codistr
     xD=codistributed(x,codistr);
     XD=xD.*0; % also initialise X
-    t_occD = XD; % and t_occupied
+    t_occD = XD(); % and t_occupied
 
     T_optD=codistributed(T_opt,codistr); % distribute
     
@@ -54,6 +55,8 @@ spmd(run_options.parp_size)
     tser_x = getLocalPart(tseries_xD);
     t_occ  = getLocalPart(t_occD);
     nxc    = size(x,2);
+    
+    
     
 end
 

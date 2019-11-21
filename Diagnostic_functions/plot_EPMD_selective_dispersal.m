@@ -33,10 +33,7 @@ nlineages = run_options.nlineages;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 T_unq = unique(run_options.T_opt);
-T_anc = reshape(repmat(T_unq',1,run_options.nphen)',1,[]);
 
-annual_temp = ocean.ann_theta;
-[tsort,i]=sort(annual_temp);
 
 iyr=i_lastyr;
     
@@ -44,7 +41,7 @@ iyr=i_lastyr;
 x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
 
 % reshape for locations, phenotypes, lineages
-x1 = reshape(full(x),60646,run_options.nphen,run_options.nlineages);
+x1 = reshape(full(t_occupied),60646,run_options.nphen,run_options.nlineages);
 
 x2 = squeeze(sum(x1,2)); % integrate within each ancestral lineage
 x3 = squeeze(sum(x1,3)); % integrate within each phenotype

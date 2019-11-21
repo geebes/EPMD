@@ -22,16 +22,16 @@ ii=[0 cumsum(idiv)];                   % sort ii as for idiv
 
 %%
 
+mutation = run_options.mutation;
 
-if run_options.mutation
-    % replicate mutation array along diagonal according to size of block
-    spmd(run_options.parp_size)
+spmd(run_options.parp_size)
+    
+    if mutation
+        % replicate mutation array along diagonal according to size of block
         nrep=idiv(labindex)./nphen;
         mutmat=kron(eye(nrep),mutmat1); % order is important (identity first)
     end
-end
-    
-spmd(run_options.parp_size)
+
     % create index to assign 'x' to workers
     codistr = codistributor1d(2, idiv, [nxr nxc]);
 

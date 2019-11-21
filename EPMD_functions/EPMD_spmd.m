@@ -137,7 +137,6 @@ for yr=1:run_options.nyear
         end % end day loops
    
         % put local data back in global codistributed array
-        
         xD(:,indx)           = x;
         tseries_xD(:,indx,:) = tser_x;
         t_occD(:,indx)       = t_occ;
