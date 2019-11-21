@@ -114,9 +114,13 @@ for yr=1:run_options.nyear
 
             switch seed_dist
                 case {'neutral','selective_dispersal'}
+                    % get current date
                     occdate=(yr-1 + dy./nday);
-                    isoccupied = find(x & t_occ==0);
-                    t_occ(isoccupied) = occdate;
+                    % find all pppulations and locations occupied for the first time
+                    % (i.e. occupied but no date of first occupation)
+                    [i,j] = find(x & t_occ==0);
+                    % assign current date to newly occupied 
+                    t_occ = t_occ + sparse(i,j,occdate,size(t_occ,1),size(t_occ,2));
             end
 %
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,9 +137,10 @@ for yr=1:run_options.nyear
         end % end day loops
    
         % put local data back in global codistributed array
+        
         xD(:,indx)           = x;
-        t_occD(:,indx)       = t_occ;
         tseries_xD(:,indx,:) = tser_x;
+        t_occD(:,indx)       = t_occ;
         
     end  % end spmd block (exiting to write data)
 

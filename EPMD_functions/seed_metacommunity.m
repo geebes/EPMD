@@ -43,7 +43,6 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             % share initial abundance among all types equally
             x=ones(length(B),nphen)./nphen;
             
-            run_options.resident  = false;
             run_options.solver    = 'serial';	% serial or parallel
             run_options.mutation  = true;	
             run_options.selection = true;
@@ -60,7 +59,6 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             x(iseed)=1;
             x=sparse(x);
             
-            run_options.resident  = false;
             run_options.solver    = 'serial';	% serial or parallel
             run_options.mutation  = true;	
             run_options.selection = true;
@@ -80,7 +78,6 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.T_opt     = zeros(1,run_options.nlineages);
             run_options.selection = false;
             run_options.mutation  = false;
-            run_options.resident  = true;
             run_options.rel_s     = 1;
             run_options.solver    = 'parallel';	% serial or parallel
             
@@ -107,7 +104,6 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             x=sparse(length(B),nphen*nlineages);
             x(:,linindx) = x1;
             
-            run_options.resident  = false;
             run_options.T_opt     = repmat(T_opt,1,nlineages); % replicate T_opt for ancestral species
             run_options.nlineages = nlineages;
             run_options.mutation  = true;
@@ -144,14 +140,12 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'selective_dispersal'
 
-            iseed = 1:341;
+            nlineages   = size(ocean.sample_points,1);
             
-            nlineages   = size(ocean.sample_points(iseed),1);
-            
-            x1=sparse(ocean.sample_points(iseed),1:nlineages,1,length(B),nlineages);
+            x1=sparse(ocean.sample_points,1:nlineages,1,length(B),nlineages);
             
             % find temperature of water at seed locations
-            Tsample=ocean.ann_theta(ocean.sample_points(iseed));
+            Tsample=ocean.ann_theta(ocean.sample_points);
             diffT=abs(Tsample-run_options.T_opt);
             [~,isample]=min(diffT,[],2);
             
@@ -181,17 +175,11 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.npopn     = nphen;
             run_options.selection = true;
             run_options.mutation  = true;
-            run_options.resident  = true;
             run_options.rel_s     = 1;
             run_options.solver    = 'parallel';	% serial or parallel
             
-            iseed = unique([min(iseed),max(iseed)]);
-            ilabel = num2str(iseed);
-            ilabel=replace(ilabel,'  ','-');
-            run_options.seed_dist = [run_options.seed_dist '_' ilabel];
-            
-        % initialise array for connectivity times
-        run_options.t_occupied=sparse(size(x));
+            % initialise array for connectivity times
+            run_options.t_occupied=sparse(size(x));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     end

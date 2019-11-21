@@ -56,6 +56,8 @@ spmd(run_options.parp_size)
     t_occ  = getLocalPart(t_occD);
     nxc    = size(x,2);
     
+    
+    
 end
 
 
