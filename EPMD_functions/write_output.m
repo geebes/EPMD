@@ -9,10 +9,14 @@ function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
         
         switch run_options.seed_dist
             case 'selective_dispersal'
-                % Do not write x for huge selective_dispersal runs
+                % Integrate cell numbers across all phenotypes in each lineage
+                xx=reshape(full(x),[],run_options.nphen,run_options.nlineages);
+                xx=squeeze(sum(xx,2));
+                xx=sparse(xx);
             otherwise
-                cmat.x(yr,1)           = {[x]};
+                xx=x;
         end
+        cmat.x(yr,1)           = {[xx]};
         
         switch run_options.seed_dist
             case {'neutral','selective_dispersal'}
