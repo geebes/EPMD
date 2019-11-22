@@ -4,8 +4,9 @@ addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
 % input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
-% input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
-input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
+input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
+% input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
+% input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport';
 
 pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
@@ -43,6 +44,7 @@ mean_abundance = mean(ocean.forcing_PCapacity,2);
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
 caxis([0 25]);
 % th=title(['Prochlorococcus']);
+colormap(parula)
 ch=colorbar('Location','SouthOutside');
 ch.TickLabels={'10^{0}','10^{5}','10^{10}','10^{15}','10^{20}','10^{25}'};
 drawnow
@@ -73,6 +75,7 @@ scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),25,'k','L
 sname=[pathname input_filename '/connection_times_map.png'];
 set(gcf,'Color','w')
 export_fig(sname,'-r300')
+
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f3=figure(3);
 f3.Position = [75 130 560 715];
@@ -135,6 +138,24 @@ axis square
 sname=[pathname input_filename '/connection_matrix.png'];
 set(gcf,'Color','w')
 export_fig(sname,'-r300')
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+f5=figure(5);
+clf
+
+scatter(t_emmigration,t_immigration(ocean.sample_points),15,ibasins,'filled')
+
+box on
+xlabel('Emigration time')
+ylabel('Immigration time')
+axis square
+axis([0 100 0 100])
+hold on
+plot([0 100],[0 100],'k-')
+
+sname=[pathname input_filename '/imm_vs_em.png'];
+set(gcf,'Color','w')
+export_fig(sname,'-r300')
+
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
