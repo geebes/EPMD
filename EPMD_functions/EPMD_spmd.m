@@ -7,7 +7,7 @@ disp('Create mutation matrix for lineages')
 
 % Initialise ocean structural array
 disp('Allocate ocean metadata and generate seeding points')
-[ocean] = allocate_ocean(run_options,3,'quad');
+[ocean] = allocate_ocean(run_options,run_options.seedseed,'quad');
 
 % initialise the global metacommunity
 disp('Set up initial seed populations')
