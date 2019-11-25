@@ -24,6 +24,7 @@ ii=[0 cumsum(idiv)];                   % sort ii as for idiv
 %%
 
 mutation = run_options.mutation;
+xsparse  = run_options.xsparse;
 
 spmd(run_options.parp_size)
     
@@ -57,8 +58,10 @@ spmd(run_options.parp_size)
     t_occ  = getLocalPart(t_occD);
     nxc    = size(x,2);
     
-    x=full(x);
-    X=full(X);
+    if ~xsparse
+        x=full(x);
+        X=full(X);
+    end
     
 end
 
