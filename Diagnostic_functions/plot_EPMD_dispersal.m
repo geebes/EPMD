@@ -4,9 +4,9 @@ addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
 % input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
-input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
+% input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
-% input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport';
+input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_CRASHED';
 
 pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
@@ -82,7 +82,7 @@ f3.Position = [75 130 560 715];
 clf
 
 D           = t_occ(ocean.sample_points,:);
-D(isnan(D)) = inf;
+% D(isnan(D)) = inf;
 indx        = find(speye(size(D)));
 D(indx)     = 0; 
 
@@ -105,13 +105,15 @@ basin_names{12}='S. Ocean';
 
 
 [ibasins,ind] = sort(basins(ocean.sample_points));
-imagesc(log10(D(ind,ind)))
+pcolor(log10(D(ind,ind)))
+shading flat
 hold on
 isdv=find(diff(ibasins))';
 axlim=xlim';
 ones(2,numel(isdv)).*axlim;
-plot([axlim],repmat(isdv,2,1),'w-','LineW',1.5)
-plot(repmat(isdv,2,1),[axlim],'w-','LineW',1.5)
+plot([axlim],repmat(isdv,2,1),'k-','LineW',1.5)
+plot(repmat(isdv,2,1),[axlim],'k-','LineW',1.5)
+set(gca,'LineW',1.5,'layer','top')
 
 for i=unique(ibasins)'
     ii=find(ibasins==i);
@@ -134,6 +136,7 @@ ch.Ticks=log10([1/365 7/365 1/12 1 10 100]);
 ch.TickLabels={'day','week','month','year','decade','century'};
 ch.FontSize=11;
 axis square
+
 
 sname=[pathname input_filename '/connection_matrix.png'];
 set(gcf,'Color','w')
@@ -186,7 +189,7 @@ seed_ID=1;
 
 % get abundance data
 
-for iyr = 1:i_lastyr
+for iyr = i_lastyr
     clf
     x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
     

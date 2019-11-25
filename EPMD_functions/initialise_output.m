@@ -35,8 +35,9 @@ function [cmat,run_options] = initialise_output(run_options,ocean)
         cmat.CarryingCapacity	=ocean.forcing_PCapacity;
         cmat.T_optima           =run_options.T_opt;
 
-        % yearly snapshots (1st Jan)
-        cmat.x(run_options.nyear,1)        ={[]};    
+        % yearly snapshots (1st Jan) 
+        cmat.x(run_options.nyear,1)        ={[]}; 
+        cmat.x_restart                     =[];      
         cmat.t_occupied                    =[];
 
         % Timeseries (Daily)

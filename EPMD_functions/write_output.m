@@ -7,6 +7,7 @@ function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
         disp('Saving time-slice ...')
         cmat.yrs_saved         = yr;
         
+        cmat.x_restart = x;
         switch run_options.seed_dist
             case 'selective_dispersal'
                 % Integrate cell numbers across all phenotypes in each lineage
