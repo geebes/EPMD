@@ -105,7 +105,9 @@ basin_names{12}='S. Ocean';
 
 
 [ibasins,ind] = sort(basins(ocean.sample_points));
-pcolor(log10(D(ind,ind)))
+pclr=log10(D(ind,ind));
+pclr=padarray(pclr,[1 1],'post'); % pad array so no data lost by pcolor
+pcolor(0:size(D,1),0:size(D,1),pclr)
 shading flat
 hold on
 isdv=find(diff(ibasins))';
@@ -189,7 +191,7 @@ seed_ID=1;
 
 % get abundance data
 
-for iyr = i_lastyr
+for iyr = 1:17;%i_lastyr
     clf
     x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
     

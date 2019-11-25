@@ -1,3 +1,4 @@
+disp('Setting up SPMD variables')
 
 % Do not use more processsors than model has independent lineages
 run_options.parp_size = min(run_options.parp_size,run_options.nlineages);
@@ -56,7 +57,8 @@ spmd(run_options.parp_size)
     t_occ  = getLocalPart(t_occD);
     nxc    = size(x,2);
     
-    
+    x=full(x);
+    X=full(X);
     
 end
 

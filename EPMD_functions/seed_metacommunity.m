@@ -166,8 +166,8 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             % set resident to 1
             x(resind)=1;
             % reset sample sites to zero
-            x(resind(ocean.sample_points))=0;  
-            
+            x(resind(ocean.sample_points))=0; 
+                        
             nlineages = nlineages + 1;
             
             run_options.T_opt     = repmat(T_opt,1,nlineages); % replicate T_opt for ancestral species
