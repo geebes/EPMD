@@ -6,7 +6,8 @@ diag_fcns = diagnostics;
 % input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
-input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_CRASHED';
+% input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport';
+input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport';
 
 pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
@@ -167,10 +168,10 @@ export_fig(sname,'-r300')
 f4 = figure(4);
 hold on
 
-[N,edges] = histcounts(t_occ(:),0:(1/12):i_lastyr);
+[N,edges] = histcounts(t_occ(:),0:(1/96):i_lastyr);
 
 clr=rand(1,3);
-plot([0 edges],[0 cumsum(N)./numel(t_occ) sum(N)./numel(t_occ)],'Color',clr,'LineW',2)
+plot([0 edges],[NaN cumsum(N)./numel(t_occ) NaN],'Color',clr,'LineW',2)
 ylim([0 1])
 box on
 xlabel('Time (years)')
@@ -182,6 +183,7 @@ set(gcf,'Color','w')
 export_fig(sname,'-r300')
 
 
+return
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -191,7 +193,7 @@ seed_ID=1;
 
 % get abundance data
 
-for iyr = 1:17;%i_lastyr
+for iyr = 1:i_lastyr
     clf
     x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
     

@@ -89,43 +89,37 @@ for yr=1:run_options.nyear
                 
                 p = popn_selected ./ global_comn_selected;
                 
+                ind         = find(p & N);  % work only with locations/genotypes where nonzero probability of cells
+                [loc,trc]   = ind2sub(size(N),ind);
+                p_l         = full(p(ind));
+                N_l         = full(N(loc));       % carrying capacities for extant populations
+                
+                % STOCHASTIC OR DETERMINISTIC POPULATION DYNAMICS
+                switch trajectory
+                    case 'stochastic'
+                        mu_x   =N_l.*p_l;
+                        sigma_x=sqrt(N_l.*p_l.*(1-p_l));
+                        X_l=normrnd(mu_x,sigma_x); % sample population
+                        % Set abundance to integer value
+                        X_l=floor(X_l);
+                    case 'deterministic'
+                        X_l=N_l.*p_l;
+                end
+                
+                % Set abundance to positive value
+                X_l(X_l<0)=0;
+                
+                % Calculate as fraction of local carrying capacity
+                x_l = X_l./N_l;
+                
                 if run_options.xsparse
-                    ind         = find(p & N);  % work only with locations/genotypes where nonzero probability of cells
-                    [loc,trc]   = ind2sub(size(N),ind);
-                    p_l         = full(p(ind));
-                    N_l         = full(N(loc));       % carrying capacities for extant populations
-
-                    % STOCHASTIC OR DETERMINISTIC POPULATION DYNAMICS
-                    switch trajectory
-                        case 'stochastic'
-                            mu_x   =N_l.*p_l;
-                            sigma_x=sqrt(N_l.*p_l.*(1-p_l));
-                            X_l=normrnd(mu_x,sigma_x); % sample population
-                            % Set abundance to integer value
-                            X_l=floor(X_l);
-                        case 'deterministic'
-                            X_l=N_l.*p_l;
-                    end 
-
-                    % Set abundance to positive value
-                    X_l(X_l<0)=0;
-
-                    % Calculate as fraction of local carrying capacity
-                    x_l = X_l./N_l;
-
                     % convert x and X from vector to matrix form
                     x=sparse(loc,trc,x_l,nxr,nxc);
                     X=sparse(loc,trc,X_l,nxr,nxc);
                 else
-                    mu_x    = N.*p;
-                    sigma_x = sqrt(N.*p.*(1-p));
-                    X_l     = normrnd(mu_x,sigma_x); % sample population
-                    % Set abundance to integer value
-                    X = floor(X);
-                     % Set abundance to positive value
-                    X(X<0)=0;
-                    % Calculate as fraction of local carrying capacity
-                    x=X./N;
+                    % convert x and X from vector to matrix form
+                    X(ind)=X_l;
+                    X(ind)=x_l;
                 end
             end
 

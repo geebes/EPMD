@@ -51,7 +51,41 @@ Lagrangian studies have been equivocal. \citet{Hellweger:2014} used an agent-bas
 
 Stochastic approach that accounts for the enormous and variable size of plankton (meta) populations, the potential for stochastic dispersal, and/or a representation of natural selection.
 
-\section{Methods}
+\section{Experiments}
+
+We developed a population-genetic model of global plankton dispersal that accounts for oceanic dispersal, selection and drift \citep{Cherry:2003}. We initially considered a scenario where buoyant cells are transported within the surface layer of a model ocean. Each grid box supports a predefined but spatially inhomogeneous carrying capacity of $\mathbf{n}$ individuals, based on the estimated global distribution of 0.6 micron diameter \textit{prochlorococcus} cells. 
+
+
+
+
+
+At 94 We used the population model to estimate the global dispersal of 341 genotypes, each initialised at unique ``seed locations'' that were distributed approximately evenly around the surface ocean. We also included one additional tracer representing a globally resident species, with a genotype frequency of $\mathbf{p} = 0$ at all seed locations, and 1 throughout the rest of the surface grid.
+
+Under the assumption that all species have equal fitness, the number of individuals $\mathbf{X}$ surviving at each generation is drawn randomly from the local population (after oceanic transport and mutation) with probability equal to the local subpopulation frequency ($\mathbf{p} = \mathbf{X} \mathbf{n}^{-1}$). Under these assumptions, the expected population size in each generation is given by the multinomial distribution, 
+
+\begin{equation}
+\label{eqn:mnml}
+\mathbf{X}\sim\mathcal{M}(\mathbf{n},\mathbf{p})
+\end{equation}
+
+For large $\mathbf{N}$, equation~\ref{eqn:mnml} is reasonably approximated by a normal distribution.
+
+\begin{equation}
+\mathbf{X}\approx\mathcal{N}(\boldsymbol{\mu},\boldsymbol{\sigma})
+\end{equation}
+
+with $\boldsymbol{\mu}=\mathbf{n}\circ\mathbf{p}$ and $\boldsymbol{\sigma}=\mathbf{n}\circ\mathbf{p}\circ(1-\mathbf{p})$. (Here the `$\circ$' symbol denotes element-wise multiplication.)
+
+
+
+
+The Evolutionary Plankton Metacommunity Dynamics (EPMD) model considers the global distribution of an arbitrary number of planktonic subpopulations distributed across a two-dimensional (latitude and longitude) ocean grid. The probability of survival for each subpopulation in each generation is a function of its relative abundance and its thermal tolerance to its current environmental temperature. Each subpopulation can be assigned a particular thermal optimum, or its survival can be made independent of growth. Plankton cells are circulated in physical space according to a realistic ocean circulation model \ref{}. 
+
+
+
+We estimated minimum connectivity times by integrating the model forward from these initial conditions, noting the time at which each genotype first appeared in each grid cell. 
+
+The Evolutionary Plankton Metacommunity Dynamics (EPMD) model considers the global distribution of an arbitrary number of  planktonic subpopulations distributed across a two-dimensional (latitude and longitude) ocean grid. The probability of survival for each subpopulation in each generation is a function of its relative abundance and its thermal tolerance to its current environmental temperature. Each subpopulation can be assigned a particular thermal optimum, or its survival can be made independent of growth. Plankton cells are circulated in physical space according to a realistic ocean circulation model \ref{}. 
 
 
 \begin{figure}[htp!]
@@ -101,59 +135,34 @@ Stochastic approach that accounts for the enormous and variable size of plankton
 
 
 
-\subsection{Plankton as passive tracers}
+\section{Model description}
 
-We consider the global abundance of a plankton population with $K$ genotypes within $J$ spatial boxes of an ocean general circulation model (GCM). Local cell abundances within each genotype are thus represented in the $[J\times K]$ population matrix.
 
-Plankton cells are transported between grid boxes using a $[J\times J]$ oceanic `transport matrix' $\mathbf{A}$ that describes the volume transport attributable to advection, diffusion and parameterised sub-grid-scale processes in the GCM \cite{Khatiwala:2005}. This transport can be written as a linear matrix equation \cite{Khatiwala:2005}, with the form
 
-\begin{equation}
-\frac{d\mathbf{x}}{dt} = \mathbf{A}\mathbf{X}
-\end{equation}
 
-Here $\mathbf{X}$ is the $[J\times K]$ matrix of genotype frequencies in each grid box of the GCM. Each element of the transport matrix $\mathbf{A}$ describes the mass flux between source boxes (columns) and recipient boxes (rows). The diagonal elements of the transport matrix should always be nonpositive ($<=0$), as they describe the mass flux out of the source box to other (nearby) boxes. Similarly, the off-diagonal elements should always be nonnegative ($>=0$), as they describe the mass flux into the recipient box from other nearby boxes. 
 
-This gives the following explicit form of the linear matrix equation
+across $J$ spatial boxes of an ocean general circulation model (GCM). The global abundances of all subpopulations are thus represented in the $[J\times K]$ population matrix.
+
+
+
+\subsection*{Physical dispersal}
+
+Plankton cells are transported between grid boxes using a $[J\times J]$ oceanic `transport matrix' $\mathbf{A}$ that describes the transport of neutrally buoyant cells between points in the ocean grid \citep{Khatiwala:2005}. This transport can be written as 
 
 \begin{equation}
 \label{ }
-\mathbf{X}_{t+1}=\mathbf{D}\mathbf{X}_{t}
+\mathbf{T} = \mathbf{A}\mathbf{x}_{t}
 \end{equation}
 
-%\subsection{Shortest path connectivity}
-%Given that $\mathbf{D}$ describes the volume-specific rate of water flux among each of the GCM grid boxes, then $\mathbf{T}=[\mathbf{D}>0]^{-1}$ is the expected waiting time for an individual water molecule (or particle) to pass from one grid box to the next (assuming each grid cell is perfectly mixed). We can then use Dijkstra's shortest path algorithm to calculate the shortest path direct between any two points in the ocean, with path length defined as the sum of expected waiting times along the path. We can also calculate the probability of a single particle directly following the shortest path, as the product of each element in $\mathbf{D}$ corresponding to that path.
+Here $\mathbf{x}$ is the $[J\times K]$ matrix of genotype frequencies in each grid box of the GCM. Each element of the transport matrix $\mathbf{A}$ describes the transport of cells between source boxes (columns) and recipient boxes (rows). The transport matrix was derived from the ``Estimating the Circulation and Climate of the Ocean'' (ECCO) version 4 ocean model \citep{}. It represents physical transport attributable to advection, diffusion and parameterised sub-grid-scale processes in the ocean model. 
 
-%[dist,path,pred] = graphshortestpath(weighted',s,t);\\
-%isnk=path(2:end);\\
-%isrc=path(1:end-1);\\
-%P=sum(log10(B(sub2ind(size(B),isnk,isrc))));
+\subsection*{Mutation}
 
+Each plankton subpopulation may be assigned a particular phenotype, defined by its thermal optima.
 
-\subsection{Stochastic dispersal}
-
-Each grid box supports a predefined carrying capacity of $\mathbf{n}$ individuals. Under strict neutrality, the number of individuals $\mathbf{X}$ surviving at each generation is drawn randomly from the local population (after oceanic transport) with probability equal to the local genotype frequency ($\mathbf{p} = \mathbf{X} \mathbf{n}^{-1}$). Under these assumptions, the expected population size in each generation is given by the multinomial distribution, 
-
-\begin{equation}
-\label{eqn:mnml}
-\mathbf{X}\sim\mathcal{M}(\mathbf{n},\mathbf{p})
-\end{equation}
-
-For large $\mathbf{N}$, equation~\ref{eqn:mnml} is reasonably approximated by a normal distribution.
-
-\begin{equation}
-\mathbf{X}\approx\mathcal{N}(\boldsymbol{\mu},\boldsymbol{\sigma})
-\end{equation}
-
-with $\boldsymbol{\mu}=\mathbf{n}\circ\mathbf{p}$ and $\boldsymbol{\sigma}=\mathbf{n}\circ\mathbf{p}\circ(1-\mathbf{p})$. (Here the `$\circ$' symbol denotes element-wise multiplication.)
-
-\subsection{Connectivity}
-
-We used the population model to estimate the global dispersal of 341 genotypes, each initialised at unique ``seed locations'' that were distributed approximately evenly around the surface ocean. We also included one additional tracer representing a globally resident species, with a genotype frequency of $\mathbf{p} = 0$ at all seed locations, and 1 throughout the rest of the surface grid.
-
-We estimated minimum connectivity times by integrating the model forward from these initial conditions, noting the time at which each genotype first appeared in each grid cell. 
+\subsection*{Selection}
 
 
-\subsection{Selection}
 
 Selection can be further incorporated through the selection vector $\mathbf{s}$, that assigns each population in $\mathbf{X}$ a relative fitness of $1+\mathbf{s}$.
 
@@ -162,7 +171,10 @@ Selection can be further incorporated through the selection vector $\mathbf{s}$,
 \mathbf{p} = \frac{\mathbf{\tilde{p}} \circ (1+\mathbf{s}) } {\mathbf{\tilde{p}} \circ (1+\mathbf{s}) + 1 -\mathbf{\tilde{p}}}
 \end{equation}
 
-\textbf{[NOT YET GENERALISED FOR MULTINOMIAL]}
+\begin{equation}
+s = \exp\bigg[-\Big(\frac{T_{env}-T_{opt}}{w}\Big)^2\bigg]
+\end{equation}
+
 
 
 %If we model just two genotypes, the expected population size in each generation of the first genotype is given by the binomial distribution, 
@@ -175,9 +187,17 @@ Selection can be further incorporated through the selection vector $\mathbf{s}$,
 
 Thermal niche. Seed with n plankton types, each adjusted to a different optimal temperature. How connected are these phenotypes? How does the connectivity depend on population size? on the shape of the thermal niche? Do results compare well with Thomas 2012 or Righetti 2019?
 
-\begin{equation}
-\gamma_T = a e^{bT} e^{\Big(-\big(\frac{2(T-z)}{w}\big)^2\Big)}
-\end{equation}
+
+
+
+
+
+
+\subsection{Connectivity}
+
+
+
+
 
 
 \section{Results}
