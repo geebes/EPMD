@@ -172,17 +172,22 @@ hold on
 
 clr=rand(1,3);
 plot([0 edges],[NaN cumsum(N)./numel(t_occ) NaN],'Color',clr,'LineW',2)
+hold on
+plot(edges,[0 N],'Color',clr,'LineW',2)
 ylim([0 1])
 box on
 xlabel('Time (years)')
 ylabel('Connectance')
+set(gca,'XScale','log')
 
-
-sname=[pathname input_filename '/cummulative_connections.png'];
+sname=[pathname input_filename '/cumulative_connections.png'];
 set(gcf,'Color','w')
 export_fig(sname,'-r300')
 
-
+Cseed=t_occ(ocean.sample_points,:);
+Cdiag=find(speye(size(Cseed)));
+Cseed(Cdiag)=NaN;
+nanmedian(Cseed(:))
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f8 = figure(8);
 clf

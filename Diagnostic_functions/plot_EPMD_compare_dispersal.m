@@ -50,9 +50,9 @@ ch.TickLabels={'1/10','1/5','1/3','1/2','1','2','3','5','10'};
 scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),25,log10(t_emmigration),'filled')
 scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),25,'k','LineWidth',0.1)
 
-% sname=[pathname input_filename '/connection_times_map.png'];
-% set(gcf,'Color','w')
-% export_fig(sname,'-r300')
+sname=['../Figures/surface_vs_depth_map.png'];
+set(gcf,'Color','w')
+export_fig(sname,'-r300')
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f3=figure(3);
 f3.Position = [75 130 560 715];
@@ -135,3 +135,6 @@ hold on
 plot([0 100],[0 100],'k-')
 set(gcf,'Color','w')
 
+sname=['../Figures/imm_vs_em.png'];
+set(gcf,'Color','w')
+export_fig(sname,'-r300')
