@@ -3,9 +3,11 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: EPMD_0.2.aux
 The style file: /Users/baw103/Latex/elsart-harv.bst.bst
 Database file #1: /Users/baw103/GoogleDrive/biblio1.bib
+Warning--I didn't find a database entry for "Cherry:2003"
+Warning--I didn't find a database entry for ""
 You've used 8 entries,
             2825 wiz_defined-function locations,
-            697 strings with 5857 characters,
+            699 strings with 5879 characters,
 and the built_in function-call counts, 4146 in all, are:
 = -- 434
 > -- 149
@@ -44,3 +46,4 @@ warning$ -- 0
 while$ -- 31
 width$ -- 0
 write$ -- 93
+(There were 2 warnings)

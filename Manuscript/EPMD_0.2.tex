@@ -53,11 +53,52 @@ Stochastic approach that accounts for the enormous and variable size of plankton
 
 \section{Experiments}
 
-We developed a population-genetic model of global plankton dispersal that accounts for oceanic dispersal, selection and drift \citep{Cherry:2003}. We initially considered a scenario where buoyant cells are transported within the surface layer of a model ocean. Each grid box supports a predefined but spatially inhomogeneous carrying capacity of $\mathbf{n}$ individuals, based on the estimated global distribution of 0.6 micron diameter \textit{prochlorococcus} cells. 
+To assess the rate of planktonic dispersal across the global ocean, we developed a model that tracks the abundance of different subpopulations in a globally distributed metapopulation \citep{Cherry:2003}. Throughout the simulation, each of the 60,646 surface grid boxes supports a predefined but spatially inhomogeneous carrying capacity $\mathbf{N}$, based on the estimated global distribution of 0.6 micron diameter \textit{prochlorococcus} cells \citep{}. At the beginning of the simulation, a resident subpopulation was assumed to have population frequency of 1 throughout the global ocean, with the exception of 94 'seed locations' distributed more or less evenly around the ocean. At these sites, the resident subpopulation was replaced with a unique (but ecologically neutral) local subpopulation. We initially considered a scenario where buoyant cells are transported within the surface layer of a model ocean. 
+
+From this initial condition, the model is integrated for 100 years in discrete time. Every six hours, plankton cells are dispersed by the ocean circulation. Every 24 hours the metapopulation is assumed to reproduce. A new metapopulation is drawn at random from a multinomial distribution, with probabilities based on the dispersed metapopulation. In regions where a subpopulation is present in high abundance, this process has no significant effect on the relative abundance of different subpopulations, but it introduces a meaningful chance of local extinction at the boundaries of each subpopulation, or where the overall carrying capacity is low. 
+
+Figure~\ref{Cumulative} shows the timescales over which the 94 seed subpopulations become connected with the rest of the ocean. Largely in agreement with \citet{Jonsson:2016}, we find that almost 90\% of the ocean is connected within a decade. 
+
+
+
+Figure~\ref{Dispersal}a shows the timescales at which a seed population initialised in the Mediterranean Sea reaches the rest of the surface ocean
 
 
 
 
+
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_surface_transport/dispersal_map.png}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport/dispersal_map.png}
+    \end{subfigure}
+    \caption{}
+\label{Dispersal}
+\end{figure*}
+
+
+Figure~\ref{Dispersal}a shows the matrix describing the two-way connection times between each of the 94 seed locations. Within the 100 year simulation, XX\% of the 94 seed locations have been made. There are, however, some sites that are still not fully connected. The Mediterranean Sea is well connected to the rest of the ocean by incoming cells, but cells seeded in the Mediterranean have not yet arrived at many locations, particularly in the Indian, Pacific and Southern Oceans.  
+
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_matrix.png}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_matrix.png}
+    \end{subfigure}
+    \caption{}
+\label{Connectivity}
+\end{figure*}
 
 At 94 We used the population model to estimate the global dispersal of 341 genotypes, each initialised at unique ``seed locations'' that were distributed approximately evenly around the surface ocean. We also included one additional tracer representing a globally resident species, with a genotype frequency of $\mathbf{p} = 0$ at all seed locations, and 1 throughout the rest of the surface grid.
 

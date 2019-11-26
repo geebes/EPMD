@@ -173,6 +173,9 @@ for yr=1:run_options.nyear
         [cmat] = write_output(yr,xG,tseries_xG,run_options,cmat);
         disp('----------------------------------')
     end
+    
+    clear xG tseries_xG
+    run_options.t_occupied = [];
 end % end year loop
 
 %%

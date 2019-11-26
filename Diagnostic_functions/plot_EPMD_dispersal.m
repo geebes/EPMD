@@ -3,11 +3,11 @@ clc
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
-% input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
+input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
 % input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport';
-input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport';
+% input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport';
 
 pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
@@ -17,12 +17,11 @@ if exist([pathname input_filename])~=7
 end
 
 ocean       = matObj.ocean;
+run_options = matObj.run_options;
 t_occupied  = matObj.t_occupied;
 
 i_lastyr    = matObj.yrs_saved;
-disp([num2str(i_lastyr) ' years evaluated.'])
-
-%% 
+disp([num2str(i_lastyr) ' years evaluated.']) 
 
 grid_load('~/GitHub/EPMD/nctiles_grid/',5,'nctiles')
 gcmfaces_global
@@ -184,7 +183,29 @@ set(gcf,'Color','w')
 export_fig(sname,'-r300')
 
 
-return
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+f8 = figure(8);
+clf
+
+iseed=1; % 261,279
+[ax] = plot_vector(t_occ(:,iseed),'log',mygrid,ocean);
+geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
+% th=title(['Prochlorococcus']);
+
+ch=colorbar('Location','SouthOutside');
+ch.Label.String={'Connectance Time'};
+colormap(flipud(turbo(16)))
+caxis(log10([1/365 100]));
+ch.Ticks=log10([1/365 7/365 1/12 1 10 100]);
+ch.TickLabels={'day','week','month','year','decade','century'};
+ch.FontSize=11;
+
+scatterm(ocean.lat(ocean.sample_points(iseed)),ocean.lon(ocean.sample_points(iseed)),25,'m')
+
+sname=[pathname input_filename '/dispersal_map.png'];
+set(gcf,'Color','w')
+export_fig(sname,'-r300')
+
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -194,7 +215,7 @@ seed_ID=1;
 
 % get abundance data
 
-for iyr = 1:i_lastyr
+for iyr = 1%:i_lastyr
     clf
     x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
     

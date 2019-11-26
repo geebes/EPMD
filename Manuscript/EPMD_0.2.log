@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.4.6)  26 NOV 2019 12:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.4.6)  26 NOV 2019 14:50
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -312,44 +312,116 @@ Missing character: There is no ù in font cmr12!
 [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<../Figures/Schematic.png, id=12, 590.9277pt x 566.3559pt>
+
+Package natbib Warning: Citation `Cherry:2003' on page 2 undefined on input lin
+e 56.
+
+
+LaTeX Warning: Reference `Cumulative' on page 2 undefined on input line 60.
+
+
+<../Output/neutral_stochastic_static_GUD_X01_surface_transport/dispersal_map.pn
+g, id=12, 474.0912pt x 270.5307pt>
+File: ../Output/neutral_stochastic_static_GUD_X01_surface_transport/dispersal_m
+ap.png Graphic file (type png)
+
+<use ../Output/neutral_stochastic_static_GUD_X01_surface_transport/dispersal_ma
+p.png>
+Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_surface_tr
+ansport/dispersal_map.png used on input line 74.
+(pdftex.def)             Requested size: 209.12683pt x 119.3352pt.
+
+<../Output/neutral_stochastic_static_GUD_X01_weighted_transport/dispersal_map.p
+ng, id=13, 474.0912pt x 270.5307pt>
+File: ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/dispersal_
+map.png Graphic file (type png)
+
+<use ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/dispersal_m
+ap.png>
+Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_weighted_t
+ransport/dispersal_map.png used on input line 79.
+(pdftex.def)             Requested size: 209.12683pt x 119.3352pt.
+
+Overfull \hbox (5.22215pt too wide) in paragraph at lines 72--81
+ [][]  [] 
+ []
+
+[2]
+<../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_matri
+x.png, id=18, 497.2176pt x 566.5968pt>
+File: ../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_
+matrix.png Graphic file (type png)
+
+<use ../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_m
+atrix.png>
+Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_surface_tr
+ansport/connection_matrix.png used on input line 92.
+(pdftex.def)             Requested size: 209.12683pt x 238.3062pt.
+
+<../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_matr
+ix.png, id=19, 497.2176pt x 566.5968pt>
+File: ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection
+_matrix.png Graphic file (type png)
+
+<use ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_
+matrix.png>
+Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_weighted_t
+ransport/connection_matrix.png used on input line 97.
+(pdftex.def)             Requested size: 209.12683pt x 238.3062pt.
+
+Overfull \hbox (5.22215pt too wide) in paragraph at lines 90--99
+ [][]  [] 
+ []
+
+[3 <../Output/neutral_stochastic_static_GUD_X01_surface_transport/dispersal_map
+.png (PNG copy)> <../Output/neutral_stochastic_static_GUD_X01_weighted_transpor
+t/dispersal_map.png (PNG copy)> <../Output/neutral_stochastic_static_GUD_X01_su
+rface_transport/connection_matrix.png (PNG copy)> <../Output/neutral_stochastic
+_static_GUD_X01_weighted_transport/connection_matrix.png (PNG copy)>]
+
+LaTeX Warning: Reference `' on page 4 undefined on input line 123.
+
+
+LaTeX Warning: Reference `' on page 4 undefined on input line 129.
+
+<../Figures/Schematic.png, id=23, 590.9277pt x 566.3559pt>
 File: ../Figures/Schematic.png Graphic file (type png)
 
 <use ../Figures/Schematic.png>
-Package pdftex.def Info: ../Figures/Schematic.png used on input line 59.
+Package pdftex.def Info: ../Figures/Schematic.png used on input line 134.
 (pdftex.def)             Requested size: 334.60422pt x 320.7003pt.
 
 <../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_times
-_map.png, id=13, 429.5247pt x 208.3785pt>
+_map.png, id=24, 429.5247pt x 208.3785pt>
 File: ../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_
 times_map.png Graphic file (type png)
 
 <use ../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_t
 imes_map.png>
 Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_surface_tr
-ansport/connection_times_map.png used on input line 68.
+ansport/connection_times_map.png used on input line 143.
 (pdftex.def)             Requested size: 209.12683pt x 101.45453pt.
 
 <../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_time
-s_map.png, id=14, 429.5247pt x 208.3785pt>
+s_map.png, id=25, 429.5247pt x 208.3785pt>
 File: ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection
 _times_map.png Graphic file (type png)
 
 <use ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_
 times_map.png>
 Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_weighted_t
-ransport/connection_times_map.png used on input line 72.
+ransport/connection_times_map.png used on input line 147.
 (pdftex.def)             Requested size: 209.12683pt x 101.45453pt.
 
 <../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_time
-s_map.png, id=15, 429.5247pt x 208.3785pt>
+s_map.png, id=26, 429.5247pt x 208.3785pt>
 File: ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection
 _times_map.png Graphic file (type png)
 
 <use ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_
 times_map.png>
 Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X17_weighted_t
-ransport/connection_times_map.png used on input line 76.
+ransport/connection_times_map.png used on input line 151.
 (pdftex.def)             Requested size: 209.12683pt x 101.45453pt.
 File: ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection
 _times_map.png Graphic file (type png)
@@ -357,67 +429,70 @@ _times_map.png Graphic file (type png)
 <use ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_
 times_map.png>
 Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X17_weighted_t
-ransport/connection_times_map.png used on input line 80.
+ransport/connection_times_map.png used on input line 155.
 (pdftex.def)             Requested size: 209.12683pt x 101.45453pt.
 
-Overfull \hbox (2.61107pt too wide) in paragraph at lines 67--83
+Overfull \hbox (2.61107pt too wide) in paragraph at lines 142--158
 []$[]$ $[]$
  []
 
 
-Overfull \hbox (2.61107pt too wide) in paragraph at lines 67--83
+Overfull \hbox (2.61107pt too wide) in paragraph at lines 142--158
 []$ $[]$ 
  []
 
-
-<../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_matr
-ix.png, id=16, 497.2176pt x 566.5968pt>
 File: ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection
 _matrix.png Graphic file (type png)
 
 <use ../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_
 matrix.png>
 Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_weighted_t
-ransport/connection_matrix.png used on input line 91.
+ransport/connection_matrix.png used on input line 166.
 (pdftex.def)             Requested size: 209.12683pt x 238.3062pt.
 
 <../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_matr
-ix.png, id=17, 497.2176pt x 566.5968pt>
+ix.png, id=27, 497.2176pt x 566.5968pt>
 File: ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection
 _matrix.png Graphic file (type png)
 
 <use ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_
 matrix.png>
 Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X17_weighted_t
-ransport/connection_matrix.png used on input line 95.
+ransport/connection_matrix.png used on input line 170.
 (pdftex.def)             Requested size: 209.12683pt x 238.3062pt.
 
-Overfull \hbox (2.61107pt too wide) in paragraph at lines 90--98
+Overfull \hbox (2.61107pt too wide) in paragraph at lines 165--173
 []$[]$ $[]$ 
  []
 
-[2 <../Figures/Schematic.png (PNG copy)>] [3 <../Output/neutral_stochastic_stat
+[4] [5 <../Figures/Schematic.png (PNG copy)> <../Output/neutral_stochastic_stat
 ic_GUD_X01_surface_transport/connection_times_map.png (PNG copy)> <../Output/ne
 utral_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png (PN
 G copy)> <../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connec
-tion_times_map.png (PNG copy)> <../Output/neutral_stochastic_static_GUD_X01_wei
-ghted_transport/connection_matrix.png (PNG copy)> <../Output/neutral_stochastic
-_static_GUD_X17_weighted_transport/connection_matrix.png (PNG copy)>] [4]
-[5] [6] (./EPMD_0.2.bbl [7
+tion_times_map.png (PNG copy)>] [6 <../Output/neutral_stochastic_static_GUD_X17
+_weighted_transport/connection_matrix.png (PNG copy)>] [7] [8] (./EPMD_0.2.bbl
+[9
 
-]) [8] (./EPMD_0.2.aux)
+])
+
+Package natbib Warning: There were undefined citations.
+
+[10] (./EPMD_0.2.aux)
+
+LaTeX Warning: There were undefined references.
+
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 4206 strings out of 492995
- 63871 string characters out of 6132705
- 137520 words of memory out of 5000000
- 7698 multiletter control sequences out of 15000+600000
+ 4224 strings out of 492995
+ 64973 string characters out of 6132705
+ 137536 words of memory out of 5000000
+ 7715 multiletter control sequences out of 15000+600000
  16339 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,12n,40p,877b,359s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,12n,40p,949b,373s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
@@ -429,10 +504,10 @@ ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/loca
 l/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local
 /texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/t
 exlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on EPMD_0.2.pdf (8 pages, 3669582 bytes).
+Output written on EPMD_0.2.pdf (10 pages, 5294791 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
- 53 compressed objects within 1 object stream
+ 90 PDF objects out of 1000 (max. 8388607)
+ 57 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

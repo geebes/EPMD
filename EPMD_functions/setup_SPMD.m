@@ -50,6 +50,15 @@ spmd(run_options.parp_size)
     
     tseries_xD  = codistributed(zeros(n_tseries_loc,nxc,nday),codistr);
     
+    if ~xsparse
+        xD          = full(xD);
+        XD          = full(XD);
+        T_optD      = full(T_optD);
+        tseries_xD  = full(tseries_xD);
+        t_occD      = full(t_occD);
+        t_occupied  = full(t_occupied);
+    end
+    
     % Initialise local arrays
     x      = getLocalPart(xD);
     X      = getLocalPart(XD);
@@ -58,13 +67,7 @@ spmd(run_options.parp_size)
     t_occ  = getLocalPart(t_occD);
     nxc    = size(x,2);
     
-    if ~xsparse
-        x=full(x);
-        X=full(X);
-    end
-    
 end
-
 
 
 
