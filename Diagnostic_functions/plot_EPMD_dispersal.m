@@ -21,6 +21,7 @@ t_occupied  = matObj.t_occupied;
 
 i_lastyr    = matObj.yrs_saved;
 disp([num2str(i_lastyr) ' years evaluated.'])
+
 %% 
 
 grid_load('~/GitHub/EPMD/nctiles_grid/',5,'nctiles')
