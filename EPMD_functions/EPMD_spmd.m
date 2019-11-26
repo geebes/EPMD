@@ -174,6 +174,7 @@ for yr=1:run_options.nyear
         disp('----------------------------------')
     end
     
+    disp('Clear large output arrays')
     clear xG tseries_xG
     run_options.t_occupied = [];
 end % end year loop
