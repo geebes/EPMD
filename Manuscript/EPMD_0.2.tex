@@ -80,23 +80,21 @@ The red dots in Figure~\ref{Connectivity_maps}d show that there are `source' reg
         \centering
         \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_times_map.png}
     \end{subfigure}%
-    \\
+~
     \begin{subfigure}[b]{0.5\textwidth}
         \centering
         \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png}
     \end{subfigure}%
-    \\
-    \begin{subfigure}[b]{0.5\textwidth}
-        \centering
-        \includegraphics[width=1\textwidth]{../Figures/surface_vs_depth_map.png}
-    \end{subfigure}
-    \\
-    \begin{subfigure}[b]{0.5\textwidth}
-        \centering
-        \includegraphics[width=0.8\textwidth]{../Figures/imm_vs_em.png}
-    \end{subfigure}%
     \caption{}
 \label{Connectivity_maps}
+\end{figure*}
+
+
+\begin{figure*}[t!]
+    \centering
+        \includegraphics[width=0.6\textwidth]{../Figures/imm_vs_em.png}
+    \caption{}
+\label{Imm_vs_em}
 \end{figure*}
 
 These interpretations of the immigration and emigration times shown in Figure~\ref{Connectivity_maps}a are based on the assumption that transport below the surface layer can be neglected. To test the sensitivity of the model to this assumption, we calculated the depth-integrated horizontal transport of cells across all model layers. This is effectively the depth-integrated horizontal water transport, weighted by the vertical distribution of cellular abundance. The same transport could be achieved by using the full depth-resolved transport, while vertically homogenising each water column at every time step. After this adjustment to the transport component, and with the carrying capacity increased to the depth-integrated cellular abundance, we repeated the initial experiment in exactly the same way. 

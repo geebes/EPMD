@@ -1,4 +1,6 @@
-function [u,v] = get_circ_vectors(ocean)
+function [x,y,u,v] = get_circ_vectors(ocean)
+
+
 
 % get grid coords and inverse of transport matrix
 lon = ocean.lon;
@@ -31,5 +33,8 @@ u = lon2-lon;
 % saturate at 99th percentile
 v = sign(v).*min(abs(v),prctile(abs(v),99));
 u = sign(u).*min(abs(u),prctile(abs(u),99));
+
+y = lat;
+x = lon;
 
 end

@@ -3,10 +3,10 @@ clc
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
-input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
+% input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
-% input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport';
+input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport';
 % input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport';
 
 pathname   = '~/GitHub/EPMD/Output/';
@@ -41,7 +41,7 @@ f1=figure(1);
 clf
 
 mean_abundance = mean(ocean.forcing_PCapacity,2);
-[ax] = plot_vector(sum(ocean.B,2),'lin',mygrid,ocean);
+[ax] = plot_vector(mean_abundance,'log',mygrid,ocean);
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
 caxis([0 25]);
 % th=title(['Prochlorococcus']);
@@ -51,6 +51,30 @@ ch.TickLabels={'10^{0}','10^{5}','10^{10}','10^{15}','10^{20}','10^{25}'};
 drawnow
 
 sname=[pathname input_filename '/abundance.png'];
+set(gcf,'Color','w')
+export_fig(sname,'-r300')
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+f11=figure(11);
+clf
+
+mean_temp = mean(ocean.forcing_temp,2);
+[ax] = plot_vector(mean_temp,'lin',mygrid,ocean);
+geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
+caxis([-2 36]);
+
+% transport vectors
+[x,y,u,v] = get_circ_vectors(ocean); % second input is coarse graining resolution
+iplot=randsample(60646,1e4);
+h=quiverm(y(iplot),x(iplot),v(iplot),u(iplot),'k');
+
+th=title(['Mean Annual SST (^\circ C)']);
+colormap(parula)
+ch=colorbar('Location','SouthOutside');
+ch.Ticks=-2:2:36;
+drawnow
+
+sname=[pathname input_filename '/temp_and_circulation.png'];
 set(gcf,'Color','w')
 export_fig(sname,'-r300')
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,10 +87,6 @@ t_emmigration = prctile(t_occ,prc,1);
 
 [ax] = plot_vector(t_immigration,'log',mygrid,ocean);
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
-
-[u,v] = get_circ_vectors(ocean);
-h=quiverm(ocean.lat,ocean.lon,v,u,'k');
-
 % th=title(['Prochlorococcus']);
 ch=colorbar;
 colormap(flipud(turbo))
@@ -150,15 +170,20 @@ set(gcf,'Color','w')
 export_fig(sname,'-r300')
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f5=figure(5);
-clf
 
-scatter(t_emmigration,t_immigration(ocean.sample_points),15,ibasins,'filled')
+
+h=scatter(t_emmigration,t_immigration(ocean.sample_points),...
+        25,'k','Marker','.');
+h=scatter(t_emmigration,t_immigration(ocean.sample_points),...
+        25,abs(ocean.lat(ocean.sample_points)),'filled','Marker','s');
+colormap(redblue)
+colorbar
 
 box on
 xlabel('Emigration time')
 ylabel('Immigration time')
 axis square
-axis([0 100 0 100])
+axis([0 50 0 50])
 hold on
 plot([0 100],[0 100],'k-')
 
