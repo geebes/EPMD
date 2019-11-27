@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.4.6)  26 NOV 2019 17:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.4.6)  27 NOV 2019 09:58
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -187,12 +187,6 @@ LaTeX Warning: Label `Schematic' multiply defined.
 
 
 LaTeX Warning: Label ` ' multiply defined.
-
-
-LaTeX Warning: Label `Connectivity_maps' multiply defined.
-
-
-LaTeX Warning: Label `Connectivity_maps' multiply defined.
 
 )
 \openout1 = `EPMD_0.2.aux'.
@@ -503,7 +497,7 @@ ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/loca
 l/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local
 /texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/t
 exlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on EPMD_0.2.pdf (11 pages, 4185912 bytes).
+Output written on EPMD_0.2.pdf (11 pages, 4185681 bytes).
 PDF statistics:
  93 PDF objects out of 1000 (max. 8388607)
  59 compressed objects within 1 object stream

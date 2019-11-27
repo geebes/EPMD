@@ -41,7 +41,7 @@ f1=figure(1);
 clf
 
 mean_abundance = mean(ocean.forcing_PCapacity,2);
-[ax] = plot_vector(mean_abundance,'log',mygrid,ocean);
+[ax] = plot_vector(sum(ocean.B,2),'lin',mygrid,ocean);
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
 caxis([0 25]);
 % th=title(['Prochlorococcus']);
@@ -63,6 +63,10 @@ t_emmigration = prctile(t_occ,prc,1);
 
 [ax] = plot_vector(t_immigration,'log',mygrid,ocean);
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
+
+[u,v] = get_circ_vectors(ocean);
+h=quiverm(ocean.lat,ocean.lon,v,u,'k');
+
 % th=title(['Prochlorococcus']);
 ch=colorbar;
 colormap(flipud(turbo))
@@ -172,8 +176,6 @@ hold on
 
 clr=rand(1,3);
 plot([0 edges],[NaN cumsum(N)./numel(t_occ) NaN],'Color',clr,'LineW',2)
-hold on
-plot(edges,[0 N],'Color',clr,'LineW',2)
 ylim([0 1])
 box on
 xlabel('Time (years)')

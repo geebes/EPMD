@@ -30,13 +30,12 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
     disp('Initialising ocean metadata')
 
     % load transport matrix data
-
-    TM_boxes        = load('./Transport_Matrices/MITgcm_ECCO_v4/Matrix13/Data/boxes.mat');
-    TM_matrices     = load('./Transport_Matrices/MITgcm_ECCO_v4/Matrix13/TMs/matrix_nocorrection_annualmean.mat','Aexpms');
-    TM_grid         = load('./Transport_Matrices/MITgcm_ECCO_v4/grid.mat');
-    TM_basin_mask   = load('./Transport_Matrices/MITgcm_ECCO_v4/GCM/basin_mask.mat');
+    TM_boxes        = load('~/Transport_Matrices/MITgcm_ECCO_v4/Matrix13/Data/boxes.mat');
+    TM_matrices     = load('~/Transport_Matrices/MITgcm_ECCO_v4/Matrix13/TMs/matrix_nocorrection_annualmean.mat','Aexpms');
+    TM_grid         = load('~/Transport_Matrices/MITgcm_ECCO_v4/grid.mat');
+    TM_basin_mask   = load('~/Transport_Matrices/MITgcm_ECCO_v4/GCM/basin_mask.mat');
     gcmfaces_global
-    grid_load('./Transport_Matrices/MITgcm_ECCO_v4_data/Data_v1/nctiles_grid/',5,'nctiles');
+    grid_load('../nctiles_grid/',5,'nctiles');
 
     coastlines      = load('coastlines');
     ocean.land      = shaperead('landareas','UseGeoCoords',true);

@@ -53,20 +53,20 @@ Stochastic approach that accounts for the enormous and variable size of plankton
 
 \section{Experiments}
 
-To assess the rate of planktonic dispersal across the global ocean, we developed a model that tracks the abundance of different subpopulations in a globally distributed metapopulation \citep{Cherry:2003}. Throughout the simulation, each of the 60,646 surface grid boxes supports a predefined but spatially inhomogeneous carrying capacity $\mathbf{N}$, based on the estimated global distribution of 0.6 micron diameter \textit{Prochlorococcus} cells \citep{}. At the beginning of the simulation, a resident subpopulation was assumed to have population frequency of 1 throughout the global ocean, with the exception of 94 'seed locations' distributed more or less evenly around the ocean. At these sites, the resident subpopulation was replaced with a unique (but ecologically neutral) local subpopulation. 
+To assess the rate of planktonic dispersal across the global ocean, we developed a model that tracks the abundance of different subpopulations in a globally distributed metapopulation \citep{Cherry:2003}. Throughout the simulation, each of the 60,646 surface grid boxes supports a predefined but spatially variable carrying capacity $\mathbf{N}$. This is derived from the estimated global distribution of 0.6 micron diameter \textit{Prochlorococcus} cells \citep{}. At the beginning of the simulation, a resident subpopulation is assumed to have population frequency of 1 throughout the global ocean. However, this population is replaced with a unique (but ecologically neutral) local subpopulation at 94 `seed locations' distributed more or less evenly around the ocean. 
 
-From this initial condition, the model is integrated for 100 years in discrete time. Every six hours, plankton cells are dispersed by the ocean circulation. We initially considered a scenario where positively buoyant cells are transported within the surface layer of a model ocean. Every 24 hours the metapopulation is assumed to reproduce. A new metapopulation is drawn at random from a multinomial distribution, with probabilities based on the dispersed metapopulation. In regions where a subpopulation is present in high abundance, this process has no significant effect on the relative abundance of different subpopulations, but it introduces a meaningful chance of local extinction at the boundaries of each subpopulation, or where the overall carrying capacity is low. 
+From this initial condition, the model is integrated for 100 years in discrete time. Every six hours, plankton cells are dispersed by the ocean circulation. We initially considered a scenario where cells are transported exclusively within the surface layer. Every 24 hours the metapopulation is assumed to reproduce. A new metapopulation is drawn at random from a multinomial distribution, with probabilities based on the subpopulation frequencies after dispersal. In regions where a subpopulation is present in high abundance, this stochastic process has no significant effect on the relative abundance of different subpopulations, but it introduces a meaningful chance of local extinction at the boundaries of each subpopulation, or where the overall carrying capacity is low. 
 
-The green line in Figure~\ref{Cumulative} shows the timescales over which the 94 seed subpopulations become connected with the rest of the ocean. Largely in agreement with \citet{Jonsson:2016}, we find that almost 90\% of the surface ocean is connected within a decade. However, we find a much lower value for the median connection times, with a value of just 2.4 years. \textbf{this could be because of increased diffusivities associated with the Eulerian approach used here, but JW16 discard all indirect shortest paths less than 1 year. The distribution of 'raw' paths is skewed towards zero (but this could be because longer connections are missed)???}.
+The green line in Figure~\ref{Cumulative} shows the timescales over which the 94 seed subpopulations become connected with the rest of the ocean. Largely in agreement with \citet{Jonsson:2016}, we find that almost 90\% of the surface ocean is connected within a decade. However, we find a much lower value for the median connection times, with a value of just 2.4 years. \textbf{This could be because of increased diffusivities associated with the Eulerian approach used here. But could also be because JW16 discard all indirect shortest paths less than 1 year. Their distribution of 'raw' paths is skewed towards zero (but this could be because longer connections are missed)???}.
 
 \begin{figure*}[htp!]
     \centering
         \includegraphics[width=0.5\textwidth]{../Output/neutral_stochastic_static_GUD_X01_surface_transport/cumulative_connections.png}
-    \caption{}
+\caption{Fraction of connected points between the 94 seed locations and  the rest of the ocean through time}
 \label{Cumulative}
 \end{figure*}
 
-Global immigration and emigration times are not spatially homogenous, as indicated in Figure~\ref{Connectivity_maps}a. Immigration times (shown as the background colour) suggest that the oligotrophic gyres are the most easily invaded, whereas the equatorial upwellings appear to be much more resistant  to immigration. Emigration times (shown by the dots) suggest that equatorial regions readily seed the ocean, with higher latitude regions showing somewhat slower timescales of emigration. 
+Global immigration and emigration times are not spatially homogenous, as indicated in Figure~\ref{Connectivity_maps}a. Immigration times (shown as the background colour) suggest that regions between 20 and 60$^\circ$ N and S are the most easily invaded, whereas the equatorial and polar regions appear to be much more resistant  to immigration. Emigration times (shown by the dots) appear to increase either side of a minimum at the equator. 
 
 These patterns are consistent with the surface circulation patterns used to drive the simulation. The equatorial regions are characterised by divergent meridional currents and upwelling. With a consistent efflux of cells being topped up to the carrying capacity, these regions can easily export cells to the rest of the ocean, while remaining resistant to immigration. 
 
@@ -287,18 +287,6 @@ Seed subset of ocean regions with one tracer each. Examine time until globally d
 \end{figure}
 
 
-
-\begin{figure}[htp!]
-
-\caption{Spatial distribution of the 15 connectivity clusters. Colours and numbers correspond to those used in Figure~\ref{connectivity_matrices}.}
-\label{Connectivity_maps}
-\end{figure}
-
-\begin{figure}[htp!]
-
-\caption{Number of globally unconnected points through time}
-\label{Connectivity_maps}
-\end{figure}
 
 
 
