@@ -5,9 +5,10 @@ diag_fcns = diagnostics;
 
 % input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
+% input_filename = 'neutral_stochastic_static_GUD_X17_surface_transport';
 % input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
-input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport';
-% input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport';
+% input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport';
+input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport';
 
 pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
@@ -44,6 +45,12 @@ mean_abundance = mean(ocean.forcing_PCapacity,2);
 [ax] = plot_vector(mean_abundance,'log',mygrid,ocean);
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
 caxis([0 25]);
+
+% transport vectors
+[x,y,u,v] = get_circ_vectors(ocean); % second input is coarse graining resolution
+iplot=randsample(60646,1e4);
+h=quiverm(y(iplot),x(iplot),v(iplot),u(iplot),'k');
+
 % th=title(['Prochlorococcus']);
 colormap(parula)
 ch=colorbar('Location','SouthOutside');
@@ -67,6 +74,8 @@ caxis([-2 36]);
 [x,y,u,v] = get_circ_vectors(ocean); % second input is coarse graining resolution
 iplot=randsample(60646,1e4);
 h=quiverm(y(iplot),x(iplot),v(iplot),u(iplot),'k');
+% h(1).Color=[1 1 1].*0.1;
+% h(2).Color=[1 1 1].*0.1;
 
 th=title(['Mean Annual SST (^\circ C)']);
 colormap(parula)
@@ -79,25 +88,48 @@ set(gcf,'Color','w')
 export_fig(sname,'-r300')
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f2=figure(2);
+f2.Position = [209 369 930 685];
 clf
-
+t_occ(isnan(t_occ))=Inf;
 prc=95;
 t_immigration = prctile(t_occ,prc,2);
 t_emmigration = prctile(t_occ,prc,1);
 
 [ax] = plot_vector(t_immigration,'log',mygrid,ocean);
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
+
+% transport vectors
+[x,y,u,v] = get_circ_vectors(ocean); % second input is coarse graining resolution
+iplot=randsample(60646,1e4);
+h=quiverm(y(iplot),x(iplot),v(iplot),u(iplot),'k');
+
 % th=title(['Prochlorococcus']);
-ch=colorbar;
-colormap(flipud(turbo))
-caxis(log10([2 50]));
+% ch=colorbar;
+colormap(flipud(turbo)) 
+caxis(log10([2 100]));
 ch.Ticks=log10([1 2 5 10 20 50 100 200]);
 ch.TickLabels={'1','2','5','10','20','50','100','200'};
 
 scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),25,log10(t_emmigration),'filled')
 scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),25,'k','LineWidth',0.1)
 
-sname=[pathname input_filename '/connection_times_map.png'];
+% sname=[pathname input_filename '/connection_times_map.png'];
+set(gcf,'Color','w')
+export_fig(sname,'-r300')
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+f2=figure(22);
+f22.Position = [209 369 930 685];
+clf
+
+ch=colorbar('Location','SouthOutside');
+
+colormap(flipud(turbo(64)))
+caxis(log10([1/365 100]));
+ch.Ticks=log10([1/365 7/365 1/12 1 10 100]);
+ch.TickLabels={'day','week','month','year','decade','century'};
+axis off
+
+sname=[pathname input_filename '/colorbar.png'];
 set(gcf,'Color','w')
 export_fig(sname,'-r300')
 

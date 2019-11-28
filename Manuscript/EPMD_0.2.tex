@@ -5,6 +5,7 @@
 \usepackage{bm} % see geometry.pdf on how to lay out the page. There's lots.
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{pdflscape}
 \usepackage{subcaption}
 \usepackage[round]{natbib}
 % \geometry{landscape} % rotated page geometry
@@ -74,40 +75,84 @@ On the other hand, the sub-tropical gyres are characterised by convergent flow a
 
 The red dots in Figure~\ref{Connectivity_maps}d show that there are `source' regions with slow immigration and fast emigration, and conversely there are `sink' regions with fast immigration and slow emigration.
 
-\begin{figure*}[t!]
-    \centering
-    \begin{subfigure}[b]{0.5\textwidth}
+\begin{figure*}[htp]
+        \centering
+\begin{subfigure}{.66\textwidth}
         \centering
         \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_times_map.png}
     \end{subfigure}%
-~
-    \begin{subfigure}[b]{0.5\textwidth}
+\\
+\begin{subfigure}{.66\textwidth}
         \centering
-        \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png}
+         \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png}
     \end{subfigure}%
-    \caption{}
-\label{Connectivity_maps}
+    \\
+\begin{subfigure}{.66\textwidth}
+        \centering
+         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png}
+    \end{subfigure}%
+    \\~\\
+\begin{subfigure}{.66\textwidth}
+        \centering
+         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport/colorbar.png}
+    \end{subfigure}%
+    \\
+    \caption{Immigration and emigration timescales (years) given (a) surface transport and (b) depth-integrated transport. Unique subpopulations were seeded in each of the 94 locations marked with dots. Emigration times, represented by the coloured dots, are defined as the time taken for each seed subpopulation to disperse to 95\% of all locations). Immigration times, represented by the background colours, are defined as the time taken for 95\% of all seed subpopulations to arrive in each location.Ocean currents and sea surface temperature. The vectors show planktonic transport velocities in the surface-only and depth-integrated cases}
+\label{Imm_vs_em}
+\end{figure*}
+
+\begin{figure*}[htp]
+        \centering
+\begin{subfigure}{.66\textwidth}
+        \centering
+         \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_times_map.png}
+    \end{subfigure}%
+    \\
+\begin{subfigure}{.66\textwidth}
+        \centering
+         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport/connection_times_map.png}
+    \end{subfigure}%
+    \\~\\
+\begin{subfigure}{.66\textwidth}
+        \centering
+         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport/colorbar.png}
+    \end{subfigure}%
+    \caption{Immigration and emigration timescales (years) given (a) surface transport and (b) depth-integrated transport. Unique subpopulations were seeded in each of the 94 locations marked with dots. Emigration times, represented by the coloured dots, are defined as the time taken for each seed subpopulation to disperse to 95\% of all locations). Immigration times, represented by the background colours, are defined as the time taken for 95\% of all seed subpopulations to arrive in each location.Ocean currents and sea surface temperature. The vectors show planktonic transport velocities in the surface-only and depth-integrated cases}
+\label{Imm_vs_em}
 \end{figure*}
 
 
 \begin{figure*}[t!]
     \centering
         \includegraphics[width=0.6\textwidth]{../Figures/imm_vs_em.png}
-    \caption{}
+    \caption{Immigration vs emigration times (years) at the 94 seed locations. The coloured circles show times from the surface-only case. The colour scale indicates absolute latitude, with low latitude regions clearly characterised by fast emigration and slow immigration, with the opposite true at higher latitudes. The black dots show the same time scales in the depth-integrated case.}
 \label{Imm_vs_em}
 \end{figure*}
+
+
 
 These interpretations of the immigration and emigration times shown in Figure~\ref{Connectivity_maps}a are based on the assumption that transport below the surface layer can be neglected. To test the sensitivity of the model to this assumption, we calculated the depth-integrated horizontal transport of cells across all model layers. This is effectively the depth-integrated horizontal water transport, weighted by the vertical distribution of cellular abundance. The same transport could be achieved by using the full depth-resolved transport, while vertically homogenising each water column at every time step. After this adjustment to the transport component, and with the carrying capacity increased to the depth-integrated cellular abundance, we repeated the initial experiment in exactly the same way. 
 
 
 The purple line in Figure~\ref{Cumulative} shows that allowing for sub-surface transport markedly decreases the timescales of global plankton dispersal, with a median connection time of 2.1 years, such that more than 97\% of the ocean is connected within a decade. Figure~\ref{Cumulative} shows the change in immigration and emigration times that occurs with the switch from surface to depth-integrated transport. Figure~\ref{Connectivity_maps}b and c shows that the global distribution of immigration and emigration times has decreased everywhere, with the strongest effects in the Indian ocean, where the surface-only simulation suggested that the region was highly resistant to immigration. The blue dots in Figure~\ref{Connectivity_maps}d show that the difference between source and sink regions largely disappears when the depth-integrated transport is considered. 
 
-We next investigated the effect of carrying capacity on the timescales of global dispersal. 
+We next investigated the effect of carrying capacity on the timescales of global dispersal, changing the carrying capacity to the estimated global distribution of 6 micron diameter diatoms \citep{ref}.
 
+\begin{figure*}[t!]
+    \centering
+    \caption{Immigration and emigration timescales (years) given (a) surface transport and (b) depth-integrated transport. Unique subpopulations were seeded in each of the 94 locations marked with dots. Emigration times, represented by the coloured dots, are defined as the time taken for each seed subpopulation to disperse to 95\% of all locations). Immigration times, represented by the background colours, are defined as the time taken for 95\% of all seed subpopulations to arrive in each location.Ocean currents and sea surface temperature. The vectors show planktonic transport velocities in the surface-only and depth-integrated cases}
+\label{Imm_vs_em}
+\end{figure*}
 
 
 The previous experiments have assumed that all subpopulations are equally well-adapted to conditions throughout the entire ocean. We know however that cells show distinct thermal optima that closely reflect their local environment \citep{Thomas:2012}. Such observations suggest that plankton are able to rapidly evolve their thermal tolerance as the are transported across temperature gradients. To account for this, we divided each of the model subpopulations into 77 distinct phenotypes across a range of thermal optima. We initialised the experiment with each subpopulation optimally adapted to its local temperature, but allowed for a small mutational flux between adjacent phenotypes \citep{Beckman:2019}.
 
+
+\begin{figure*}[t!]
+    \centering
+    \caption{Immigration and emigration timescales (years) given (a) surface transport and (b) depth-integrated transport. Unique subpopulations were seeded in each of the 94 locations marked with dots. Emigration times, represented by the coloured dots, are defined as the time taken for each seed subpopulation to disperse to 95\% of all locations). Immigration times, represented by the background colours, are defined as the time taken for 95\% of all seed subpopulations to arrive in each location.Ocean currents and sea surface temperature. The vectors show planktonic transport velocities in the surface-only and depth-integrated cases}
+\label{Imm_vs_em}
+\end{figure*}
 
 
 
