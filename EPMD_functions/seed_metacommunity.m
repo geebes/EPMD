@@ -4,7 +4,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
     % Load carrying capacity
     if strmatch(run_options.TM_scheme,'surface_transport')
         % Can be selected if using surface transport
-        load(['./GUD_forcing/GUD_' run_options.DARWIN_pop '_abundance.mat']);
+        load(['../GUD_forcing/GUD_' run_options.DARWIN_pop '_abundance.mat']);
         run_options.PCapacity = abundance(ocean.Ib,:) .* ocean.volume;
     else
         % Predefined if using depth-integrated biomass-weighted transport
@@ -62,27 +62,6 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.solver    = 'serial';	% serial or parallel
             run_options.mutation  = true;	
             run_options.selection = true;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        case 'neutral'
-
-            nlineages=size(ocean.sample_points,1);
-            
-            x=sparse(ocean.sample_points,1:nlineages,1,length(B),nlineages);
-            % add global resident population
-            x(:,end+1)=1;
-            x(ocean.sample_points,end)=0;
-            
-            run_options.nlineages = nlineages+1;
-            run_options.nphen     = 1;
-            run_options.T_opt     = zeros(1,run_options.nlineages);
-            run_options.selection = false;
-            run_options.mutation  = false;
-            run_options.rel_s     = 1;
-            run_options.solver    = 'parallel';	% serial or parallel
-            
-            % initialise array for connectivity times
-            run_options.t_occupied=zeros(size(x));
             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -135,6 +114,27 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.mutation  = true;
             run_options.selection = true;
             run_options.solver    = 'parallel';	% serial or parallel
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        case 'neutral'
+
+            nlineages=size(ocean.sample_points,1);
+            
+            x=sparse(ocean.sample_points,1:nlineages,1,length(B),nlineages);
+            % add global resident population
+            x(:,end+1)=1;
+            x(ocean.sample_points,end)=0;
+            
+            run_options.nlineages = nlineages+1;
+            run_options.nphen     = 1;
+            run_options.T_opt     = zeros(1,run_options.nlineages);
+            run_options.selection = false;
+            run_options.mutation  = false;
+            run_options.rel_s     = 1;
+            run_options.solver    = 'parallel';	% serial or parallel
+            
+            % initialise array for connectivity times
+            run_options.t_occupied=zeros(size(x));
             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

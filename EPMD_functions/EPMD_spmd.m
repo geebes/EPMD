@@ -47,7 +47,7 @@ forcing_temp        = ocean.forcing_temp;
 dt_sec              = ocean.dt_sec;
 nsubtime            = ocean.nsubtime;
 B                   = ocean.B;
-
+%%
 for yr=1:run_options.nyear
 
     disp('Opening SPMD block')
@@ -117,16 +117,18 @@ for yr=1:run_options.nyear
                     x=sparse(loc,trc,x_l,nxr,nxc);
                     X=sparse(loc,trc,X_l,nxr,nxc);
                 else
-                    p(global_comn_selected<=0)=0;
+                    p(global_comn_selected<=0,:)=0;
                     mu_x    = N.*p;
                     sigma_x = sqrt(N.*p.*(1-p));
                     X       = normrnd(mu_x,sigma_x); % sample population
                     % Set abundance to integer value
                     X = floor(X);
-                     % Set abundance to positive value
+                    % Set abundance to positive value
                     X(X<0)=0;
                     % Calculate as fraction of local carrying capacity
                     x=X./N;
+                    % crude check for div 0
+                    x(isnan(x))=0;
                 end
             end
 
@@ -140,7 +142,7 @@ for yr=1:run_options.nyear
                     % assign current date to newly occupied 
                     t_occ = t_occ + sparse(i,j,occdate,size(t_occ,1),size(t_occ,2));
             end
-%
+
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % COLLATE TIMESERIES OUTPUT (DAILY) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,7 +165,6 @@ for yr=1:run_options.nyear
     disp('----------------------------------')
     disp('Closed SPMD block to write output data')
 
-    %%
     % Gather x data
     xG                       = gather(xD);
     tseries_xG               = gather(tseries_xD);
