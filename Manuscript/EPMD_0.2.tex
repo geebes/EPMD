@@ -62,7 +62,7 @@ The green line in Figure~\ref{Cumulative} shows the timescales over which the 94
 
 \begin{figure*}[htp!]
     \centering
-        \includegraphics[width=0.5\textwidth]{../Output/neutral_stochastic_static_GUD_X01_surface_transport/cumulative_connections.png}
+        \includegraphics[width=0.5\textwidth]{../Figures/cumulative_connections.png}
 \caption{Fraction of connected points between the 94 seed locations and  the rest of the ocean through time}
 \label{Cumulative}
 \end{figure*}
@@ -79,22 +79,22 @@ The red dots in Figure~\ref{Connectivity_maps}d show that there are `source' reg
         \centering
 \begin{subfigure}{.66\textwidth}
         \centering
-        \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_times_map.png}
+        \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_surface_transport_341/connection_times_map.png}
     \end{subfigure}%
 \\
 \begin{subfigure}{.66\textwidth}
         \centering
-         \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png}
+         \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport_341/connection_times_map.png}
     \end{subfigure}%
     \\
 \begin{subfigure}{.66\textwidth}
         \centering
-         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png}
+         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport_94_mut_0.1/connection_times_map.png}
     \end{subfigure}%
     \\~\\
 \begin{subfigure}{.66\textwidth}
         \centering
-         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport/colorbar.png}
+         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport_94_mut_0.1/colorbar.png}
     \end{subfigure}%
     \\
     \caption{Immigration and emigration timescales (years) given (a) surface transport and (b) depth-integrated transport. Unique subpopulations were seeded in each of the 94 locations marked with dots. Emigration times, represented by the coloured dots, are defined as the time taken for each seed subpopulation to disperse to 95\% of all locations). Immigration times, represented by the background colours, are defined as the time taken for 95\% of all seed subpopulations to arrive in each location.Ocean currents and sea surface temperature. The vectors show planktonic transport velocities in the surface-only and depth-integrated cases}
@@ -105,17 +105,17 @@ The red dots in Figure~\ref{Connectivity_maps}d show that there are `source' reg
         \centering
 \begin{subfigure}{.66\textwidth}
         \centering
-         \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_times_map.png}
+         \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport_341/connection_times_map.png}
     \end{subfigure}%
     \\
 \begin{subfigure}{.66\textwidth}
         \centering
-         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport/connection_times_map.png}
+         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport_94/connection_times_map.png}
     \end{subfigure}%
     \\~\\
 \begin{subfigure}{.66\textwidth}
         \centering
-         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport/colorbar.png}
+         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport_94/colorbar.png}
     \end{subfigure}%
     \caption{Immigration and emigration timescales (years) given (a) surface transport and (b) depth-integrated transport. Unique subpopulations were seeded in each of the 94 locations marked with dots. Emigration times, represented by the coloured dots, are defined as the time taken for each seed subpopulation to disperse to 95\% of all locations). Immigration times, represented by the background colours, are defined as the time taken for 95\% of all seed subpopulations to arrive in each location.Ocean currents and sea surface temperature. The vectors show planktonic transport velocities in the surface-only and depth-integrated cases}
 \label{Imm_vs_em}
@@ -204,34 +204,11 @@ The Evolutionary Plankton Metacommunity Dynamics (EPMD) model considers the glob
 \begin{figure}[htp!]
 %%
 \begin{subfigure}{0.5\textwidth}
-\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X01_surface_transport/connection_times_map.png}
+\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport_341/connection_matrix.png}
 \end{subfigure}
 %%
 \begin{subfigure}{0.5\textwidth}
-\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png}
-\end{subfigure}
-%%
-\begin{subfigure}{0.5\textwidth}
-\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_times_map.png}
-\end{subfigure}
-%%
-\begin{subfigure}{0.5\textwidth}
-\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_times_map.png}
-\end{subfigure}
-%%
-\caption{}
-\label{Schematic}
-\end{figure}
-
-
-\begin{figure}[htp!]
-%%
-\begin{subfigure}{0.5\textwidth}
-\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_matrix.png}
-\end{subfigure}
-%%
-\begin{subfigure}{0.5\textwidth}
-\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_matrix.png}
+\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport_341/connection_matrix.png}
 \end{subfigure}
 %%
 \caption{}

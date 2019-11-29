@@ -19,9 +19,9 @@ el = deg2rad(lat); % convert to radians
 
 % Apply inverse of transport matrix
 % concentration-weighted coordinate transform
-X2 = sum(TM.*(scl.*X)',2)./(TM*scl); 
-Y2 = sum(TM.*(scl.*Y)',2)./(TM*scl); 
-Z2 = sum(TM.*(scl.*Z)',2)./(TM*scl); 
+X2 = sum(TM.*(scl.*X)',2)./(TM*vol); 
+Y2 = sum(TM.*(scl.*Y)',2)./(TM*vol); 
+Z2 = sum(TM.*(scl.*Z)',2)./(TM*vol); 
 
 % convert back to lat and lon for plotting
 [az2,el2,r2] = cart2sph(X2,Y2,Z2);

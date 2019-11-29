@@ -3,8 +3,8 @@ clc
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
-input_filename = {'neutral_stochastic_static_GUD_X01_surface_transport',...
-                  'neutral_stochastic_static_GUD_X01_weighted_transport'};
+input_filename = {'neutral_stochastic_static_GUD_X01_surface_transport_341',...
+                  'neutral_stochastic_static_GUD_X01_weighted_transport_341'};
 
 grid_load('~/GitHub/EPMD/nctiles_grid/',5,'nctiles')
 gcmfaces_global
@@ -110,12 +110,13 @@ ch.TickLabels={'1/10','1/5','1/3','1/2','1','2','3','5','10'};
 ch.FontSize=11;
 axis square
 
-% sname=[pathname input_filename '/connection_matrix.png'];
-% set(gcf,'Color','w')
-% export_fig(sname,'-r300')
+sname=['../Figures/connection_matrix.png'];
+set(gcf,'Color','w')
+export_fig(sname,'-r300')
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%f5=figure(5);
 f5=figure(5);
+clf
 
 clrs={'r','b'};
 for i=1:2
@@ -123,18 +124,53 @@ for i=1:2
     t_immigration = prctile(t_occ{i},prc,2);
     t_emmigration = prctile(t_occ{i},prc,1);
     
-    scatter(t_emmigration,t_immigration(ocean.sample_points),15,clrs{i},'filled')
+    if i==1
+        clr=abs(ocean.lat(ocean.sample_points));
+        sz=25;
+    else
+        clr='k';
+        sz=1;
+    end
+    scatter(t_emmigration,t_immigration(ocean.sample_points),sz+2,'k')
     hold on
+    scatter(t_emmigration,t_immigration(ocean.sample_points),sz,clr,'filled')
+    caxis([0 90])
 end
+colormap(redblue)
+colorbar
 box on
 xlabel('Emigration time')
 ylabel('Immigration time')
 axis square
-axis([0 100 0 100])
+axis([0 80 0 80])
 hold on
-plot([0 100],[0 100],'k-')
+plot(xlim,ylim,'k-')
 set(gcf,'Color','w')
 
 sname=['../Figures/imm_vs_em.png'];
+set(gcf,'Color','w')
+export_fig(sname,'-r300')
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+f4 = figure(4);
+clf
+hold on
+
+for i=1:2
+    [N,edges] = histcounts(t_occ{i}(:),0:(1/96):i_lastyr);
+    
+    clr=rand(1,3);
+    plot([0 edges],[NaN cumsum(N)./numel(t_occ{i}) NaN],'Color',clr,'LineW',2)
+    ylim([0 1])
+    box on
+    xlabel('Time (years)')
+    ylabel('Connectance')
+    set(gca,'XScale','log')
+end
+legend('Surface-only','Depth-integrated','Location','SouthEast')
+
+sname=['../Figures/cumulative_connections.png'];
 set(gcf,'Color','w')
 export_fig(sname,'-r300')

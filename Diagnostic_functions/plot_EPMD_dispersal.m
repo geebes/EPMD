@@ -3,12 +3,13 @@ clc
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
-% input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport';
-% input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
-% input_filename = 'neutral_stochastic_static_GUD_X17_surface_transport';
-% input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport';
+% input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport_341';
+% input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport_341';
+% input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_94_mut_0.1';
 % input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport';
-input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport';
+% Not Done Yet % input_filename = 'neutral_stochastic_static_GUD_X17_surface_transport_341';
+% input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport_341';
+input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_94';
 
 pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
@@ -90,7 +91,7 @@ export_fig(sname,'-r300')
 f2=figure(2);
 f2.Position = [209 369 930 685];
 clf
-t_occ(isnan(t_occ))=Inf;
+t_occ(isnan(t_occ))=NaN;
 prc=95;
 t_immigration = prctile(t_occ,prc,2);
 t_emmigration = prctile(t_occ,prc,1);
@@ -110,10 +111,10 @@ caxis(log10([2 100]));
 ch.Ticks=log10([1 2 5 10 20 50 100 200]);
 ch.TickLabels={'1','2','5','10','20','50','100','200'};
 
-scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),25,log10(t_emmigration),'filled')
-scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),25,'k','LineWidth',0.1)
+scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),50,log10(t_emmigration),'filled')
+scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),50,'k','LineWidth',0.1)
 
-% sname=[pathname input_filename '/connection_times_map.png'];
+sname=[pathname input_filename '/connection_times_map.png'];
 set(gcf,'Color','w')
 export_fig(sname,'-r300')
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
