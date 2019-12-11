@@ -3,24 +3,42 @@ clc
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 
-input_filename = {'neutral_stochastic_static_GUD_X01_surface_transport_341',...
-                  'neutral_stochastic_static_GUD_X01_weighted_transport_341'};
+input_filename = { 'neutral_stochastic_static_GUD_X01_surface_transport',...
+                 'neutral_stochastic_seasonal_GUD_X01_surface_transport',...
+                   'neutral_stochastic_static_GUD_X01_weighted_transport',...
+                 'neutral_stochastic_seasonal_GUD_X01_weighted_transport',...
+       'selective_dispersal_stochastic_static_GUD_X01_weighted_transport',...
+     'selective_dispersal_stochastic_seasonal_GUD_X01_weighted_transport',...
+                   'neutral_stochastic_static_GUD_X17_surface_transport',...
+                 'neutral_stochastic_seasonal_GUD_X17_surface_transport',...
+                   'neutral_stochastic_static_GUD_X17_weighted_transport',...
+                 'neutral_stochastic_seasonal_GUD_X17_weighted_transport',... 
+       'selective_dispersal_stochastic_static_GUD_X17_weighted_transport',...
+     'selective_dispersal_stochastic_seasonal_GUD_X17_weighted_transport'}; 
+  
+lgnd = {'Neutral, surface',...
+        'Neutral, surface, seasonal cycle',...
+        'Neutral, depth-integrated',...
+        'Neutral, depth-integrated, seasonal cycle',...
+        'Selective, depth-integrated',...
+        'Selective, depth-integrated, seasonal cycle'};
 
 grid_load('~/GitHub/EPMD/nctiles_grid/',5,'nctiles')
 gcmfaces_global
 load coastlines
 land = shaperead('landareas', 'UseGeoCoords', true);
 
-for i=1:2
+for i=1:numel(input_filename)
     pathname   = '~/GitHub/EPMD/Output/';
     matObj  = matfile([pathname input_filename{i} '.mat']);
 
+    clear ocean t_occupied
     ocean       = matObj.ocean;
     t_occupied  = matObj.t_occupied;
 
-    i_lastyr    = matObj.yrs_saved;
-    disp([num2str(i_lastyr) ' years evaluated.'])
-    %% 
+    i_lastyr{i} = matObj.yrs_saved;
+    disp([num2str(i_lastyr{i}) ' years evaluated.'])
+ 
 
     K = ocean.forcing_PCapacity(:,end);
     T = ocean.forcing_temp;
@@ -30,6 +48,60 @@ for i=1:2
 
     t_occ{i}(~t_occ{i}(:))=NaN;
 end
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+f4 = figure(4);
+f4.Position=[89 692 1160 653];
+clf
+
+clr=zeros(8,3);
+clr(1:4,2) = linspace(0.5,1,4);
+clr(5:8,1) = linspace(0.5,1,4);
+
+lg={};
+for i=1:numel(input_filename)
+    if contains(input_filename{i},'01')
+        ax=subplot(2,1,1);
+        t=title(['(a) 0.6 ' char(181) 'm \it{Prochlorococcus}'],'HorizontalAlignment','Left');
+        lg{end+1}=lgnd{i};
+    else
+        ax=subplot(2,1,2);
+        t=title(['(b) 6 ' char(181) 'm Diatom'],'HorizontalAlignment','Left');        
+    end
+    t.Position(1)=7/365;
+    
+    hold on
+    clear N edges
+    [N,edges] = histcounts(t_occ{i}(:),0:(1/96):i_lastyr{i});
+    
+    hp=plot([0 edges],[NaN cumsum(N)./numel(t_occ{i}) NaN],'LineW',2);
+    ylim([0 1])
+    box on
+    ylabel('Connectance') 
+    set(gca,'XScale','log')
+    
+    xlim([7/365 100])
+    set(gca,'XTick',[7/365 1/12 1 10 100],'YTick',0:0.1:1);
+    set(gca,'XTickLabels',{'week','month','year','decade','century'});
+    grid on
+    ax.XMinorTick = 'off';
+    ax.XAxis.MinorTickValues = [1/365 (1:11)./12 1 2 3 4 5 6 7 8 9 10:10:100];
+    ax.XMinorGrid = 'on';
+    
+%     if contains(input_filename{i},'GUD_X17_surface_transport')
+%         delete(hp)
+%     end
+end
+subplot(2,1,1);
+legend(lg,'Location','NorthWest')
+xlabel('Time')
+
+sname=['../Figures/cumulative_connections.png'];
+set(gcf,'Color','w');
+export_fig(sname,'-r300')
+
+return
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f1=figure(1);
 clf
@@ -139,8 +211,8 @@ end
 colormap(redblue)
 colorbar
 box on
-xlabel('Emigration time')
-ylabel('Immigration time')
+xlabel('Emigration time (years)')
+ylabel('Immigration time (years)')
 axis square
 axis([0 80 0 80])
 hold on
@@ -148,29 +220,5 @@ plot(xlim,ylim,'k-')
 set(gcf,'Color','w')
 
 sname=['../Figures/imm_vs_em.png'];
-set(gcf,'Color','w')
-export_fig(sname,'-r300')
-
-
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-f4 = figure(4);
-clf
-hold on
-
-for i=1:2
-    [N,edges] = histcounts(t_occ{i}(:),0:(1/96):i_lastyr);
-    
-    clr=rand(1,3);
-    plot([0 edges],[NaN cumsum(N)./numel(t_occ{i}) NaN],'Color',clr,'LineW',2)
-    ylim([0 1])
-    box on
-    xlabel('Time (years)')
-    ylabel('Connectance')
-    set(gca,'XScale','log')
-end
-legend('Surface-only','Depth-integrated','Location','SouthEast')
-
-sname=['../Figures/cumulative_connections.png'];
 set(gcf,'Color','w')
 export_fig(sname,'-r300')

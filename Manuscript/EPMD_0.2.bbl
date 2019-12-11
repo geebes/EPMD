@@ -1,4 +1,4 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{9}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \expandafter\ifx\csname url\endcsname\relax
   \def\url#1{\texttt{#1}}\fi
@@ -7,6 +7,10 @@
 \bibitem[{Baas-Becking(1934)}]{BaasBecking:1934}
 Baas-Becking, L. G.~M., 1934. Geobiologie of Inleiding Tot de Milieukunde. Van
   Stockum \& Zoon, The Hague.
+
+\bibitem[{Cherry and Wakeley(2003)}]{Cherry:2003}
+Cherry, J.~L., Wakeley, J., 2003. A diffusion approximation for selection and
+  drift in a subdivided population. Genetics 163~(1), 421--428.
 
 \bibitem[{Dijkstra(1959)}]{Dijkstra:1959}
 Dijkstra, E.~W., 1959. A note on two problems in connexion with graph.

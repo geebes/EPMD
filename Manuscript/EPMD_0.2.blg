@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2017)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: EPMD_0.2.aux
+The style file: /Users/baw103/Latex/elsart-harv.bst.bst
+Database file #1: /Users/baw103/GoogleDrive/biblio1.bib
+Warning--I didn't find a database entry for "Dutkiewicz:2019"
+Warning--I didn't find a database entry for "Thomas:2012"
+Warning--I didn't find a database entry for "Sauterey:2017"
+Warning--I didn't find a database entry for "Beckman:2019"
+Warning--I didn't find a database entry for "Prochlorococcus"
+Warning--I didn't find a database entry for ""
+You've used 9 entries,
+            2825 wiz_defined-function locations,
+            715 strings with 6144 characters,
+and the built_in function-call counts, 4632 in all, are:
+= -- 486
+> -- 168
+< -- 6
++ -- 73
+- -- 54
+* -- 399
+:= -- 803
+add.period$ -- 27
+call.type$ -- 9
+change.case$ -- 62
+chr.to.int$ -- 9
+cite$ -- 9
+duplicate$ -- 156
+empty$ -- 360
+format.name$ -- 81
+if$ -- 955
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 10
+newline$ -- 34
+num.names$ -- 36
+pop$ -- 53
+preamble$ -- 1
+purify$ -- 54
+quote$ -- 0
+skip$ -- 123
+stack$ -- 0
+substring$ -- 427
+swap$ -- 18
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 78
+warning$ -- 0
+while$ -- 35
+width$ -- 0
+write$ -- 104
+(There were 6 warnings)

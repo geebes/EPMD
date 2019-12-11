@@ -1,22 +1,23 @@
 clear
-clc
+% clc
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
-
-% input_filename = 'neutral_stochastic_static_GUD_X01_surface_transport_341';
-% input_filename = 'neutral_stochastic_static_GUD_X01_weighted_transport_341';
-% input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_94_mut_0.1';
-% input_filename = 'selective_dispersal_stochastic_static_GUD_X01_weighted_transport';
-% Not Done Yet % input_filename = 'neutral_stochastic_static_GUD_X17_surface_transport_341';
-% input_filename = 'neutral_stochastic_static_GUD_X17_weighted_transport_341';
-input_filename = 'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_94';
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+input_filename = {'neutral_stochastic_static_GUD_X01_surface_transport',...
+                  'neutral_stochastic_static_GUD_X01_weighted_transport',...
+                  'neutral_stochastic_seasonal_GUD_X01_weighted_transport',...
+      'selective_dispersal_stochastic_static_GUD_X01_weighted_transport',... % running on belafonte
+                  ...
+                  'neutral_stochastic_static_GUD_X17_surface_transport',... % Needs more than 100 year run
+                  'neutral_stochastic_static_GUD_X17_weighted_transport',... % Needs more than 100 year run
+                  'neutral_stochastic_seasonal_GUD_X17_weighted_transport',...  % Needs more han 100 year run
+      'selective_dispersal_stochastic_static_GUD_X17_weighted_transport'}; % Needs more han 100 year run
+  
+input_filename = input_filename{5};
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 pathname   = '~/GitHub/EPMD/Output/';
 matObj  = matfile([pathname input_filename '.mat']);
-
-if exist([pathname input_filename])~=7
-    mkdir([pathname input_filename]);
-end
 
 ocean       = matObj.ocean;
 run_options = matObj.run_options;
@@ -37,7 +38,11 @@ t_occ=full(t_occupied(:,1:numel(ocean.sample_points)));
 disp(['ocean is ' num2str(100.*nnz(t_occ)/numel(t_occ),'%2.0f') '% connected.'])
 
 t_occ(~t_occ(:))=NaN;
+%%
 
+if exist([pathname input_filename])~=7
+    mkdir([pathname input_filename]);
+end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f1=figure(1);
 clf
@@ -78,7 +83,7 @@ h=quiverm(y(iplot),x(iplot),v(iplot),u(iplot),'k');
 % h(1).Color=[1 1 1].*0.1;
 % h(2).Color=[1 1 1].*0.1;
 
-th=title(['Mean Annual SST (^\circ C)']);
+th=title(['Mean Annual SST (^\circC)']);
 colormap(parula)
 ch=colorbar('Location','SouthOutside');
 ch.Ticks=-2:2:36;
@@ -91,7 +96,7 @@ export_fig(sname,'-r300')
 f2=figure(2);
 f2.Position = [209 369 930 685];
 clf
-t_occ(isnan(t_occ))=NaN;
+t_occ(isnan(t_occ))=100;
 prc=95;
 t_immigration = prctile(t_occ,prc,2);
 t_emmigration = prctile(t_occ,prc,1);
@@ -203,7 +208,7 @@ set(gcf,'Color','w')
 export_fig(sname,'-r300')
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f5=figure(5);
-
+clf
 
 h=scatter(t_emmigration,t_immigration(ocean.sample_points),...
         25,'k','Marker','.');
@@ -228,6 +233,7 @@ export_fig(sname,'-r300')
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 f4 = figure(4);
+clf
 hold on
 
 [N,edges] = histcounts(t_occ(:),0:(1/96):i_lastyr);
@@ -247,7 +253,7 @@ export_fig(sname,'-r300')
 Cseed=t_occ(ocean.sample_points,:);
 Cdiag=find(speye(size(Cseed)));
 Cseed(Cdiag)=NaN;
-nanmedian(Cseed(:))
+disp(['Median connection time is ' num2str(nanmedian(Cseed(:))) ' years'])
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f8 = figure(8);
 clf

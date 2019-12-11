@@ -1,5 +1,6 @@
 Output/*
 Workspace/*
 Plotting/*
+Figures/*
 TM_data/full_matrix.mat
 *.m~
