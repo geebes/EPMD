@@ -56,11 +56,11 @@ Stochastic approach that accounts for the enormous and variable size of plankton
 
 \section{Experiments}
 
-To assess the rate of planktonic dispersal across the global ocean, we developed a model that tracks the abundance of different subpopulations in a globally distributed metapopulation \citep{Cherry:2003}. Throughout the simulation, each of the 60,646 surface grid boxes supports a predefined but spatially variable carrying capacity $\mathbf{N}$. This is derived from the estimated global distribution of 0.6 micron diameter \textit{Prochlorococcus} cells \citep{Dutkiewicz:2019}. At the beginning of the simulation, a resident subpopulation is assumed to have population frequency of 1 throughout the global ocean. However, this population is replaced with a unique (but ecologically identical) local subpopulation at 94 `seed locations' distributed more or less evenly around the ocean. 
+To assess the rate of planktonic dispersal across the global ocean, we developed a model that tracks the abundance of different subpopulations in a globally distributed metapopulation \citep{Cherry:2003}. Throughout the simulation, each of the 60,646 surface grid boxes supports a predefined but spatially variable carrying capacity $\mathbf{N}$. This is derived from the estimated global distribution of 0.6 micron diameter \textit{Prochlorococcus} cells \citep{Dutkiewicz:2019}. At the beginning of the simulation, a resident subpopulation is assumed to have population frequency of 1 throughout the global ocean. However, at each of 94 `seed locations' distributed more or less evenly around the ocean, the resident population is replaced with a taxonomically distinct (but ecologically identical) local subpopulation. 
 
-From this initial condition, the model is integrated for 100 years in discrete time. Every six hours, plankton cells are dispersed by the ocean circulation. We initially considered a scenario where cells are transported exclusively within the surface layer. Every 24 hours the metapopulation is assumed to reproduce. A new metapopulation is drawn at random from a multinomial distribution, with probabilities based on the subpopulation frequencies after dispersal. In regions where a subpopulation is present in high abundance, this stochastic process has no significant effect on the relative abundance of different subpopulations, but it introduces a meaningful chance of local extinction at the boundaries of each subpopulation, or where the overall carrying capacity is low. 
+From this initial condition, the model is integrated for 100 years in discrete time. Every six hours, plankton cells are dispersed by the ocean circulation. We initially considered a scenario where cells are transported exclusively within the surface layer. Every 24 hours the metapopulation is assumed to reproduce, with the new metapopulation drawn at random from a multinomial distribution, with probabilities given by the relative abundance of each subpopulation. In regions where a subpopulation is present in high abundance, this stochastic process has no significant effect on the relative abundance of different subpopulations, but it introduces a meaningful chance of local extinction wherever the overall carrying capacity is low (such as at edges of a subpopulations spatial distribution). 
 
-The blue line in Figure~\ref{Cumulative}a shows the timescales over which the 94 seed subpopulations become connected with the rest of the ocean. Largely in agreement with \citet{Jonsson:2016}, we find that almost 90\% of the surface ocean is connected within a decade. However, we find a much lower value for the median connection times, with a value of just 2.4 years. \textbf{This could be because of increased diffusivities associated with the Eulerian approach used here. But could also be because JW16 discard all indirect shortest paths less than 1 year. Their distribution of 'raw' paths is skewed towards zero (but this could be because longer connections are missed)???}.
+The blue line in Figure~\ref{Cumulative}a shows the timescales over which the 94 seed subpopulations become connected with the rest of the ocean. Largely in agreement with \citet{Jonsson:2016}, we find that almost 90\% of the surface ocean is connected within a decade. However, we find a much lower value for the median connection times, with a value of just 2.5 years. \textbf{This could be because of increased diffusivities associated with the Eulerian approach used here. But could also be because JW16 discard all indirect shortest paths less than 1 year. Their distribution of 'raw' paths is skewed towards zero (but this could be because longer connections are missed)???}.
 
 \begin{figure*}[htp!]
     \centering
@@ -69,7 +69,7 @@ The blue line in Figure~\ref{Cumulative}a shows the timescales over which the 94
 \label{Cumulative}
 \end{figure*}
 
-Global immigration and emigration times are not spatially homogenous, as indicated in Figure~\ref{Connectivity_map_pro}a. Immigration times (shown as the background colour) suggest that temperate latitudes are generally more easily invaded than the equatorial regions. Conversely, emigration times (shown by the dots) suggest that subpopulations initialised at lower latitudes reach the rest of the ocean more rapidly than those at higher latitudes. 
+Global immigration and emigration times are not spatially homogenous, as indicated in Figure~\ref{Connectivity_map_pro}a. Immigration times (background colour) suggest that temperate latitudes are generally more easily invaded than the equatorial regions. Conversely, emigration times (coloured dots) suggest that subpopulations initialised at lower latitudes are more rapidly dispersed throughout the ocean than those at from higher latitudes. 
 
 \begin{figure*}[htp]
         \centering
@@ -88,23 +88,19 @@ Global immigration and emigration times are not spatially homogenous, as indicat
 \begin{subfigure}{.66\textwidth}
 (c)\\
         \centering
-\includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport/connection_times_map.png}
+\includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.1/connection_times_map.png}
     \end{subfigure}%
     \\~\\
 \begin{subfigure}{.66\textwidth}
         \centering
-\includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport/colorbar.png}
+\includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.1/colorbar.png}
     \end{subfigure}%
     \\
     \caption{Immigration and emigration timescales (years) for \textit{Prochlorococcus}, given (a) surface only transport, (b) depth-integrated transport and (c) depth-integrated transport with selection. Unique subpopulations were seeded in each of the 94 locations marked with dots. Emigration times, represented by the coloured dots, are defined as the time taken for each seed subpopulation to disperse to 95\% of all locations). Immigration times, represented by the background colours, are defined as the time taken for 95\% of all seed subpopulations to arrive in each location. Planktonic transport velocities are shown as vectors.}
 \label{Connectivity_map_pro}
 \end{figure*}
 
-
-These patterns are confirmed in Figure~\ref{Imm_vs_em}, which shows immigration times against emigration times for the `surface-only' simulation. Low latitude seed locations (red) act as source regions with slow immigration and fast emigration. High latitude source locations act as sink regions, with fast immigration and slow emigration.
-
-These patterns are consistent with the surface circulation patterns used to drive the simulation. The plankton surface transport vectors shown in Figure~\ref{Connectivity_map_pro}a indicate a characteristic divergent circulation at low latitudes, associated with the equatorial upwellings. With a consistent efflux of cells being topped up to the carrying capacity, these regions can easily export cells to the rest of the ocean, while remaining resistant to immigration. At higher latitudes, the sub-tropical gyres are characterised by convergent flow and downwelling. Immigrant cells are continually entrained from bordering regions, with a significant loss to resident cells as the population is cropped to the local carrying capacity. With plankton transport in the surface only, these regions are easily invaded and are slower to export cells to the rest of the ocean.
-
+These patterns are explained by the surface circulation patterns shown in Figure~\ref{Connectivity_map_pro}a. The plankton transport vectors are highly divergent in equatorial upwelling regions, driving a consistent efflux of cells that must be topped up to the carrying capacity by reproduction of the local resident population. These regions thus export cells to the rest of the ocean, while remaining resistant to immigration. At higher latitudes, the sub-tropical gyres are characterised by convergent flow, with a consistent influx of cells diluting the local resident populations. These regions are thus easily invaded and are slower to export cells to the rest of the ocean. These patterns are confirmed in Figure~\ref{Imm_vs_em}, which shows immigration times against emigration times for the `surface-only' simulation. Low latitudes (red) act as source regions, with slow immigration and fast emigration. High latitudes act as sink regions, with fast immigration and slow emigration.
 
 \begin{figure*}[t!]
     \centering
@@ -113,11 +109,13 @@ These patterns are consistent with the surface circulation patterns used to driv
 \label{Imm_vs_em}
 \end{figure*}
 
-The patterns of immigration and emigration times shown in Figure~\ref{Connectivity_map_pro}a appear to be driven by the characteristic circulation patterns at the ocean surface. To test the sensitivity of the model to the subsurface transport, we calculated the depth-integrated horizontal transport of cells across the entire water column. This is effectively the depth-integrated horizontal water transport, weighted by the vertical distribution of cellular abundance. The same transport could be achieved by using the full depth-resolved transport, while vertically homogenising each water column at every time step. After this adjustment to the transport component, and with the carrying capacity increased to the depth-integrated cellular abundance, we repeated the initial experiment in the same way. 
+The assumption that horizontal dispersal of plankton occurs only in the surface layer ignores the potential role of subsurface connectivity. To test the sensitivity of our results to this pathway, we calculated the depth-integrated horizontal transport of cells across the entire water column. This is effectively the depth-integrated horizontal water transport, weighted by the vertical distribution of cellular abundance. After this adjustment to the transport component, and with the carrying capacity increased to the depth-integrated cellular abundance, we repeated the initial experiment in the same way. 
 
-The orange line in Figure~\ref{Cumulative} shows that allowing for sub-surface transport markedly decreases the timescales of global plankton dispersal, with more than 97\% of the ocean connected within a decade, and a median connection time of 2.1 years. Figure~\ref{Connectivity_map_pro}b shows that the global distribution of immigration and emigration times has decreased everywhere (see SI for the relative changes). The strongest effects are in the Indian ocean, where the surface-only simulation suggested that the region was highly resistant to immigration. The black dots in Figure~\ref{Imm_vs_em}d show that the difference between source and sink regions largely disappears when the depth-integrated transport is considered. 
+The orange line in Figure~\ref{Cumulative} shows that allowing for sub-surface transport markedly decreases the timescales of global plankton dispersal, with more than 97\% of the ocean connected within a decade, and a median connection time of 2.1 years. Figure~\ref{Connectivity_map_pro}b shows that the global distribution of immigration and emigration times has decreased everywhere (see SI for the relative changes). The strongest effects are in the Indian ocean, where the surface-only simulation suggested that the region was highly resistant to immigration. The black dots in Figure~\ref{Imm_vs_em}d show that the differences between source and sink regions largely disappears when the depth-integrated transport is considered. 
 
 The previous experiments have assumed that all subpopulations are equally well-adapted to conditions throughout the entire ocean. We know however that cells show distinct thermal optima that closely reflect their local environment \citep{Thomas:2012}. Such observations suggest that plankton are able to rapidly evolve their thermal tolerance as they are transported across temperature gradients. To account for this, we divided each of the model subpopulations into 77 distinct phenotypes across a range of thermal optima. We initialised the experiment with each subpopulation optimally adapted to its local temperature, but allowed for a small mutational flux between adjacent phenotypes \citep{Sauterey:2017,Beckman:2019}.
+
+As a particular phenotype is dispersed beyond its optimal habitat, it will be selectively disadvantaged relative to locally better adapted populations..
 
 These results demonstrate that subsurface circulation plays a key role in the global connectivity of \citep{Prochlorococcus}. Furthermore, the need to adapt across large-scale temperature gradients markedly slows the rate of dispersal. Nonetheless, global connectivity seems to be assured within a matter of decades. 
 
@@ -125,26 +123,7 @@ While these timescales are broadly consistent with the estimates of \citet{Jonss
 
 Figure~\ref{Cumulative}b shows that the equivalent global connectivity of these diatoms for the depth-integrated cases only. It is clear that the decreased abundance and restricted biogeography of this group markedly slows down their global dispersal, in both the neutral and selective cases. 
 
-\begin{figure*}[htp]
-        \centering
-\begin{subfigure}{.66\textwidth}
-        \centering
- \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_times_map.png}
-    \end{subfigure}%
-    \\
-\begin{subfigure}{.66\textwidth}
-        \centering
-\includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport/connection_times_map.png}
-    \end{subfigure}%
-    \\~\\
-\begin{subfigure}{.66\textwidth}
-        \centering
-\includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport/colorbar.png}
-    \end{subfigure}%
-    \\
-    \caption{Immigration and emigration timescales (years) for \textit{Prochlorococcus}, given (a) depth-integrated transport and (c) depth-integrated transport with selection. Experimental setup as for Figure~\ref{Connectivity_map_pro}, but run for 1000 years.}
-\label{Connectivity_map_diatoms}
-\end{figure*}
+
 
 
 
@@ -386,7 +365,7 @@ Finally, the transport matrix is converted from a volume flux per time (m$^3$~d$
 Seed locations were identified by iteratively projecting a subdivided rectangular grid onto the surface of a sphere. Surface ocean coordinates from the GCM grid were then mapped onto these points (by shortest euclidean distance in cartesian coordinates). Finally, the 341 unique coordinates were mapped back to their nearest point on the GCM grid. The model was initialised with one tracer for each of these points, with a genotype frequency of $\mathbf{p} = 1$ at the seed location, and zero everywhere else. 
 
 
-\bibliography{/Users/baw103/GoogleDrive/biblio1}
+\bibliography{/Users/baw103/GoogleDrive_Copy/biblio1}
 \bibliographystyle{/Users/baw103/Latex/elsart-harv.bst}
 \end{document}
 

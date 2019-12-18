@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.4.6)  11 DEC 2019 09:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.4.6)  18 DEC 2019 14:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -348,134 +348,97 @@ Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X01_weighted_t
 ransport/connection_times_map.png used on input line 85.
 (pdftex.def)             Requested size: 276.04895pt x 139.2135pt.
 
-<../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport/con
-nection_times_map.png, id=19, 700.2963pt x 353.1594pt>
+<../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.
+1/connection_times_map.png, id=19, 700.2963pt x 353.1594pt>
 File: ../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transpor
-t/connection_times_map.png Graphic file (type png)
+t_m0.1/connection_times_map.png Graphic file (type png)
 
 <use ../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport
-/connection_times_map.png>
+_m0.1/connection_times_map.png>
 Package pdftex.def Info: ../Output/selective_dispersal_stochastic_static_GUD_X0
-1_weighted_transport/connection_times_map.png used on input line 91.
+1_weighted_transport_m0.1/connection_times_map.png used on input line 91.
 (pdftex.def)             Requested size: 276.04895pt x 139.2135pt.
 
-<../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport/col
-orbar.png, id=20, 457.71pt x 30.8352pt>
+<../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.
+1/colorbar.png, id=20, 457.71pt x 30.8352pt>
 File: ../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transpor
-t/colorbar.png Graphic file (type png)
+t_m0.1/colorbar.png Graphic file (type png)
 
 <use ../Output/selective_dispersal_stochastic_static_GUD_X01_weighted_transport
-/colorbar.png>
+_m0.1/colorbar.png>
 Package pdftex.def Info: ../Output/selective_dispersal_stochastic_static_GUD_X0
-1_weighted_transport/colorbar.png used on input line 96.
+1_weighted_transport_m0.1/colorbar.png used on input line 96.
 (pdftex.def)             Requested size: 276.04895pt x 18.5977pt.
 
 
 LaTeX Warning: Float too large for page by 7.70918pt on input line 101.
 
-[3 <../Figures/cumulative_connections.png (PNG copy)>] [4 <../Output/neutral_st
-ochastic_static_GUD_X01_surface_transport/connection_times_map.png (PNG copy)> 
-<../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_time
-s_map.png (PNG copy)> <../Output/selective_dispersal_stochastic_static_GUD_X01_
-weighted_transport/connection_times_map.png (PNG copy)> <../Output/selective_di
-spersal_stochastic_static_GUD_X01_weighted_transport/colorbar.png (PNG copy)>]
-<../Figures/imm_vs_em.png, id=29, 416.2752pt x 377.0085pt>
+<../Figures/imm_vs_em.png, id=21, 416.2752pt x 377.0085pt>
 File: ../Figures/imm_vs_em.png Graphic file (type png)
 
 <use ../Figures/imm_vs_em.png>
-Package pdftex.def Info: ../Figures/imm_vs_em.png used on input line 111.
+Package pdftex.def Info: ../Figures/imm_vs_em.png used on input line 107.
 (pdftex.def)             Requested size: 250.95476pt x 227.2826pt.
- [5 <../Figures/imm_vs_em.png (PNG copy)>]
+ [3 <../Figures/cumulative_connections.png (PNG copy)>] [4 <../Output/neutral_s
+tochastic_static_GUD_X01_surface_transport/connection_times_map.png (PNG copy)>
+ <../Output/neutral_stochastic_static_GUD_X01_weighted_transport/connection_tim
+es_map.png (PNG copy)> <../Output/selective_dispersal_stochastic_static_GUD_X01
+_weighted_transport_m0.1/connection_times_map.png (PNG copy)> <../Output/select
+ive_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.1/colorbar.png (P
+NG copy)>]
 
-Package natbib Warning: Citation `Thomas:2012' on page 6 undefined on input lin
-e 120.
+Package natbib Warning: Citation `Thomas:2012' on page 5 undefined on input lin
+e 116.
 
 
-Package natbib Warning: Citation `Sauterey:2017' on page 6 undefined on input l
-ine 120.
+Package natbib Warning: Citation `Sauterey:2017' on page 5 undefined on input l
+ine 116.
 
 
-Package natbib Warning: Citation `Beckman:2019' on page 6 undefined on input li
-ne 120.
+Package natbib Warning: Citation `Beckman:2019' on page 5 undefined on input li
+ne 116.
+
+[5 <../Figures/imm_vs_em.png (PNG copy)>]
+
+Package natbib Warning: Citation `Prochlorococcus' on page 6 undefined on input
+ line 120.
 
 
 Package natbib Warning: Citation `Prochlorococcus' on page 6 undefined on input
  line 122.
 
 
-Package natbib Warning: Citation `Prochlorococcus' on page 6 undefined on input
- line 124.
-
-
 Package natbib Warning: Citation `Dutkiewicz:2019' on page 6 undefined on input
- line 124.
+ line 122.
 
-
-<../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_time
-s_map.png, id=33, 700.2963pt x 353.1594pt>
-File: ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection
-_times_map.png Graphic file (type png)
-
-<use ../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connection_
-times_map.png>
-Package pdftex.def Info: ../Output/neutral_stochastic_static_GUD_X17_weighted_t
-ransport/connection_times_map.png used on input line 132.
-(pdftex.def)             Requested size: 276.04895pt x 139.2135pt.
-
-<../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport/con
-nection_times_map.png, id=34, 700.2963pt x 353.1594pt>
-File: ../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transpor
-t/connection_times_map.png Graphic file (type png)
-
-<use ../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport
-/connection_times_map.png>
-Package pdftex.def Info: ../Output/selective_dispersal_stochastic_static_GUD_X1
-7_weighted_transport/connection_times_map.png used on input line 137.
-(pdftex.def)             Requested size: 276.04895pt x 139.2135pt.
-
-<../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport/col
-orbar.png, id=35, 457.71pt x 30.8352pt>
-File: ../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transpor
-t/colorbar.png Graphic file (type png)
-
-<use ../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport
-/colorbar.png>
-Package pdftex.def Info: ../Output/selective_dispersal_stochastic_static_GUD_X1
-7_weighted_transport/colorbar.png used on input line 142.
-(pdftex.def)             Requested size: 276.04895pt x 18.5977pt.
- [6] [7 <../Output/neutral_stochastic_static_GUD_X17_weighted_transport/connect
-ion_times_map.png (PNG copy)> <../Output/selective_dispersal_stochastic_static_
-GUD_X17_weighted_transport/connection_times_map.png (PNG copy)> <../Output/sele
-ctive_dispersal_stochastic_static_GUD_X17_weighted_transport/colorbar.png (PNG 
-copy)>]
-<../Figures/Schematic.png, id=44, 590.9277pt x 566.3559pt>
+[6] <../Figures/Schematic.png, id=37, 590.9277pt x 566.3559pt>
 File: ../Figures/Schematic.png Graphic file (type png)
 
 <use ../Figures/Schematic.png>
-Package pdftex.def Info: ../Figures/Schematic.png used on input line 193.
+Package pdftex.def Info: ../Figures/Schematic.png used on input line 172.
 (pdftex.def)             Requested size: 334.60422pt x 320.7003pt.
- [8] [9 <../Figures/Schematic.png (PNG copy)>]
-[10] [11] [12
+ [7] [8 <../Figures/Schematic.png (PNG copy)>]
+[9] [10] [11
 
-] (./EPMD_0.2.bbl [13
+] (./EPMD_0.2.bbl [12
 
 ])
 
 Package natbib Warning: There were undefined citations.
 
-[14] (./EPMD_0.2.aux)
+[13] (./EPMD_0.2.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 4269 strings out of 492995
- 65985 string characters out of 6132705
- 137148 words of memory out of 5000000
- 7750 multiletter control sequences out of 15000+600000
+ 4254 strings out of 492995
+ 64705 string characters out of 6132705
+ 138139 words of memory out of 5000000
+ 7737 multiletter control sequences out of 15000+600000
  16985 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,12n,40p,911b,378s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,12n,40p,1030b,378s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
@@ -489,10 +452,10 @@ texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/t
 exlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/tex
 live/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texl
 ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on EPMD_0.2.pdf (14 pages, 8170063 bytes).
+Output written on EPMD_0.2.pdf (13 pages, 5309342 bytes).
 PDF statistics:
- 112 PDF objects out of 1000 (max. 8388607)
- 72 compressed objects within 1 object stream
+ 106 PDF objects out of 1000 (max. 8388607)
+ 70 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 51 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

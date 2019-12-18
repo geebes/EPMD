@@ -3,10 +3,11 @@ clear
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-input_filename = {'neutral_stochastic_static_GUD_X01_surface_transport',...
+input_filename = {'neutral_deterministic_static_GUD_X01_surface_transport',...
+                  'neutral_stochastic_static_GUD_X01_surface_transport',...
                   'neutral_stochastic_static_GUD_X01_weighted_transport',...
                   'neutral_stochastic_seasonal_GUD_X01_weighted_transport',...
-      'selective_dispersal_stochastic_static_GUD_X01_weighted_transport',... % running on belafonte
+      'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.01',... % running on belafonte
                   ...
                   'neutral_stochastic_static_GUD_X17_surface_transport',... % Needs more than 100 year run
                   'neutral_stochastic_static_GUD_X17_weighted_transport',... % Needs more than 100 year run
@@ -31,6 +32,8 @@ gcmfaces_global
 load coastlines
 land = shaperead('landareas', 'UseGeoCoords', true);
 
+ocean.ann_abundance = mean(ocean.forcing_PCapacity,2);
+
 K = ocean.forcing_PCapacity(:,end);
 T = ocean.forcing_temp;
 t_occ=full(t_occupied(:,1:numel(ocean.sample_points)));
@@ -38,11 +41,13 @@ t_occ=full(t_occupied(:,1:numel(ocean.sample_points)));
 disp(['ocean is ' num2str(100.*nnz(t_occ)/numel(t_occ),'%2.0f') '% connected.'])
 
 t_occ(~t_occ(:))=NaN;
-%%
+
 
 if exist([pathname input_filename])~=7
     mkdir([pathname input_filename]);
 end
+
+% return
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f1=figure(1);
 clf
@@ -286,7 +291,7 @@ seed_ID=1;
 
 % get abundance data
 
-for iyr = 1%:i_lastyr
+for iyr = 1:i_lastyr
     clf
     x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
     
