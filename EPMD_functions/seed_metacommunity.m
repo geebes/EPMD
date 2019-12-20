@@ -65,7 +65,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        case 'neutral_lineages' % set locally addapted phenotype as x=1 in each location
+        case 'neutral_lineages' % set locally adapted phenotype as x=1 in each location
             % bin  temperature according to T_opt range
             [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
             % initialise EiE matrix
@@ -177,6 +177,51 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.mutation  = true;
             run_options.rel_s     = 1;
             run_options.solver    = 'parallel';	% serial or parallel
+            
+            % initialise array for connectivity times
+            run_options.t_occupied=sparse(size(x));
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        case 'nonadaptive_dispersal'
+
+            nlineages   = size(ocean.sample_points,1);
+            
+            x1=sparse(ocean.sample_points,1:nlineages,1,length(B),nlineages);
+            
+            % find temperature of water at seed locations
+            Tsample=ocean.ann_theta(ocean.sample_points);
+            diffT=abs(Tsample-run_options.T_opt);
+            [~,isample]=min(diffT,[],2);
+            
+            ilin    = (1:nlineages);
+            linindx = (ilin-1).*nphen + isample';
+            
+            x=sparse(length(B),nlineages*nphen);
+            x(:,linindx) = x1;
+            
+            % add global resident population
+            % find best adapted phenotype for each location
+            diffT=abs(ocean.ann_theta-run_options.T_opt);
+            [~,isample]=min(diffT,[],2);
+            % add nphen columns for resident
+            x(:,end+1:end+nphen)=0;
+            % get index of best adapted phenotype in each location
+            resind = sub2ind(size(x),(1:size(x,1))',nlineages*nphen+isample);
+            % set resident to 1
+            x(resind)=1;
+            % reset sample sites to zero
+            x(resind(ocean.sample_points))=0; 
+                        
+            nlineages = nlineages + 1;
+            
+            run_options.T_opt     = repmat(T_opt,1,nlineages); % replicate T_opt for ancestral species
+            run_options.nlineages = nlineages;
+            run_options.npopn     = nphen;
+            run_options.selection = true;
+            run_options.mutation  = false;
+            run_options.rel_s     = 1;
+            run_options.solver    = 'parallel';	% serial or parallel
+            run_options.xsparse   = true;
             
             % initialise array for connectivity times
             run_options.t_occupied=sparse(size(x));

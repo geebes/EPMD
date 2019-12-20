@@ -21,7 +21,7 @@ function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
         cmat.x(yr,1)           = {[xx]};
         
         switch run_options.seed_dist
-            case {'neutral','selective_dispersal'}
+            case {'neutral','selective_dispersal','nonadaptive_dispersal'}
                 % find minimum occupancy time across all phenotypes in each lineage
                 % (N.B. exclude resident)
                 t_occ = run_options.t_occupied;
@@ -41,7 +41,7 @@ function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
         % SAVE DAILY TIMESERIES DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         switch run_options.seed_dist
-            case 'selective_dispersal'
+            case {'selective_dispersal','nonadaptive_dispersal'}
                 % Do not write x time-series for huge selective_dispersal runs
             otherwise
                 disp('Saving time-series ...')

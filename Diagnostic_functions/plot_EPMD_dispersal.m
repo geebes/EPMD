@@ -3,16 +3,27 @@ clear
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-input_filename = {'neutral_deterministic_static_GUD_X01_surface_transport',...
-                  'neutral_stochastic_static_GUD_X01_surface_transport',...
-                  'neutral_stochastic_static_GUD_X01_weighted_transport',...
-                  'neutral_stochastic_seasonal_GUD_X01_weighted_transport',...
-      'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.01',... % running on belafonte
-                  ...
-                  'neutral_stochastic_static_GUD_X17_surface_transport',... % Needs more than 100 year run
-                  'neutral_stochastic_static_GUD_X17_weighted_transport',... % Needs more than 100 year run
-                  'neutral_stochastic_seasonal_GUD_X17_weighted_transport',...  % Needs more han 100 year run
-      'selective_dispersal_stochastic_static_GUD_X17_weighted_transport'}; % Needs more han 100 year run
+input_filename = {   'neutral_stochastic_static_GUD_X01_surface_transport',...
+                   'neutral_stochastic_seasonal_GUD_X01_surface_transport',...
+                     'neutral_stochastic_static_GUD_X01_weighted_transport',...
+                   'neutral_stochastic_seasonal_GUD_X01_weighted_transport',...
+       'nonadaptive_dispersal_stochastic_static_GUD_X01_weighted_transport',...
+       ...
+         'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.01',...
+       'selective_dispersal_stochastic_seasonal_GUD_X01_weighted_transport_m0.01',...
+         'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.1',...
+       'selective_dispersal_stochastic_seasonal_GUD_X01_weighted_transport_m0.1',...
+...
+                     'neutral_stochastic_static_GUD_X17_surface_transport',...
+                   'neutral_stochastic_seasonal_GUD_X17_surface_transport',...
+                     'neutral_stochastic_static_GUD_X17_weighted_transport',...
+                   'neutral_stochastic_seasonal_GUD_X17_weighted_transport',... 
+                   ...
+                   ...
+         'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_m0.01',...
+                   ...
+         'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_m0.1',...
+       'selective_dispersal_stochastic_seasonal_GUD_X17_weighted_transport_m0.1'}; 
   
 input_filename = input_filename{5};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -287,23 +298,49 @@ export_fig(sname,'-r300')
 
 figure(6)
 
-seed_ID=1;
+seed_ID=8;
 
 % get abundance data
 
-for iyr = 1:i_lastyr
+for iyr = i_lastyr
     clf
-    x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
+    x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;;
     
-    x_i=x(:,seed_ID);
+    [~,cols] = find(x);
+    cols=unique(cols);
+    x_i=x(:,cols(seed_ID));
     
+    subplot(3,1,1:2)
     [ax] = plot_vector(x_i,'log',mygrid,ocean);
     geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
     caxis([0 25])
     hold on
-    title(['Year ' num2str(iyr)])
+    title('(a)')
     scatterm(ocean.lat(ocean.sample_points(seed_ID)),ocean.lon(ocean.sample_points(seed_ID)),25,'m')
-    colorbar
+    ch=colorbar;
+    ch.TickLabels={'10^{0}','10^{5}','10^{10}','10^{15}','10^{20}','10^{25}'};
+    
+    sh2=subplot(313);
+    [n,edges,bin] = histcounts(ocean.ann_theta,unique(run_options.T_opt));
+    for i=1:numel(edges)
+        freq(i)=sum(x_i(bin==i));
+    end
+    bar(edges,freq,1)
+    hold on
+    in9999=cumsum(freq)>sum(freq).*0.01 & cumsum(freq)<sum(freq).*0.99;
+    bar(edges,freq.*in9999,1)
+    mask=edges==run_options.T_opt(cols(seed_ID));
+    bar(edges,freq.*mask,1)
+    set(gca,'YScale','log')
+    ylim([1 1e25])
+    xlabel('Temperature (^\circC)')
+    ylabel('Abundance')
+    title('(b)')
+    sh2.Position(2)=sh2.Position(2)+0.1;
+    legend('All','1% to 99%','T = T_{opt}')
+    set(gca,'YTick',10.^(0:5:25),...
+            'YTickLabel',{'10^{0}','10^{5}','10^{10}','10^{15}','10^{20}','10^{25}'})
+    
     drawnow
     
     sname=[pathname input_filename '/Seed_' num2str(seed_ID,'%03i') '_Year_'  num2str(iyr,'%03i') '.png'];

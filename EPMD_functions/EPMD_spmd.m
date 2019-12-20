@@ -133,7 +133,7 @@ for yr=1:run_options.nyear
             end
 
             switch seed_dist
-                case {'neutral','selective_dispersal'}
+                case {'neutral','selective_dispersal','nonadaptive_dispersal'}
                     % get current date
                     occdate=(yr-1 + dy./nday);
                     % find all pppulations and locations occupied for the first time

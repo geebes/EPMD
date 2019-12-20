@@ -56,16 +56,16 @@ Stochastic approach that accounts for the enormous and variable size of plankton
 
 \section{Experiments}
 
-To assess the rate of planktonic dispersal across the global ocean, we developed a model that tracks the abundance of different subpopulations in a globally distributed metapopulation \citep{Cherry:2003}. Throughout the simulation, each of the 60,646 surface grid boxes supports a predefined but spatially variable carrying capacity $\mathbf{N}$. This is derived from the estimated global distribution of 0.6 micron diameter \textit{Prochlorococcus} cells \citep{Dutkiewicz:2019}. At the beginning of the simulation, a resident subpopulation is assumed to have population frequency of 1 throughout the global ocean. However, at each of 94 `seed locations' distributed more or less evenly around the ocean, the resident population is replaced with a taxonomically distinct (but ecologically identical) local subpopulation. 
+To assess the rate of planktonic dispersal across the global ocean, we developed a model that tracks the abundance of different subpopulations in a globally distributed metapopulation \citep{Cherry:2003}. Throughout the simulation, each of the 60,646 surface grid boxes supports a predefined but spatially variable carrying capacity $\mathbf{N}$ (Figure~\ref{Abundances}a). This is derived from the estimated global distribution of 0.6 micron diameter \textit{Prochlorococcus} cells \citep{Dutkiewicz:2019}. At the beginning of the simulation, a resident subpopulation is assumed to have population frequency of 1 throughout the global ocean. However, at each of 94 `seed locations' distributed more or less evenly around the ocean, the resident population is replaced with a taxonomically distinct (but ecologically identical) local subpopulation. 
 
-From this initial condition, the model is integrated for 100 years in discrete time. Every six hours, plankton cells are dispersed by the ocean circulation. We initially considered a scenario where cells are transported exclusively within the surface layer. Every 24 hours the metapopulation is assumed to reproduce, with the new metapopulation drawn at random from a multinomial distribution, with probabilities given by the relative abundance of each subpopulation. In regions where a subpopulation is present in high abundance, this stochastic process has no significant effect on the relative abundance of different subpopulations, but it introduces a meaningful chance of local extinction wherever the overall carrying capacity is low (such as at edges of a subpopulations spatial distribution). 
+From this initial condition, the model is integrated for 100 years in discrete time. Every six hours, plankton cells are dispersed by the ocean circulation. We initially considered a scenario where cells are transported exclusively within the surface layer. Every 24 hours the metapopulation is assumed to reproduce, with the new metapopulation drawn at random from a multinomial distribution, with probabilities given by the relative abundance of each subpopulation. In regions where a subpopulation is present in high abundance, this stochastic process has no significant effect on the relative abundance of different subpopulations, but it introduces a meaningful chance of local extinction wherever the overall carrying capacity is low (such as at edges of a subpopulations spatial distribution). In the following we discuss the results from simulations with time-invariant temperatures and carrying capacities. We also performed simulations where these variables followed a seasonal cycle (dashed lines in Figure~\ref{Cumulative}), finding that the results were not overly sensitive to the change.
 
-The blue line in Figure~\ref{Cumulative}a shows the timescales over which the 94 seed subpopulations become connected with the rest of the ocean. Largely in agreement with \citet{Jonsson:2016}, we find that almost 90\% of the surface ocean is connected within a decade. However, we find a much lower value for the median connection times, with a value of just 2.5 years. \textbf{This could be because of increased diffusivities associated with the Eulerian approach used here. But could also be because JW16 discard all indirect shortest paths less than 1 year. Their distribution of 'raw' paths is skewed towards zero (but this could be because longer connections are missed)???}.
+The blue line in Figure~\ref{Cumulative}a shows the timescales over which the 94 seed subpopulations become connected with the rest of the ocean. Largely in agreement with \citet{Jonsson:2016}, we find that almost 90\% of the surface ocean is connected within a decade. \textbf{This could be because of increased diffusivities associated with the Eulerian approach used here. But could also be because JW16 discard all indirect shortest paths less than 1 year. Their distribution of 'raw' paths is skewed towards zero (but this could be because longer connections are missed)???}.
 
 \begin{figure*}[htp!]
     \centering
         \includegraphics[width=1\textwidth]{../Figures/cumulative_connections.png}
-\caption{Fraction of connected points between the 94 seed locations and  the rest of the ocean through time}
+\caption{Fraction of connections between the 94 seed locations and the rest of the ocean through time. Solid lines show the results of simulations with time-invariant temperatures and carrying capacities. Dashed lines show the results of simulations with seasonality in these two variables.}
 \label{Cumulative}
 \end{figure*}
 
@@ -111,11 +111,27 @@ These patterns are explained by the surface circulation patterns shown in Figure
 
 The assumption that horizontal dispersal of plankton occurs only in the surface layer ignores the potential role of subsurface connectivity. To test the sensitivity of our results to this pathway, we calculated the depth-integrated horizontal transport of cells across the entire water column. This is effectively the depth-integrated horizontal water transport, weighted by the vertical distribution of cellular abundance. After this adjustment to the transport component, and with the carrying capacity increased to the depth-integrated cellular abundance, we repeated the initial experiment in the same way. 
 
-The orange line in Figure~\ref{Cumulative} shows that allowing for sub-surface transport markedly decreases the timescales of global plankton dispersal, with more than 97\% of the ocean connected within a decade, and a median connection time of 2.1 years. Figure~\ref{Connectivity_map_pro}b shows that the global distribution of immigration and emigration times has decreased everywhere (see SI for the relative changes). The strongest effects are in the Indian ocean, where the surface-only simulation suggested that the region was highly resistant to immigration. The black dots in Figure~\ref{Imm_vs_em}d show that the differences between source and sink regions largely disappears when the depth-integrated transport is considered. 
+The orange line in Figure~\ref{Cumulative} shows that allowing for sub-surface transport markedly accelerates global plankton dispersal, with more than 97\% of the ocean connected in less than a decade. Figure~\ref{Connectivity_map_pro}b shows that the global distribution of immigration and emigration times has decreased everywhere (see SI for the relative changes). The strongest effects are in the Indian ocean, where the surface-only simulation suggested that the region was highly resistant to immigration. The black dots in Figure~\ref{Imm_vs_em}d show that the differences between source and sink regions largely disappears when the depth-integrated transport is considered. 
 
-The previous experiments have assumed that all subpopulations are equally well-adapted to conditions throughout the entire ocean. We know however that cells show distinct thermal optima that closely reflect their local environment \citep{Thomas:2012}. Such observations suggest that plankton are able to rapidly evolve their thermal tolerance as they are transported across temperature gradients. To account for this, we divided each of the model subpopulations into 77 distinct phenotypes across a range of thermal optima. We initialised the experiment with each subpopulation optimally adapted to its local temperature, but allowed for a small mutational flux between adjacent phenotypes \citep{Sauterey:2017,Beckman:2019}.
+The previous experiments have assumed that all subpopulations are equally well-adapted to conditions throughout the entire ocean, but we know that phytoplankton populations show distinct thermal optima that closely reflect their local environment \citep{Thomas:2012,ODonnell:2018}. As a population is dispersed, it must compete with locally-adapted residents that may well competitively exclude the immigrant population. To test the influence of this effect, we assigned thermal tolerance curves, such that populations are preferentially selected when ambient conditions match their thermal optimum. The global resident population is divided into 77 phenotypes, each with thermal optima matching the annual-mean local water temperature. Each seed population is also assigned a thermal optimum defined by its local environment. The [as yet unplotted] line in Figure~\ref{Cumulative} shows the global dispersal of the 94 seed populations is severely restricted by temperature-based selection, with global connectivity not rising above XX\% in the 100 year simulation. 
 
-As a particular phenotype is dispersed beyond its optimal habitat, it will be selectively disadvantaged relative to locally better adapted populations..
+Figure~\ref{} shows the global distribution of an illustrative seed population added in the central North Atlantic (35$^\circ$N, 46$^\circ$W), after 100 years of dispersal. With a thermal optimum matching its initial habitat temperature of 22$^{\circ}$C, the population remains restricted to the North Atlantic subtropical gyre, in waters between 5 and 28$^\circ$C. The population has been unable to disperse beyond its original ocean basin, being outcompeted by 
+resident cold-adapted species at higher latitudes.
+
+\begin{figure*}[t!]
+    \centering
+        \includegraphics[width=0.6\textwidth]{../Output/nonadaptive_dispersal_stochastic_static_GUD_X01_weighted_transport/Seed_008_Year_014.png}
+    \caption{\textbf{(a)} Global distribution of a non-adapting population after 100 years of dispersal. The population was seeded at the circled location, with a thermal optima matching the ambient temperature of 22$^\circ$C. \textbf{(b)} Abundance as a function of ambient temperature after 100 years of dispersal. The population is completely restricted to waters between 5 and 28$^\circ$C, with 1st and 99th percentiles of 20 and 23$^\circ$C.}
+\label{}
+\end{figure*}
+
+Temperature-related selection clearly has the capacity to restrict the dispersal of thermally adapted populations. If populations are to overcome this restriction, then they must adapt to their new environments \citep{Thomas:2012,ODonnell:2018}. We included this capacity in the model by allowing populations to produce mutants with different thermal optima. We divided all of the model subpopulations into 77 distinct phenotypes across a range of thermal optima. We initialised the experiment with each subpopulation optimally adapted to its local temperature, but allowed for a small mutational flux between adjacent phenotypes \citep{Sauterey:2017,Beckman:2019}. As populations are transported away from their thermal optima, they will still be outcompeted by the better adapted residents, but their mutated offspring will be able to compete as equals, allowing dispersal to continue (albeit at an attenuated rate). We performed simulations with mutation rates of 1\% and 10\%.
+
+The green line in Figure~\ref{Cumulative} shows that even with an extremely high mutation rate of 10\%, global dispersal is markedly restricted by selection effects, with 95\% connectivity only achieved after approximately 30 years. When the mutation rate is set to 1\%, just over 30\% of the ocean has been connected within 100 years.
+
+In a final set of experiments, we assessed performed the same set of simulations with a carrying capacity representative of small (6 micron) diatoms \citep{Dutkiewicz:2019}. Figure~\ref{cumulative}b shows that in all cases the lower abundances and associated higher probability of extinctions leads to a notable increase in the global timescales of dispersal. 
+
+\section{Discussion}
 
 These results demonstrate that subsurface circulation plays a key role in the global connectivity of \citep{Prochlorococcus}. Furthermore, the need to adapt across large-scale temperature gradients markedly slows the rate of dispersal. Nonetheless, global connectivity seems to be assured within a matter of decades. 
 
@@ -173,22 +189,6 @@ The Evolutionary Plankton Metacommunity Dynamics (EPMD) model considers the glob
 \caption{}
 \label{Schematic}
 \end{figure}
-
-
-\begin{figure}[htp!]
-%%
-\begin{subfigure}{0.5\textwidth}
-%\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X01_weighted_transport_341/connection_matrix.png}
-\end{subfigure}
-%%
-\begin{subfigure}{0.5\textwidth}
-%\includegraphics[width=1\linewidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport_341/connection_matrix.png}
-\end{subfigure}
-%%
-\caption{}
-\label{Schematic}
-\end{figure}
-
 
 
 \section{Model description}
@@ -271,15 +271,6 @@ Seed subset of ocean regions with one tracer each. Examine time until globally d
 
 
 
-\subsection{Spatial clustering by timescales of connectivity}
-
-
-\begin{figure}[htp!]
-
-\caption{Pairwise global minimum connectivity and clustering. Upper panel: matrix of the connectivity times between seed locations. Columns of the matrix correspond to source locations (such that row values represent emigration timescales), while rows correspond to target locations (such that column values represent immigration timescales). Lower panel: Clustering of the seed locations on the basis of the average of the immigration and emigration timescales between each location. Coloured boxes in the upper panel indicate clusters defined by the average timescales of connectivity (as shown in the lower panel).}
-\label{connectivity_matrices}
-\end{figure}
-
 
 
 
@@ -298,35 +289,43 @@ Seed subset of ocean regions with one tracer each. Examine time until globally d
 
 
 
-\clearpage 
-
-\begin{figure*}[htp]
-        \centering
-\begin{subfigure}{.66\textwidth}
-        \centering
-%         \includegraphics[width=1\textwidth]{../Output/neutral_stochastic_static_GUD_X17_weighted_transport_341/connection_times_map.png}
-    \end{subfigure}%
-    \\
-\begin{subfigure}{.66\textwidth}
-        \centering
-%         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport_94/connection_times_map.png}
-    \end{subfigure}%
-    \\~\\
-\begin{subfigure}{.66\textwidth}
-        \centering
-%         \includegraphics[width=1\textwidth]{../Output/selective_dispersal_stochastic_static_GUD_X17_weighted_transport_94/colorbar.png}
-    \end{subfigure}%
-    \caption{Immigration and emigration timescales (years) given (a) surface transport and (b) depth-integrated transport. Unique subpopulations were seeded in each of the 94 locations marked with dots. Emigration times, represented by the coloured dots, are defined as the time taken for each seed subpopulation to disperse to 95\% of all locations). Immigration times, represented by the background colours, are defined as the time taken for 95\% of all seed subpopulations to arrive in each location.Ocean currents and sea surface temperature. The vectors show planktonic transport velocities in the surface-only and depth-integrated cases}
-\label{}
-\end{figure*}
 
 
-
-\clearpage 
-
+\clearpage
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
 \appendix
 
 \section{Appendix}
+
+
+
+
+\begin{figure*}[htp]
+        \centering
+\begin{subfigure}{0.8\textwidth}
+        \centering
+        (a) \textit{Prochlorococcus}
+         \includegraphics[width=1\textwidth]{/Users/baw103/GitHub/EPMD/Output/neutral_stochastic_static_GUD_X01_weighted_transport/abundance.png}
+    \end{subfigure}%
+    \\
+\begin{subfigure}{0.8\textwidth}
+        \centering
+        ~\\(b) diatom
+         \includegraphics[width=1\textwidth]{/Users/baw103/GitHub/EPMD/Output/neutral_stochastic_static_GUD_X17_weighted_transport/abundance.png}
+    \end{subfigure}%
+    \caption{Global abundance of a 0.6 micron \textit{Prochlorococcus} population (upper panel) and a 6 micron diatom. Distributions are taken from \citep{Dutkiewicz:2019}.}
+\label{Abundances}
+\end{figure*}
+
+\begin{figure}[htp!]
+\includegraphics[width=1\linewidth]{/Users/baw103/GitHub/EPMD/Output/neutral_stochastic_static_GUD_X01_weighted_transport/Dispersal_maps-01.png}
+\caption{Neutral dispersal of a \textit{Prochlorococcus} subpopulation seeded off the southern tip of Greenland (magenta circle). Panels 1 to 14 show the global abundance distribution at the end of each year. The final panel shows the arrival times of the subpopulation as it spreads globally.}
+\label{Schematic}
+\end{figure}
+
+
 
 \subsection{Mass conservation correction}
 
