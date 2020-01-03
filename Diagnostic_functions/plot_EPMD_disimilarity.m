@@ -9,13 +9,14 @@ input_filename = {'neutral_deterministic_static_GUD_X01_surface_transport',...
                   'neutral_stochastic_seasonal_GUD_X01_weighted_transport',...
       'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.1',... 
       'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.01',... % running on belafonte
+       'nonadaptive_dispersal_stochastic_static_GUD_X01_weighted_transport',...
                   ...
                   'neutral_stochastic_static_GUD_X17_surface_transport',... % Needs more than 100 year run
                   'neutral_stochastic_static_GUD_X17_weighted_transport',... % Needs more than 100 year run
                   'neutral_stochastic_seasonal_GUD_X17_weighted_transport',...  % Needs more han 100 year run
       'selective_dispersal_stochastic_static_GUD_X17_weighted_transport'}; % Needs more han 100 year run
   
-input_filename = input_filename{6};
+input_filename = input_filename{7};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 pathname   = '~/GitHub/EPMD/Output/';
@@ -65,7 +66,7 @@ tdist=t_occ(ocean.sample_points,:);
 
 tdist=(tdist+tdist')./2;
 
-for iyr=1:100
+for iyr=i_lastyr
 
 x1  = cell2mat(matObj.x(iyr,1));
 % get taxonomic composition at all sites
@@ -119,7 +120,7 @@ end
 
 %%
 
-for iyr=1:100
+for iyr=i_lastyr
 
     x1  = cell2mat(matObj.x(iyr,1));
     lnx=log(x1);
