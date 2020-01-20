@@ -8,7 +8,7 @@ input_filename = {   'neutral_stochastic_static_GUD_X01_surface_transport',...
                      'neutral_stochastic_static_GUD_X01_weighted_transport',...
                    'neutral_stochastic_seasonal_GUD_X01_weighted_transport',...
        'nonadaptive_dispersal_stochastic_static_GUD_X01_weighted_transport',...
-       ...
+     'nonadaptive_dispersal_stochastic_seasonal_GUD_X01_weighted_transport',...
          'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.01',...
        'selective_dispersal_stochastic_seasonal_GUD_X01_weighted_transport_m0.01',...
          'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.1',...
@@ -18,14 +18,14 @@ input_filename = {   'neutral_stochastic_static_GUD_X01_surface_transport',...
                    'neutral_stochastic_seasonal_GUD_X17_surface_transport',...
                      'neutral_stochastic_static_GUD_X17_weighted_transport',...
                    'neutral_stochastic_seasonal_GUD_X17_weighted_transport',... 
-                   ...
-                   ...
+       'nonadaptive_dispersal_stochastic_static_GUD_X17_weighted_transport',...
+     'nonadaptive_dispersal_stochastic_seasonal_GUD_X17_weighted_transport',...
          'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_m0.01',...
-                   ...
+       'selective_dispersal_stochastic_seasonal_GUD_X17_weighted_transport_m0.01',...
          'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_m0.1',...
-       'selective_dispersal_stochastic_seasonal_GUD_X17_weighted_transport_m0.1'}; 
+       'selective_dispersal_stochastic_seasonal_GUD_X17_weighted_transport_m0.1'};  
   
-input_filename = input_filename{5};
+input_filename = input_filename{7};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 pathname   = '~/GitHub/EPMD/Output/';
@@ -304,21 +304,21 @@ seed_ID=8;
 
 for iyr = i_lastyr
     clf
-    x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;;
+    x  = cell2mat(matObj.x(iyr,1)) .* ocean.ann_abundance;
     
     [~,cols] = find(x);
     cols=unique(cols);
     x_i=x(:,cols(seed_ID));
     
     subplot(3,1,1:2)
-    [ax] = plot_vector(x_i,'log',mygrid,ocean);
+    [ax] = plot_vector(x_i,'lin',mygrid,ocean);
     geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
-    caxis([0 25])
+%     caxis([0 25])
     hold on
     title('(a)')
     scatterm(ocean.lat(ocean.sample_points(seed_ID)),ocean.lon(ocean.sample_points(seed_ID)),25,'m')
     ch=colorbar;
-    ch.TickLabels={'10^{0}','10^{5}','10^{10}','10^{15}','10^{20}','10^{25}'};
+%     ch.TickLabels={'10^{0}','10^{5}','10^{10}','10^{15}','10^{20}','10^{25}'};
     
     sh2=subplot(313);
     [n,edges,bin] = histcounts(ocean.ann_theta,unique(run_options.T_opt));
@@ -332,7 +332,7 @@ for iyr = i_lastyr
     mask=edges==run_options.T_opt(cols(seed_ID));
     bar(edges,freq.*mask,1)
     set(gca,'YScale','log')
-    ylim([1 1e25])
+%     ylim([1 1e25])
     xlabel('Temperature (^\circC)')
     ylabel('Abundance')
     title('(b)')
@@ -348,7 +348,82 @@ for iyr = i_lastyr
     export_fig(sname,'-r300')
 end
 
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+figure(9)
+cmap=lhsdesign(94,3);
+
+% plot dominance patterns
+
+for iyr = 1:i_lastyr
+    clf
+    
+    x  = cell2mat(matObj.x(iyr,1));
+    % sum across seed populations
+    switch run_options.seed_dist
+        case 'nonadaptive_dispersal'
+            x2 = reshape(full(x),60646,run_options.nphen,run_options.nlineages);
+            x  = squeeze(sum(x2,2));
+    end
+    [~,I] = max(x(:,1:94),[],2);
+    
+    [ax] = plot_vector(I,'lin',mygrid,ocean);
+    colormap(cmap)
+    scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),50,cmap,'filled')
+    scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),50,'k')
+    geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
+    
+    title(['Year ' num2str(iyr)])
+    
+    drawnow
+    
+    sname=[pathname input_filename '/Dominance_Year_'  num2str(iyr,'%03i') '.png'];
+    set(gcf,'Color','w')
+    export_fig(sname,'-r300')
+end
+
+
+%%
+figure(99)
+    clf
+
+% plot dominance patterns
+cmap=turbo(100);
+for iyr = 1:i_lastyr
+    
+    x  = cell2mat(matObj.x(iyr,1));
+    x = x .* K;
+    
+    
+    % sum across seed populations
+    switch run_options.seed_dist
+        case 'nonadaptive_dispersal'
+            x2 = reshape(full(x),60646,run_options.nphen,run_options.nlineages);
+            x  = squeeze(sum(x2,2));
+    end
+    
+    x=x(ocean.sample_points(8),:);
+    
+    ab=sort(x(1:94),2,'descend');
+    plot(1:94,ab','Color',cmap(iyr,:),'LineW',1);
+    hold on
+    %     plot(1:94,ab(seed_ID,:)','r-','LineW',1);
+    axis([1 100 1 1e25])
+    set(gca,'XScale','Log',...
+        'XTick',[1 2 5 10 20 50 100],...
+        'YScale','Log',...
+        'YTick',10.^(0:5:25),...
+        'YTickLabel',{'10^{0}','10^{5}','10^{10}','10^{15}','10^{20}','10^{25}'})
+    xlabel('Rank');
+    set(gca,'XTickLabel','')
+    ylabel('Abundance')
+    title(iyr)
+    
+    drawnow
+
+end  
+    
 return
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

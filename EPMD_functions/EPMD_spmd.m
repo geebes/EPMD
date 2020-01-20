@@ -83,7 +83,11 @@ for yr=1:run_options.nyear
                 % SELECTION (abundance and fitness weighted or just abundance weighted)
                 % calculate abundance and fitness weighted probability of
                 % selection in next generation, normalising so sum(x)=1
-                popn_selected = s.*x;
+if rem(dy,10)~=0
+    popn_selected = x;
+else
+                    popn_selected = s.*x;
+end
                 comn_selected = sum(popn_selected,2);
                 global_comn_selected = gplus(comn_selected);
                 
@@ -100,9 +104,13 @@ for yr=1:run_options.nyear
                         case 'stochastic'
                             mu_x   =N_l.*p_l;
                             sigma_x=sqrt(N_l.*p_l.*(1-p_l));
-                            X_l=normrnd(mu_x,sigma_x); % sample population
-                            % Set abundance to integer value
-                            X_l=floor(X_l);
+if rem(dy,10)~=0
+    X_l = mu_x; % keep populations same
+else
+                                X_l=normrnd(mu_x,sigma_x); % sample population
+                                % Set abundance to integer value
+                                X_l=floor(X_l);
+end
                         case 'deterministic'
                             X_l=N_l.*p_l;
                     end 

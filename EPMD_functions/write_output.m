@@ -9,7 +9,7 @@ function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
         
         cmat.x_restart = x;
         switch run_options.seed_dist
-            case 'selective_dispersal'
+            case 'selective_dispersal' 
                 % Integrate cell numbers across all phenotypes in each lineage
                 % (N.B. exclude resident)
                 xx=reshape(full(x),[],run_options.nphen,run_options.nlineages);
