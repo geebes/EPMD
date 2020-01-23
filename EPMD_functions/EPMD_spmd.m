@@ -69,12 +69,14 @@ for yr=1:run_options.nyear
             % GENERATION time steps in each day
             for t=1:(3600/(dt_sec*4))*24 
 
+if rem(dy,5)==0 % only mutate on every fifth day
                 if mutation
                     % TRAIT DIFFUSION
                     dxdt = x * mutmat;   % Redistribute mutants
                     x    = x + dxdt;
                 end
-                
+end
+
                 % PHYSICAL TRANSPORT
                 for st=1:nsubtime   % nsubtime transport timesteps per generation
                     x=B*x;          % calculate probability of each population in each grid cell
@@ -83,9 +85,9 @@ for yr=1:run_options.nyear
                 % SELECTION (abundance and fitness weighted or just abundance weighted)
                 % calculate abundance and fitness weighted probability of
                 % selection in next generation, normalising so sum(x)=1
-if rem(dy,10)~=0
-    popn_selected = x;
-else
+if rem(dy,5)~=0
+    popn_selected = x; 
+else % only select on every fifth day
                     popn_selected = s.*x;
 end
                 comn_selected = sum(popn_selected,2);
@@ -104,9 +106,9 @@ end
                         case 'stochastic'
                             mu_x   =N_l.*p_l;
                             sigma_x=sqrt(N_l.*p_l.*(1-p_l));
-if rem(dy,10)~=0
+if rem(dy,5)~=0
     X_l = mu_x; % keep populations same
-else
+else % only select on every fifth day
                                 X_l=normrnd(mu_x,sigma_x); % sample population
                                 % Set abundance to integer value
                                 X_l=floor(X_l);
