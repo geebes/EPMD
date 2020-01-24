@@ -198,6 +198,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             
             x=sparse(length(B),nlineages*nphen);
             x(:,linindx) = x1;
+            x=full(x);
             
             % add global resident population
             % find best adapted phenotype for each location

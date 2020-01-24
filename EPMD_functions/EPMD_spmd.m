@@ -86,7 +86,6 @@ for yr=1:run_options.nyear
                     x=B*x;          % calculate probability of each population in each grid cell
                 end
                 
-                
                 if rem(dy,5)==0
                     % SELECTION (abundance and fitness weighted or just abundance weighted)
                     % calculate abundance and fitness weighted probability of
@@ -97,8 +96,8 @@ for yr=1:run_options.nyear
                     global_comn_selected = gplus(comn_selected);
 
                     p = popn_selected ./ global_comn_selected;
-
                     p(global_comn_selected<=0,:)=0;
+
                     mu_x    = N.*p;   % mean = unselected + selected part
                     sigma_x = sqrt(N.*p.*(1-p)); % variance based only on selected part
                     X       = normrnd(mu_x,sigma_x); % sample population
