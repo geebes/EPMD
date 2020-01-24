@@ -69,77 +69,39 @@ for yr=1:run_options.nyear
             % GENERATION time steps in each day
             for t=1:(3600/(dt_sec*4))*24 
 
-if rem(dy,5)==0 % only mutate on every fifth day
                 if mutation
                     % TRAIT DIFFUSION
-                    dxdt = x * mutmat;   % Redistribute mutants
+                    dxdt = (x./10) * mutmat;   % Redistribute mutants
                     x    = x + dxdt;
                 end
-end
 
                 % PHYSICAL TRANSPORT
                 for st=1:nsubtime   % nsubtime transport timesteps per generation
                     x=B*x;          % calculate probability of each population in each grid cell
                 end
-
+                
                 % SELECTION (abundance and fitness weighted or just abundance weighted)
                 % calculate abundance and fitness weighted probability of
                 % selection in next generation, normalising so sum(x)=1
-if rem(dy,5)~=0
-    popn_selected = x; 
-else % only select on every fifth day
-                    popn_selected = s.*x;
-end
+
+                popn_selected = s.*x.*0.1; 
                 comn_selected = sum(popn_selected,2);
                 global_comn_selected = gplus(comn_selected);
                 
                 p = popn_selected ./ global_comn_selected;
                 
-                if run_options.xsparse
-                    ind         = find(p & N);  % work only with locations/genotypes where nonzero probability of cells
-                    [loc,trc]   = ind2sub(size(N),ind);
-                    p_l         = full(p(ind));
-                    N_l         = full(N(loc));       % carrying capacities for extant populations
-
-                    % STOCHASTIC OR DETERMINISTIC POPULATION DYNAMICS
-                    switch trajectory
-                        case 'stochastic'
-                            mu_x   =N_l.*p_l;
-                            sigma_x=sqrt(N_l.*p_l.*(1-p_l));
-                            X_l=normrnd(mu_x,sigma_x); % sample population
-                            % Set abundance to integer value
-                            X_l=floor(X_l);
-                        case 'deterministic'
-                            X_l=N_l.*p_l;
-                    end 
-
-                    % Set abundance to positive value
-                    X_l(X_l<0)=0;
-
-                    % Calculate as fraction of local carrying capacity
-                    x_l = X_l./N_l;
-
-                    % convert x and X from vector to matrix form
-                    x=sparse(loc,trc,x_l,nxr,nxc);
-                    X=sparse(loc,trc,X_l,nxr,nxc);
-                else
-                    p(global_comn_selected<=0,:)=0;
-                    mu_x    = N.*p;
-if rem(dy,5)~=0
-    X = mu_x; % keep populations same
-else % only select on every fifth day
-                    sigma_x = sqrt(N.*p.*(1-p));
-                    X       = normrnd(mu_x,sigma_x); % sample population
-                    % Set abundance to integer value
-                    X = floor(X);
-end
-                    % Set abundance to positive value
-                    X(X<0)=0;
-                    % Calculate as fraction of local carrying capacity
-                    x=X./N;
-                    % crude check for div 0
-                    x(isnan(x))=0;
-                end
+                p(global_comn_selected<=0,:)=0;
+                mu_x    = 0.9.*N.*x +0.1.*N.*p;      % mean = unselected + selected part
+                sigma_x = sqrt(0.1.*N.*p.*(1-p)); % variance based only on selected part
+                X       = normrnd(mu_x,sigma_x); % sample population
+                % Set abundance to integer value
+                X = floor(X);
+                % Set abundance to positive value
+                X(X<0)=0;
+                % Calculate as fraction of local carrying capacity
+                x= X./N;
+                % crude check for div 0
+                x(isnan(x))=0;
             end
 
             switch seed_dist

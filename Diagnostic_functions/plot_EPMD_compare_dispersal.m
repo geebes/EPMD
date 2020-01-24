@@ -101,11 +101,11 @@ for i=1:numel(input_filename)
         ax=subplot(2,1,1);
         t=title(['(a) 0.6 ' char(181) 'm \it{Prochlorococcus}'],'HorizontalAlignment','Left');
     else
+    
         ax=subplot(2,1,2);
         t=title(['(b) 6 ' char(181) 'm Diatom'],'HorizontalAlignment','Left');        
     end
     t.Position(1)=7/365;
-    
     hold on
     clear N edges
     [N,edges] = histcounts(t_occ{i}(:),0:(1/96):i_lastyr{i});
@@ -133,7 +133,7 @@ for i=1:numel(input_filename)
             set(gca,'XTickLabels',{'week','month','year','decade','century'});
             grid on
             ax.XMinorTick = 'off';
-            ax.XAxis.MinorTickValues = [1/365 (1:11)./12 1 2 3 4 5 6 7 8 9 10:10:100];
+            ax.XAxis.MinorTickValues = [7/365 (1:11)./12 1 2 3 4 5 6 7 8 9 10:10:100];
             ax.XMinorGrid = 'on';
         case 'lin'
             set(gca,'XScale','lin')
