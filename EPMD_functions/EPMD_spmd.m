@@ -106,13 +106,9 @@ end
                         case 'stochastic'
                             mu_x   =N_l.*p_l;
                             sigma_x=sqrt(N_l.*p_l.*(1-p_l));
-if rem(dy,5)~=0
-    X_l = mu_x; % keep populations same
-else % only select on every fifth day
-                                X_l=normrnd(mu_x,sigma_x); % sample population
-                                % Set abundance to integer value
-                                X_l=floor(X_l);
-end
+                            X_l=normrnd(mu_x,sigma_x); % sample population
+                            % Set abundance to integer value
+                            X_l=floor(X_l);
                         case 'deterministic'
                             X_l=N_l.*p_l;
                     end 
@@ -129,10 +125,14 @@ end
                 else
                     p(global_comn_selected<=0,:)=0;
                     mu_x    = N.*p;
+if rem(dy,5)~=0
+    X = mu_x; % keep populations same
+else % only select on every fifth day
                     sigma_x = sqrt(N.*p.*(1-p));
                     X       = normrnd(mu_x,sigma_x); % sample population
                     % Set abundance to integer value
                     X = floor(X);
+end
                     % Set abundance to positive value
                     X(X<0)=0;
                     % Calculate as fraction of local carrying capacity
