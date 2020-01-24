@@ -61,7 +61,11 @@ for yr=1:run_options.nyear
 
             if selection
                 % CALCULATE SELECTION COEFFICIENT (s) AS FUNCTION OF TEMPERATURE AND PREFERENCE (s<=1)
-                s = exp(-((forcing_temp(:,dy)-T_opt)./w).^2);  % Seasonal Temperature limitation
+                if rem(dy,5)==0
+                    s = exp(-((mean(forcing_temp(:,dy-4:dy),2)-T_opt)./w).^2);  % Seasonal Temperature limitation
+                else
+                    s=1;
+                end
             else
                 s = 1;
             end
@@ -69,10 +73,12 @@ for yr=1:run_options.nyear
             % GENERATION time steps in each day
             for t=1:(3600/(dt_sec*4))*24 
 
+                if rem(dy,5)==0
                 if mutation
                     % TRAIT DIFFUSION
-                    dxdt = (x./10) * mutmat;   % Redistribute mutants
+                    dxdt = (x) * mutmat;   % Redistribute mutants
                     x    = x + dxdt;
+                end
                 end
 
                 % PHYSICAL TRANSPORT
@@ -80,20 +86,25 @@ for yr=1:run_options.nyear
                     x=B*x;          % calculate probability of each population in each grid cell
                 end
                 
-                % SELECTION (abundance and fitness weighted or just abundance weighted)
-                % calculate abundance and fitness weighted probability of
-                % selection in next generation, normalising so sum(x)=1
+                
+                if rem(dy,5)==0
+                    % SELECTION (abundance and fitness weighted or just abundance weighted)
+                    % calculate abundance and fitness weighted probability of
+                    % selection in next generation, normalising so sum(x)=1
+                   
+                    popn_selected = s.*x; 
+                    comn_selected = sum(popn_selected,2);
+                    global_comn_selected = gplus(comn_selected);
 
-                popn_selected = s.*x.*0.1; 
-                comn_selected = sum(popn_selected,2);
-                global_comn_selected = gplus(comn_selected);
-                
-                p = popn_selected ./ global_comn_selected;
-                
-                p(global_comn_selected<=0,:)=0;
-                mu_x    = 0.9.*N.*x +0.1.*N.*p;      % mean = unselected + selected part
-                sigma_x = sqrt(0.1.*N.*p.*(1-p)); % variance based only on selected part
-                X       = normrnd(mu_x,sigma_x); % sample population
+                    p = popn_selected ./ global_comn_selected;
+
+                    p(global_comn_selected<=0,:)=0;
+                    mu_x    = N.*p;   % mean = unselected + selected part
+                    sigma_x = sqrt(N.*p.*(1-p)); % variance based only on selected part
+                    X       = normrnd(mu_x,sigma_x); % sample population
+                else % keep population the same
+                    X = x.*N;
+                end
                 % Set abundance to integer value
                 X = floor(X);
                 % Set abundance to positive value
