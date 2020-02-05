@@ -61,7 +61,7 @@ for yr=1:run_options.nyear
 
             if selection
                 % CALCULATE SELECTION COEFFICIENT (s) AS FUNCTION OF TEMPERATURE AND PREFERENCE (s<=1)
-                if rem(dy,5)==0
+                if rem(dy,1)==0
                     s = exp(-((mean(forcing_temp(:,dy-4:dy),2)-T_opt)./w).^2);  % Seasonal Temperature limitation
                 else
                     s=1;
@@ -73,7 +73,7 @@ for yr=1:run_options.nyear
             % GENERATION time steps in each day
             for t=1:(3600/(dt_sec*4))*24 
 
-                if rem(dy,5)==0
+                if rem(dy,1)==0
                 if mutation
                     % TRAIT DIFFUSION
                     dxdt = (x) * mutmat;   % Redistribute mutants
@@ -86,7 +86,7 @@ for yr=1:run_options.nyear
                     x=B*x;          % calculate probability of each population in each grid cell
                 end
                 
-                if rem(dy,5)==0
+                if rem(dy,1)==0
                     % SELECTION (abundance and fitness weighted or just abundance weighted)
                     % calculate abundance and fitness weighted probability of
                     % selection in next generation, normalising so sum(x)=1

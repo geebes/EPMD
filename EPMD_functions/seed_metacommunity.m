@@ -2,13 +2,13 @@
 function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
 
     % Load carrying capacity
-    if strmatch(run_options.TM_scheme,'surface_transport')
-        % Can be selected if using surface transport
+    if startsWith(run_options.TM_scheme,'GUD')
+        % Predefined if using depth-integrated abundance
+        run_options.PCapacity = ocean.abundance;
+    else
+        % Abundance needs to be specified if using surface transport
         load(['../GUD_forcing/GUD_' run_options.DARWIN_pop '_abundance.mat']);
         run_options.PCapacity = abundance(ocean.Ib,:) .* ocean.volume;
-    else
-        % Predefined if using depth-integrated biomass-weighted transport
-        run_options.PCapacity = ocean.abundance;
     end
     
     % initialise populations adapted to annual temperature

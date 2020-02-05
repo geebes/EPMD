@@ -4,8 +4,8 @@ cd ~/GitHub/EPMD/TM_data
 addpath(genpath('~/GitHub/EPMD'))
 
 %%
-depth_scheme = 'alldepths'; % 'surface_transport' or 'alldepths'
-specID       = 'GUD_X17';
+depth_scheme = 'surface_depth_integ'; % 'surface_transport', surface_depthinteg or 'alldepths'
+specID       = 'GUD_X01';
 
 %%
 
@@ -13,6 +13,9 @@ load(['~/GitHub/EPMD/GUD_forcing/' specID '_abundance.mat']);
 
 if strmatch(depth_scheme,'alldepths')
     TM_filename = ['pre-rolled/' specID '_weighted_transport.mat'];
+elseif strmatch(depth_scheme,'surface_depth_integ')
+    TM_filename = ['pre-rolled/' specID '_surface_transport.mat'];
+    
 elseif strmatch(depth_scheme,'surface_transport')
     TM_filename = ['pre-rolled/surface_transport.mat'];
 end
@@ -107,6 +110,56 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
         [isnk,isrc,val]=find(B_mass);
         val=val./ocean.volume(isnk);
         B_conc=sparse(isnk,isrc,val,size(B_mass,1),size(B_mass,2));
+        
+    elseif strmatch(depth_scheme,'surface_depth_integ')
+        disp('Generating surface-only transport matrix with depth-integrated abundance')
+        disp(' - fluxes originating in interior are set to zero')
+        disp(' - fluxes from surface to interior are kept at source (i.e. put on diagonal)')
+        
+        % convert from concentration flux to mass flux (* sink volume) [nb x nb]
+        [isnk,isrc,val]=find(A_conc);
+        val=val.*volb(isnk);
+        A_mass=sparse(isnk,isrc,val,size(A_conc,1),size(A_conc,2));
+        
+        % Fluxes within surface layer
+        B_mass  = A_mass(ocean.Ib,ocean.Ib); 
+        % Downwelling fluxes (Ib to Ii) should loop back into surface (i.e. trapped particles)
+        Bdn     = A_mass(ocean.Ii,ocean.Ib); 
+        % sum of downwelling fluxes out of each surface cell (prevented from leaving)
+        Fdn     = sum(Bdn,1); 
+        
+        I       = speye(size(B_mass));
+        dindx   = find(speye(size(B_mass))); % get index for diagonal
+        
+        % Generate new surface-only matrix
+        B_mass(dindx) = B_mass(dindx) + Fdn'; 
+        
+        % get volume of surface grid boxes to convert back to concentration flux 
+        ocean.volume=volb(ocean.Ib);
+        
+        % convert from concentration flux to mass flux (* sink volume) [nb x nb]
+        [isnk,isrc,val]=find(B_mass);
+        val=val./ocean.volume(isnk);
+        B_conc=sparse(isnk,isrc,val,size(B_mass,1),size(B_mass,2));
+        
+        
+        % get index for unique [x,y] locations
+        [~,ia,ic] = unique([TM_boxes.Xboxnom TM_boxes.Yboxnom],'rows','stable');
+        % Create sparse mapping matrix [60646,2406992]
+        % This maps all fluxes with a non-surface component to within the surface
+        % Vertical fluxes with no horizontal component go on diagonal
+        % Any horizontal fluxes are mapped to off diagonal
+        % ones in each row correspond to spatial indices for one location
+        % e.g. location n has 50 depth levels, corresponding to index n1:n50
+        % so row n has ones in columns n1:n50
+        M1=sparse(ic,1:size(ic,1),1,size(ia,1),size(ic,1));
+        M2=M1';    
+        % Need to weight layers by fraction of column total biomass
+        abundance       = max(cell_conc.*volb,1);   % get cell abundance in grid boxes
+        ann_abundance   = mean(abundance,2);        % get annual mean abundance in grid boxes        
+        % get volume of water columns to convert back to concentration flux 
+        ocean.abundance     = M1*abundance;         % save water-column abundances
+        ocean.ann_abundance = M1*ann_abundance;     % save annual water-column abundances
         
     elseif strmatch(depth_scheme,'alldepths')
         disp('Generating depth-integrated transport matrix')
