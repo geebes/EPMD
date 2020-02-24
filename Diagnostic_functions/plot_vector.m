@@ -2,6 +2,7 @@ function [ax] = plot_vector(x,cscale,mygrid,ocean)
 
 
 ax=axesm ('mollweid','frame','on','FlineWidth',0.5,'MapLonLimit',[-245 115],'MapLatLimit',[-90 90]);
+% ax=axesm ('eqaazim','frame','on','FlineWidth',0.5,'Origin',[-46.283333,-86.666665]);
 
 ax.Position=ax.Position+[-0.1 -0.2 2 4].*0.01;
 
