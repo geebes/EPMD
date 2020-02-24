@@ -4,3 +4,6 @@ Plotting/*
 Figures/*
 TM_data/full_matrix.mat
 *.m~
+*.txt.gz
+Richter_2020/Barcode_data
+Richter_2020/Archive
