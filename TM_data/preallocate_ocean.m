@@ -205,9 +205,8 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
     I           =speye(size(B));
     ocean.B     =B+I;
 
-% !HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!
-ocean.B(ocean.B<0)=0;
-% !HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!HACK!
+    % remove any remaining negative fluxes
+    ocean.B(ocean.B<0)=0;
 
 
 

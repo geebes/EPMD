@@ -3,60 +3,11 @@ clear
 addpath(genpath('~/GitHub/EPMD'))
 diag_fcns = diagnostics;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-input_filename = {   'neutral_stochastic_static_GUD_X01_surface_transport',...
-                     'neutral_stochastic_static_GUD_X01_surface_transport_slow',...
-                     'neutral_stochastic_static_GUD_X01_weighted_transport',...
-                     'neutral_stochastic_static_GUD_X01_weighted_transport_slow',...
-       'nonadaptive_dispersal_stochastic_static_GUD_X01_weighted_transport',...
-       'nonadaptive_dispersal_stochastic_static_GUD_X01_weighted_transport_slow',...
-         'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.01',...
-         'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.01_slow',...
-         'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.1',...
-         'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.1_slow',...
-    ...
-                     'neutral_stochastic_static_GUD_X17_surface_transport',...
-                     'neutral_stochastic_static_GUD_X17_surface_transport_slow',...
-                     'neutral_stochastic_static_GUD_X17_weighted_transport',...
-                     'neutral_stochastic_static_GUD_X17_weighted_transport_slow',...
-       'nonadaptive_dispersal_stochastic_static_GUD_X17_weighted_transport',...
-       'nonadaptive_dispersal_stochastic_static_GUD_X17_weighted_transport_slow',...
-         'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_m0.01',...
-         'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_m0.01_slow',...
-         'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_m0.1',...
-         'selective_dispersal_stochastic_static_GUD_X17_weighted_transport_m0.1_slow'};
-  
-input_filename = input_filename{3};
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-pathname   = '~/GitHub/EPMD/Output/';
-matObj  = matfile([pathname input_filename '.mat']);
-
-ocean       = matObj.ocean;
-run_options = matObj.run_options;
-t_occupied  = matObj.t_occupied;
-
-i_lastyr    = matObj.yrs_saved;
-disp([num2str(i_lastyr) ' years evaluated.']) 
-
+load('/Users/baw103/GitHub/EPMD/TM_data/pre-rolled/surface_transport.mat')
 grid_load('~/GitHub/EPMD/nctiles_grid/',5,'nctiles')
 gcmfaces_global
 load coastlines
 land = shaperead('landareas', 'UseGeoCoords', true);
-
-ocean.ann_abundance = mean(ocean.forcing_PCapacity,2);
-
-K = ocean.forcing_PCapacity(:,end);
-T = ocean.forcing_temp;
-t_occ=full(t_occupied(:,1:numel(ocean.sample_points)));
-   
-disp(['ocean is ' num2str(100.*nnz(t_occ)/numel(t_occ),'%2.0f') '% connected.'])
-
-t_occ(~t_occ(:))=NaN;
-
-%%
-
-G = digraph(ocean.B,'OmitSelfLoops');
-
 %%
 figure(1)
 clf
@@ -73,15 +24,24 @@ fld=vector2gcmfaces(x,ocean.iface,ocean.ix,ocean.iy,ocean.iz);
 Xmap(Xmap==0)=NaN;
 
 sh=surfacem(lat, lon, Xmap);
+
+% transport vectors
+ocean.forcing_PCapacity = 1;
+[x,y,u,v] = get_circ_vectors(ocean); % second input is coarse graining resolution
+iplot=randsample(60646,1e4);
+h=quiverm(y(iplot),x(iplot),v(iplot),u(iplot),'k');
+
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]); % Very SLOW!!!!!
 
 axis off
 
-colorbar
-
 set(gcf,'Color','w')
 
 return
+%%
+
+G = digraph(ocean.B,'OmitSelfLoops');
+
 %%
 
 clear x y phi* lam* c k
