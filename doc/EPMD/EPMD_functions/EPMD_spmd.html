@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EPMD_spmd</title>
+  <meta name="keywords" content="EPMD_spmd">
+  <meta name="description" content="Wrapper function for EPMD">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html EPMD --><!-- menu.html EPMD_functions -->
+<h1>EPMD_spmd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Wrapper function for EPMD</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function EPMD_spmd(run_options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Wrapper function for EPMD
+
+  Syntax:
+    EPMD_spmd(run_options) 
+
+  (run_options is structural array defined in run_EPMD)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="allocate_ocean.html" class="code" title="function [ocean] = allocate_ocean(run_options,varargin)">allocate_ocean</a>	Load pre-allocated ocean grid and generate seed locations</li><li><a href="initialise_output.html" class="code" title="function [cmat,run_options] = initialise_output(run_options,ocean)">initialise_output</a>	Initialise Matfile output files...</li><li><a href="make_mutation_matrix.html" class="code" title="function [run_options] = make_mutation_matrix(run_options);">make_mutation_matrix</a>	Initialises mutation matrix for adaptive simulations</li><li><a href="seed_metacommunity.html" class="code" title="function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)">seed_metacommunity</a>	Initialise EPMD population for defined options...</li><li><a href="setup_SPMD.html" class="code" title="function [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]= setup_SPMD(run_options,x)">setup_SPMD</a>	Initialise SPMD variables...</li><li><a href="write_output.html" class="code" title="function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)">write_output</a>	Write output in Matfile...</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../EPMD/run_EPMD.html" class="code" title="">run_EPMD</a>	Script to run EPMD</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function EPMD_spmd(run_options)</a>
+0002 <span class="comment">% Wrapper function for EPMD</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  Syntax:</span>
+0005 <span class="comment">%    EPMD_spmd(run_options)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%  (run_options is structural array defined in run_EPMD)</span>
+0008 
+0009 <span class="comment">%  Copyright (C) 2020 Ben Ward &lt;b.a.ward@soton.ac.uk&gt;</span>
+0010 
+0011 <span class="comment">%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0012 
+0013 <span class="comment">% generate mutation matrix</span>
+0014 disp(<span class="string">'Create mutation matrix for lineages'</span>)
+0015 [run_options] = <a href="make_mutation_matrix.html" class="code" title="function [run_options] = make_mutation_matrix(run_options);">make_mutation_matrix</a>(run_options);
+0016 
+0017 <span class="comment">% Initialise ocean structural array</span>
+0018 disp(<span class="string">'Allocate ocean metadata and generate seeding points'</span>)
+0019 [ocean] = <a href="allocate_ocean.html" class="code" title="function [ocean] = allocate_ocean(run_options,varargin)">allocate_ocean</a>(run_options,run_options.seedseed,<span class="string">'quad'</span>);
+0020 
+0021 <span class="comment">% initialise the global metacommunity</span>
+0022 disp(<span class="string">'Set up initial seed populations'</span>)
+0023 [x,run_options,ocean] = <a href="seed_metacommunity.html" class="code" title="function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)">seed_metacommunity</a>(run_options,ocean);
+0024 
+0025 <span class="comment">% initialise output files</span>
+0026 disp(<span class="string">'Initialise output files'</span>)
+0027 [cmat,run_options] = <a href="initialise_output.html" class="code" title="function [cmat,run_options] = initialise_output(run_options,ocean)">initialise_output</a>(run_options,ocean);
+0028 
+0029 <span class="comment">% setup Serial or Parallel</span>
+0030 <span class="keyword">switch</span> run_options.solver
+0031     <span class="keyword">case</span> <span class="string">'parallel'</span>
+0032         myCluster               = parcluster(<span class="string">'local'</span>);
+0033         run_options.parp_size   = myCluster.NumWorkers;
+0034         [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD] <span class="keyword">...</span>
+0035             = <a href="setup_SPMD.html" class="code" title="function [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]= setup_SPMD(run_options,x)">setup_SPMD</a>(run_options,x); <span class="comment">% (Single Program Multiple Data)</span>
+0036     <span class="keyword">case</span> <span class="string">'serial'</span>
+0037         run_options.parp_size   = 1;
+0038         [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD] <span class="keyword">...</span>
+0039             = <a href="setup_SPMD.html" class="code" title="function [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]= setup_SPMD(run_options,x)">setup_SPMD</a>(run_options,x); <span class="comment">% (Single Program Multiple Data)</span>
+0040         nxc                     = run_options.nxc;
+0041         indx                    = 1:nxc;
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">%% Extract data from structural arrays for use inside SPMD block</span>
+0045 nday                = run_options.nday;
+0046 n_tseries_loc       = run_options.n_tseries_loc;
+0047 selection           = run_options.selection;
+0048 w                   = run_options.w;
+0049 mutation            = run_options.mutation;
+0050 nxr                 = run_options.nxr;
+0051 trajectory          = run_options.trajectory;
+0052 seed_dist           = run_options.seed_dist;
+0053 save_data           = run_options.save_data;
+0054 site_indices        = run_options.site_indices;
+0055 
+0056 forcing_PCapacity   = ocean.forcing_PCapacity;
+0057 forcing_temp        = ocean.forcing_temp;
+0058 dt_sec              = ocean.dt_sec;
+0059 nsubtime            = ocean.nsubtime;
+0060 B                   = ocean.B;
+0061 <span class="comment">%%</span>
+0062 <span class="keyword">for</span> yr=1:run_options.nyear
+0063 
+0064     disp(<span class="string">'Opening SPMD block'</span>)
+0065     spmd(run_options.parp_size)
+0066         tser_x = zeros(n_tseries_loc,nxc,nday);
+0067         
+0068         <span class="keyword">for</span> dy = 1:nday
+0069             tday=tic;
+0070             <span class="comment">% DAILY-RESOLVED CARRYING CAPACITY</span>
+0071             N=forcing_PCapacity(:,dy);
+0072 
+0073             <span class="keyword">if</span> selection
+0074                 <span class="comment">% CALCULATE SELECTION COEFFICIENT (s) AS FUNCTION OF TEMPERATURE AND PREFERENCE (s&lt;=1)</span>
+0075                 s = exp(-((mean(forcing_temp(:,dy),2)-T_opt)./w).^2);  <span class="comment">% Seasonal Temperature limitation</span>
+0076             <span class="keyword">else</span>
+0077                 s = 1;
+0078             <span class="keyword">end</span>
+0079             
+0080             <span class="comment">% GENERATION time steps in each day</span>
+0081             <span class="keyword">for</span> t=1:(3600/(dt_sec*4))*24 
+0082 
+0083                 <span class="keyword">if</span> mutation
+0084                     <span class="comment">% TRAIT DIFFUSION</span>
+0085                     dxdt = (x) * mutmat;   <span class="comment">% Redistribute mutants</span>
+0086                     x    = x + dxdt;
+0087                 <span class="keyword">end</span>
+0088 
+0089                 <span class="comment">% PHYSICAL TRANSPORT</span>
+0090                 <span class="keyword">for</span> st=1:nsubtime   <span class="comment">% nsubtime transport timesteps per generation</span>
+0091                     x=B*x;          <span class="comment">% calculate probability of each population in each grid cell</span>
+0092                 <span class="keyword">end</span>
+0093                 
+0094                 <span class="comment">% SELECTION (abundance and fitness weighted or just abundance weighted)</span>
+0095                 <span class="comment">% calculate abundance and fitness weighted probability of</span>
+0096                 <span class="comment">% selection in next generation, normalising so sum(x)=1</span>
+0097                 popn_selected = s.*x;
+0098                 comn_selected = sum(popn_selected,2);
+0099                 global_comn_selected = gplus(comn_selected);
+0100                 
+0101                 p = popn_selected ./ global_comn_selected;
+0102                 p(global_comn_selected&lt;=0,:)=0;
+0103                 
+0104                 mu_x    = N.*p;   <span class="comment">% mean = unselected + selected part</span>
+0105                 sigma_x = sqrt(N.*p.*(1-p)); <span class="comment">% variance based only on selected part</span>
+0106                 X       = normrnd(mu_x,sigma_x); <span class="comment">% sample population</span>
+0107                     
+0108                 <span class="comment">% Set abundance to integer value</span>
+0109                 X = floor(X);
+0110                 <span class="comment">% Set abundance to positive value</span>
+0111                 X(X&lt;0)=0;
+0112                 <span class="comment">% Calculate as fraction of local carrying capacity</span>
+0113                 x= X./N;
+0114                 <span class="comment">% crude check for div 0</span>
+0115                 x(isnan(x))=0;
+0116             <span class="keyword">end</span>
+0117 
+0118             <span class="keyword">switch</span> seed_dist
+0119                 <span class="keyword">case</span> {<span class="string">'neutral'</span>,<span class="string">'selective_dispersal'</span>,<span class="string">'nonadaptive_dispersal'</span>}
+0120                     <span class="comment">% get current date</span>
+0121                     occdate=(yr-1 + dy./nday);
+0122                     <span class="comment">% find all pppulations and locations occupied for the first time</span>
+0123                     <span class="comment">% (i.e. occupied but no date of first occupation)</span>
+0124                     [i,j] = find(x &amp; t_occ==0);
+0125                     <span class="comment">% assign current date to newly occupied</span>
+0126                     t_occ = t_occ + sparse(i,j,occdate,size(t_occ,1),size(t_occ,2));
+0127             <span class="keyword">end</span>
+0128 
+0129             <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0130             <span class="comment">% COLLATE TIMESERIES OUTPUT (DAILY) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0131             <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0132             <span class="keyword">if</span> save_data 
+0133                 tser_x(:,:,dy) = full(x(site_indices,:));
+0134             <span class="keyword">end</span>
+0135             
+0136             <span class="keyword">if</span> labindex==1
+0137                 disp([<span class="string">'Year '</span> num2str(yr,<span class="string">'%03i'</span>) <span class="string">', Day '</span> num2str(dy,<span class="string">'%03i'</span>) <span class="string">' ('</span> num2str(toc(tday)) <span class="string">' seconds).'</span>]);
+0138             <span class="keyword">end</span>
+0139 
+0140         <span class="keyword">end</span> <span class="comment">% end day loops</span>
+0141    
+0142         <span class="comment">% put local data back in global codistributed array</span>
+0143         xD(:,indx)           = x;
+0144         tseries_xD(:,indx,:) = tser_x;
+0145         t_occD(:,indx)       = t_occ;
+0146         
+0147     <span class="keyword">end</span>  <span class="comment">% end spmd block (exiting to write data)</span>
+0148     disp(<span class="string">'----------------------------------'</span>)
+0149     disp(<span class="string">'Closed SPMD block to write output data'</span>)
+0150 
+0151     <span class="comment">% Gather x data</span>
+0152     xG                       = gather(xD);
+0153     tseries_xG               = gather(tseries_xD);
+0154     run_options.t_occupied   = gather(t_occD);
+0155     
+0156     <span class="keyword">if</span> run_options.save_data
+0157         [cmat] = <a href="write_output.html" class="code" title="function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)">write_output</a>(yr,xG,tseries_xG,run_options,cmat);
+0158         disp(<span class="string">'----------------------------------'</span>)
+0159     <span class="keyword">end</span>
+0160     
+0161     disp(<span class="string">'Clear large output arrays'</span>)
+0162     clear xG tseries_xG
+0163     run_options.t_occupied = [];
+0164 <span class="keyword">end</span> <span class="comment">% end year loop</span>
+0165 
+0166 <span class="comment">%%</span></pre></div>
+<hr><address>Generated on Tue 03-Mar-2020 14:30:27 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

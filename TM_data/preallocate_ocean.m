@@ -1,3 +1,8 @@
+% Script to generate pre-rolled ocean data files
+% These include the transport matrix and associated metadata
+
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
+
 clear
 % clc
 cd ~/GitHub/EPMD/TM_data

@@ -1,6 +1,18 @@
 function [ocean] = allocate_ocean(run_options,varargin)
+% Load pre-allocated ocean grid and generate seed locations
+%
+%  Examples:
+%    [ocean] = allocate_ocean(run_options) 
+%  generates seed locations with default n=3 subdivisions on 'quad' grid
+%
+%    [ocean] = allocate_ocean(run_options,n,mesh) 
+%  generates seed locations with n subdivisions on 'mesh' grid
+%
+%  (run_options is structural array defined in run_EPMD)
 
-% Load pre-allocated ocean grid
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
+
+%% Load pre-allocated ocean grid
 load(['TM_data/pre-rolled/' run_options.TM_scheme '.mat']);
 
 %% generate seed locations using SubdivideSphericalMesh

@@ -1,3 +1,8 @@
+% Script to run EPMD
+
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
+
+
 clear
 clc
 
@@ -15,7 +20,7 @@ run_options.annual_cycle    = 'static';     % 'static' or 'seasonal'
 run_options.seedseed        = 2;            % seed for global seeding sites
 
 % optional string to add to output filenames
-run_options.suffix          = '';
+run_options.suffix          = '_NULL';
 
 % note depth-integrated TMs are each associated with a particular abundance distribution
 % (this will be overwritten if using depth-integrated biomass-weighted transport)
@@ -33,4 +38,4 @@ run_options.sigma_m         = 0.1;          % Mutation size
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Run EPMD_spmd
-run('EPMD_functions/EPMD_spmd')
+EPMD_spmd(run_options)

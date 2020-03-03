@@ -1,3 +1,16 @@
+function [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]...
+          = setup_SPMD(run_options,x)
+% Initialise SPMD variables...
+% 
+%  Syntax:
+%    [...] = setup_SPMD(run_options,x)
+%
+%  (run_options is structural array defined in run_EPMD)
+%  (output is full list of SPMD variables)
+
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
+
+
 disp('Setting up SPMD variables')
 
 % Do not use more processsors than model has independent lineages

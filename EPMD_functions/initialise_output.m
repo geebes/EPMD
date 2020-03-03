@@ -1,5 +1,15 @@
 function [cmat,run_options] = initialise_output(run_options,ocean)
+% Initialise Matfile output files...
+% 
+%  Syntax:
+%    [cmat,run_options] = initialise_output(run_options,ocean)
+%
+%  (run_options is structural array defined in run_EPMD)
+%  (ocean is structural array defined in allocate_ocean)
 
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
+
+%%
     % Coordinates of JGOFS sites for saving time series output
     tseries_lon = [-064 -158 -145 +062 -140 -180 -019 +068 -170 ];
     tseries_lat = [+032 +023 +050 +016 +000 -076 +047 -051 -61.5];

@@ -1,3 +1,7 @@
+% Script to generate abundance data from GUD model
+
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
+
 clear
 
 load('~/Transport_Matrices/MITgcm_ECCO_v4/Matrix13/Data/boxes.mat');

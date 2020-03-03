@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of extract_GUD</title>
+  <meta name="keywords" content="extract_GUD">
+  <meta name="description" content="Script to generate abundance data from GUD model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html EPMD --><!-- menu.html TM_data -->
+<h1>extract_GUD
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Script to generate abundance data from GUD model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Script to generate abundance data from GUD model</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Script to generate abundance data from GUD model</span>
+0002 
+0003 <span class="comment">%  Copyright (C) 2020 Ben Ward &lt;b.a.ward@soton.ac.uk&gt;</span>
+0004 
+0005 clear
+0006 
+0007 load(<span class="string">'~/Transport_Matrices/MITgcm_ECCO_v4/Matrix13/Data/boxes.mat'</span>);
+0008 load(<span class="string">'~/Transport_Matrices/MITgcm_ECCO_v4/grid.mat'</span>);
+0009 
+0010 Ib = find(izBox==1); <span class="comment">% surface boundary</span>
+0011 
+0012 QCARBON =  [2.566093668483939E-012,  7.789193721295913E-012,  2.364354020783690E-011,  7.176827455596964E-011,<span class="keyword">...</span>
+0013    2.178474622439914E-010,  6.612603841985462E-010,  2.007208581666503E-009,  6.092738029662402E-009,  1.849407034084822E-008,<span class="keyword">...</span>
+0014    2.178474622439914E-010,  6.612603841985462E-010,  2.007208581666503E-009,  6.092738029662402E-009,  1.849407034084822E-008,<span class="keyword">...</span>
+0015    2.178474622439914E-010,  6.612603841985462E-010,  2.007208581666503E-009,  6.092738029662402E-009,  1.849407034084822E-008,<span class="keyword">...</span>
+0016    5.613742723010097E-008,  1.704011436062454E-007,  5.172404788573358E-007,  1.570046463929721E-006,  4.765763701139335E-006,<span class="keyword">...</span>
+0017    1.446613471441439E-005,  2.007208581666504E-009,  6.092738029662406E-009,  1.849407034084824E-008,  5.613742723010101E-008,<span class="keyword">...</span>
+0018    1.704011436062455E-007,  5.172404788573361E-007,  1.570046463929721E-006,  4.765763701139337E-006,  1.446613471441440E-005,<span class="keyword">...</span>
+0019    4.391091684330804E-005,  2.007208581666504E-009,  6.092738029662406E-009,  1.849407034084824E-008,  5.613742723010101E-008,<span class="keyword">...</span>
+0020    1.704011436062455E-007,  5.172404788573361E-007,  1.570046463929721E-006,  4.765763701139337E-006,  1.446613471441440E-005,<span class="keyword">...</span>
+0021    4.391091684330804E-005,  1.332884461596117E-004,  4.045875412494648E-004,  1.228096532375123E-003,  3.727799151140559E-003,<span class="keyword">...</span>
+0022    1.131546759143489E-002,  3.434729222834825E-002]'; <span class="comment">% mmol C / cell</span>
+0023  
+0024 dname=<span class="string">'~/Transport_Matrices/MITgcm_ECCO_v4_data/interp/PlanktonBiomass/'</span>;
+0025 lst=dir([dname <span class="string">'c*.0001.nc'</span>]);
+0026 
+0027 <span class="comment">%%</span>
+0028 
+0029 <span class="comment">% set GUD output coordinates</span>
+0030 xx=0.25:0.5:359.75;
+0031 yy=-89.75:0.5:89.75;
+0032 zz=unique(Zboxnom);
+0033 
+0034 <span class="comment">% index to TM vector</span>
+0035 i=dsearchn(xx',Xboxnom);
+0036 j=dsearchn(yy',Yboxnom);
+0037 k=dsearchn(zz ,Zboxnom);  
+0038 ii=sub2ind([720,360,50],i,j,k);
+0039 
+0040 <span class="comment">% extract and save data for each species</span>
+0041 <span class="keyword">for</span> specID=1:length(lst)
+0042     fname=lst(specID).name;
+0043     disp([<span class="string">'Processing '</span> fname <span class="string">' ('</span> num2str(specID) <span class="string">' of '</span> num2str(length(lst)) <span class="string">')'</span>])
+0044     
+0045     data = ncread([dname fname],fname(1:3));
+0046 
+0047     <span class="comment">% Process data month by month</span>
+0048     <span class="keyword">for</span> mn=1:12
+0049         <span class="comment">% extract data matrix and convert from C biomass to abundance</span>
+0050         X=data(:,:,:,mn)./QCARBON(specID);
+0051         <span class="comment">% remove negatives</span>
+0052         X(X&lt;0)=0;
+0053         <span class="comment">% reshape</span>
+0054         X=cat(1,X(xx&gt;180,:,:),X(xx&lt;=180,:,:));
+0055         <span class="comment">% extract to vector format</span>
+0056         abund=X(ii);
+0057         
+0058         <span class="comment">% place in output structure</span>
+0059         abundance(:,mn) = double(abund);
+0060     <span class="keyword">end</span>
+0061     
+0062     sname=[<span class="string">'../GUD_forcing/GUD_X'</span> num2str(specID,<span class="string">'%02.0f'</span>) <span class="string">'_abundance.mat'</span>];
+0063     save(sname,<span class="string">'abundance'</span>)
+0064 <span class="keyword">end</span>
+0065 
+0066 
+0067 <span class="comment">%%</span>
+0068 fname=<span class="string">'~/Transport_Matrices/MITgcm_ECCO_v4_data/interp/PhysicalOceanography/THETA.0001.nc'</span>;
+0069 data = ncread(fname,<span class="string">'THETA'</span>);
+0070 
+0071 <span class="keyword">for</span> mn=1:12
+0072     <span class="comment">% extract data matrix</span>
+0073     X=data(:,:,:,mn);
+0074     <span class="comment">% reshape</span>
+0075     X=cat(1,X(xx&gt;180,:,:),X(xx&lt;=180,:,:));
+0076     <span class="comment">% extract to vector format</span>
+0077     theta(:,mn) = double(X(ii));
+0078 <span class="keyword">end</span>
+0079 
+0080 sname=[<span class="string">'../GUD_forcing/Theta.mat'</span>];
+0081 save(sname,<span class="string">'theta'</span>)
+0082 <span class="comment">%%</span>
+0083 
+0084 
+0085 
+0086 
+0087 
+0088 
+0089 
+0090 
+0091 
+0092 
+0093 
+0094 
+0095 
+0096 
+0097 
+0098 
+0099 
+0100 
+0101 
+0102 
+0103 
+0104 
+0105 
+0106 
+0107 
+0108 
+0109 
+0110 
+0111 
+0112 
+0113</pre></div>
+<hr><address>Generated on Tue 03-Mar-2020 14:30:27 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

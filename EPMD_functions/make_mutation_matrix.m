@@ -1,4 +1,12 @@
 function [run_options] = make_mutation_matrix(run_options);
+% Initialises mutation matrix for adaptive simulations
+%
+%  Syntax:
+%    [run_options] = make_mutation_matrix(run_options)
+%
+%  (run_options is structural array defined in run_EPMD)
+
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
 
     % generate vector of thermal optima for n phenotypes
     run_options.T_opt = linspace(-2,36,run_options.nphen);

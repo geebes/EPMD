@@ -1,5 +1,11 @@
 function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
+% Write output in Matfile...
+% 
+%  Syntax:
+%    [cmat] = write_output(yr,x,tseries_x,run_options,cmat)
+%
 
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
     if run_options.save_data
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % SAVE GLOBAL SNAPSHOT DATA (YEARLY ON 31 DEC) %%%%%%%%%%%%%%%%%%%%%%%%%%%%

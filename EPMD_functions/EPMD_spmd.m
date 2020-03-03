@@ -1,4 +1,13 @@
-% Run EPMD_spmd
+function EPMD_spmd(run_options)
+% Wrapper function for EPMD
+%
+%  Syntax:
+%    EPMD_spmd(run_options) 
+%
+%  (run_options is structural array defined in run_EPMD)
+
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
+
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % generate mutation matrix
@@ -22,10 +31,12 @@ switch run_options.solver
     case 'parallel'
         myCluster               = parcluster('local');
         run_options.parp_size   = myCluster.NumWorkers;
-        run('setup_SPMD'); % (Single Program Multiple Data)
+        [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD] ...
+            = setup_SPMD(run_options,x); % (Single Program Multiple Data)
     case 'serial'
         run_options.parp_size   = 1;
-        run('setup_SPMD'); % (Single Program Multiple Data)
+        [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD] ...
+            = setup_SPMD(run_options,x); % (Single Program Multiple Data)
         nxc                     = run_options.nxc;
         indx                    = 1:nxc;
 end

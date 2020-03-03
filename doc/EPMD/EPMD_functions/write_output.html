@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of write_output</title>
+  <meta name="keywords" content="write_output">
+  <meta name="description" content="Write output in Matfile...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html EPMD --><!-- menu.html EPMD_functions -->
+<h1>write_output
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Write output in Matfile...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [cmat] = write_output(yr,x,tseries_x,run_options,cmat) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Write output in Matfile...
+ 
+  Syntax:
+    [cmat] = write_output(yr,x,tseries_x,run_options,cmat)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="EPMD_spmd.html" class="code" title="function EPMD_spmd(run_options)">EPMD_spmd</a>	Wrapper function for EPMD</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [cmat] = write_output(yr,x,tseries_x,run_options,cmat)</a>
+0002 <span class="comment">% Write output in Matfile...</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  Syntax:</span>
+0005 <span class="comment">%    [cmat] = write_output(yr,x,tseries_x,run_options,cmat)</span>
+0006 <span class="comment">%</span>
+0007 
+0008 <span class="comment">%  Copyright (C) 2020 Ben Ward &lt;b.a.ward@soton.ac.uk&gt;</span>
+0009     <span class="keyword">if</span> run_options.save_data
+0010         <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0011         <span class="comment">% SAVE GLOBAL SNAPSHOT DATA (YEARLY ON 31 DEC) %%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0012         <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0013         disp(<span class="string">'Saving time-slice ...'</span>)
+0014         cmat.yrs_saved         = yr;
+0015         
+0016         cmat.x_restart = x;
+0017         <span class="keyword">switch</span> run_options.seed_dist
+0018             <span class="keyword">case</span> <span class="string">'selective_dispersal'</span> 
+0019                 <span class="comment">% Integrate cell numbers across all phenotypes in each lineage</span>
+0020                 <span class="comment">% (N.B. exclude resident)</span>
+0021                 xx=reshape(full(x),[],run_options.nphen,run_options.nlineages);
+0022                 xx=squeeze(sum(xx(:,:,1:end-1),2));
+0023                 xx=sparse(xx);
+0024             <span class="keyword">otherwise</span>
+0025                 xx=x;
+0026         <span class="keyword">end</span>
+0027         cmat.x(yr,1)           = {[xx]};
+0028         
+0029         <span class="keyword">switch</span> run_options.seed_dist
+0030             <span class="keyword">case</span> {<span class="string">'neutral'</span>,<span class="string">'selective_dispersal'</span>,<span class="string">'nonadaptive_dispersal'</span>}
+0031                 <span class="comment">% find minimum occupancy time across all phenotypes in each lineage</span>
+0032                 <span class="comment">% (N.B. exclude resident)</span>
+0033                 t_occ = run_options.t_occupied;
+0034                 <span class="comment">% reshape into 3D array</span>
+0035                 tt=reshape(full(t_occ),[],run_options.nphen,run_options.nlineages);
+0036                 <span class="comment">% set zeros to NaN</span>
+0037                 tt(tt==0)=NaN;
+0038                 <span class="comment">% find minimum time for each lineage/location (excluding resident)</span>
+0039                 tt=squeeze(min(tt(:,:,1:end-1),[],2));
+0040                 <span class="comment">% put back zeros</span>
+0041                 tt(isnan(tt))=0;
+0042                 <span class="comment">% Write dispersal times</span>
+0043                 cmat.t_occupied   = sparse(tt);
+0044         <span class="keyword">end</span>
+0045 
+0046         <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0047         <span class="comment">% SAVE DAILY TIMESERIES DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0048         <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0049         <span class="keyword">switch</span> run_options.seed_dist
+0050             <span class="keyword">case</span> {<span class="string">'selective_dispersal'</span>,<span class="string">'nonadaptive_dispersal'</span>}
+0051                 <span class="comment">% Do not write x time-series for huge selective_dispersal runs</span>
+0052             <span class="keyword">otherwise</span>
+0053                 disp(<span class="string">'Saving time-series ...'</span>)
+0054                 cmat.tseries_x(yr,1)       = {[tseries_x]};
+0055         <span class="keyword">end</span>
+0056     <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 03-Mar-2020 14:30:27 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,5 +1,14 @@
-
 function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
+% Initialise EPMD population for defined options...
+% ('preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal')
+% 
+%  Syntax:
+%    [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
+%
+%  (run_options is structural array defined in run_EPMD)
+%  (ocean is structural array defined in allocate_ocean)
+
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
 
     % Load carrying capacity
     if startsWith(run_options.TM_scheme,'GUD')

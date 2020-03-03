@@ -1,4 +1,13 @@
 function [Aex] = no_negatives(TM,volb)
+% Correct transport matrix so all elements are non-negative
+% 
+%  Syntax:
+%    [Aex] = no_negatives(TM,volb)
+%
+%  TM is uncorrected transport matrix
+%  volb is vector of grid box volumes
+
+%  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
 
     I = speye(size(TM));            % create identity matrix [nb x nb]
     dindx = find(I);                    % get index of diagonals [nb x 1]
