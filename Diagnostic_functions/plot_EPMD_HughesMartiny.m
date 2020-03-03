@@ -155,24 +155,29 @@ clf
 for i=1:4
     
     dotsz=75;
+    fsize=15;
     
     sh=subplot(4,4,i*4-3);
     scatter(C2D{i}(:,1),C2D{i}(:,2),dotsz,grp2idx(Tara_Basin),'filled')
     set(gca,'XTick',[],'YTick',[]),axis square
     shpos=sh.Position;
-    ch=colorbar;
-    ch.Location='westoutside'
-    ch.Ticks=linspace(1.4375,7.5625,8);
-    ch.TickLabels=cellstr(unique(Tara_Basin));
+    if i==1
+        ch=colorbar;
+        ch.Location='westoutside'
+        ch.Ticks=linspace(1.4375,7.5625,8);
+        ch.TickLabels=cellstr(unique(Tara_Basin));
+        ch.FontSize=fsize;
+    end
     caxis([1 8])
     hold on
     scatter(C2D{i}(:,1),C2D{i}(:,2),dotsz,'k')
-    title({[ttls{i}],['(' char(96+4*(i-1)+1) ') Ocean Basins']})
+    title({[ttls{i}],['(' char(96+4*(i-1)+1) ') Ocean Basins']},'FontSize',fsize)
     box on
     axis([-0.05 1.05 -0.05 1.05])
     sh.Colormap=bsnclr;
     sh.Position=shpos;
     sh.Position(2)=sh.Position(2)+0.03.*(i-1);
+    sh.Position(1)=sh.Position(1)+0.03;
     
     sh=subplot(4,4,i*4-2);
     scatter(C2D{i}(:,1),C2D{i}(:,2),dotsz,E1D,'filled')
@@ -182,11 +187,11 @@ for i=1:4
     sh.Colormap=redblue;
     rho   = corr(Mdist{i}(:),Edist(:),'Type','Spearman');
     rho_p = partialcorr(Mdist{i}(:),Edist(:),Gdist(:),'Type','Spearman');
-    title({['(' char(96+4*(i-1)+2) ') Environmental distance']})
+    title({['(' char(96+4*(i-1)+2) ') Environmental distance']},'FontSize',fsize)
     box on
     axis([-0.05 1.05 -0.05 1.05])
     sh.Position(2)=sh.Position(2)+0.03.*(i-1);
-    sh.Position(1)=sh.Position(1)-0.03;
+    sh.Position(1)=sh.Position(1);
     
     sh=subplot(4,4,i*4-1);
     scatter(C2D{i}(:,1),C2D{i}(:,2),dotsz,G1D,'filled')
@@ -196,11 +201,11 @@ for i=1:4
 %     text(C2D{i}(:,1),C2D{i}(:,2),{basinname{Tara_ind}});
     rho   = corr(Mdist{i}(:),Gdist(:),'Type','Spearman');
     rho_p = partialcorr(Mdist{i}(:),Gdist(:),Edist(:),'Type','Spearman');
-    title({['(' char(96+4*(i-1)+3) ') Geographic distance']})
+    title({['(' char(96+4*(i-1)+3) ') Geographic distance']},'FontSize',fsize)
     box on
     axis([-0.05 1.05 -0.05 1.05])
     sh.Position(2)=sh.Position(2)+0.03.*(i-1);
-    sh.Position(1)=sh.Position(1)-0.06;
+    sh.Position(1)=sh.Position(1)-0.03;
     
     sh=subplot(4,4,i*4);
     scatter(C2D{i}(:,1),C2D{i}(:,2),dotsz,C3D{i},'filled')
@@ -210,11 +215,11 @@ for i=1:4
 %     text(C2D{i}(:,1),C2D{i}(:,2),{basinname{Tara_ind}});
     rho   = corr(Mdist{i}(:),Gdist(:),'Type','Spearman');
     rho_p = partialcorr(Mdist{i}(:),Gdist(:),Edist(:),'Type','Spearman');
-    title({['(' char(96+4*(i-1)+4) ') Community dissimilarity']})
+    title({['(' char(96+4*(i-1)+4) ') Community dissimilarity']},'FontSize',fsize)
     box on
     axis([-0.05 1.05 -0.05 1.05])
     sh.Position(2)=sh.Position(2)+0.03.*(i-1);
-    sh.Position(1)=sh.Position(1)-0.09;
+    sh.Position(1)=sh.Position(1)-0.06;
     
     set(gcf,'color','w')
     drawnow
@@ -237,6 +242,7 @@ f2=figure(2);
 f2.Position=[1253 8 1307 1337];
 clf
 dotsz=75;
+fontsz=18;
 
 smpl_pnts = ocean{1}.sample_points;
 n_eg=8;
@@ -249,18 +255,21 @@ for i=1:4
     scatterm(ocean{i}.lat(smpl_pnts(n_eg)),ocean{i}.lon(smpl_pnts(n_eg)),dotsz,'m','filled')
     scatterm(ocean{i}.lat(smpl_pnts(n_eg)),ocean{i}.lon(smpl_pnts(n_eg)),dotsz,'k')
     geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7])
-    th=title(['(' char(96+i*3-2) ')']);
-    th.Position(2)=th.Position(2)-0.6;
+    th=title(['(' char(96+i*3-2) ')'],'FontSize',fontsz);
+    th.Position(2)=th.Position(2)+0.09;
     axis off
     drawnow
     sh.Position(1)=sh.Position(1)-0.05;
     sh.Position(2)=sh.Position(2)+(i-1)*0.065;
     sh.Position(3)=sh.Position(3).*1.2;
     shpos{i}=sh.Position;
+    sh.Colormap=turbo;
     ch=colorbar('Location','westoutside');
     ch.Position(1) = ch.Position(1) - 0.03;
     ch.Position(2) = ch.Position(2) + ch.Position(4) .* 0.1;
     ch.Position(4) = ch.Position(4) .* 0.8;
+    ch.FontSize=fontsz;
+    caxis([0 max(caxis)]);
     sh.Position=shpos{i};
     
     sh=subplot(4,3,i*3-1);
@@ -268,8 +277,8 @@ for i=1:4
     geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7])
     scatterm(ocean{i}.lat(Tara_ind),ocean{i}.lon(Tara_ind),dotsz,C3D{i},'filled')
     scatterm(ocean{i}.lat(Tara_ind),ocean{i}.lon(Tara_ind),dotsz,'k')
-    th=title(['(' char(96+i*3-1) ')']);
-    th.Position(2)=th.Position(2)-0.6;
+    th=title(['(' char(96+i*3-1) ')'],'FontSize',fontsz);
+    th.Position(2)=th.Position(2)+0.09;
     axis off
     sh.Position=shpos{i};
     sh.Position(1)=shpos{i}(1)+0.275;
@@ -280,17 +289,21 @@ for i=1:4
     scatter(C2D{i}(:,1),C2D{i}(:,2),50,'k')
     set(gca,'XTick',[],'YTick',[]),axis square
     caxis([1 8])
-    th=title(['(' char(96+i*3) ')']);
+    th=title(['(' char(96+i*3) ')'],'FontSize',fontsz);
     box on
     axis([-0.05 1.05 -0.05 1.05])
+    if i==1
+        ch=colorbar;
+        ch.Location='eastoutside';
+        ch.Ticks=linspace(1.4375,7.5625,8);
+        ch.TickLabels=cellstr(unique(Tara_Basin));
+        ch.FontSize=fontsz;
+    end
+    sh.Colormap=bsnclr;
+%     sh.Position=shpos;
     sh.Position(4)=shpos{i}(4).*0.7;
     sh.Position(1)=shpos{i}(1)+0.54;
     sh.Position(2)=shpos{i}(2)+0.0325;
-    ch=colorbar;
-    ch.Location='eastoutside';
-    ch.Ticks=linspace(1.4375,7.5625,8);
-    ch.TickLabels=cellstr(unique(Tara_Basin));
-    sh.Colormap=bsnclr;
 end
 
 sname=[pathname '/EPMD_Figures/EPMD_cluster_maps.png'];
@@ -308,7 +321,7 @@ ax=axesm('MapProjection','mollweid','frame','on','MapLonLimit',[-245 115],'MapLa
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7])
 scatterm(ocean{i}.lat(Tara_ind),ocean{i}.lon(Tara_ind),dotsz,clrs,'filled')
 scatterm(ocean{i}.lat(Tara_ind),ocean{i}.lon(Tara_ind),dotsz,'k')
-title({'Ocean Basins'})
+title({'Ocean Basins'},'FontSize',20)
 axis off
 
 
@@ -317,7 +330,7 @@ ax=axesm('MapProjection','mollweid','frame','on','MapLonLimit',[-245 115],'MapLa
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7])
 scatterm(ocean{i}.lat(Tara_ind),ocean{i}.lon(Tara_ind),dotsz,G1D,'filled')
 scatterm(ocean{i}.lat(Tara_ind),ocean{i}.lon(Tara_ind),dotsz,'k')
-title({'Geographic clustering'})
+title({'Geographic clustering'},'FontSize',20)
 axis off
 
 sh=subplot(313);
@@ -326,7 +339,7 @@ ax=axesm('MapProjection','mollweid','frame','on','MapLonLimit',[-245 115],'MapLa
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7])
 scatterm(ocean{i}.lat(Tara_ind),ocean{i}.lon(Tara_ind),dotsz,E1D,'filled')
 scatterm(ocean{i}.lat(Tara_ind),ocean{i}.lon(Tara_ind),dotsz,'k')
-title({'Environmental clustering'})
+title({'Environmental clustering'},'FontSize',20)
 axis off
 
 set(gcf,'color','w')
@@ -436,8 +449,8 @@ for i=1:4
     rho   = corr(Mdist{i}(:),Gdist(:),'Type','Spearman');
     rho_p = partialcorr(Mdist{i}(:),Gdist(:),Edist(:),'Type','Spearman');
     title({ttls{i},['Rank Correlation = ' num2str(rho)],['Partial Rank Correlation = ' num2str(rho_p)]})
-    xlabel({'Geographic distance'})
-    ylabel({'Community distance'})
+    xlabel({'Geographic distance'},'FontSize',20)
+    ylabel({'Community distance'},'FontSize',20)
     
     
     [fE,xiE,bwE{i}]=ksdensity([Edist(:),Mdist{i}(:)],[Edist(:),Mdist{i}(:)],'PlotFcn','contour','Bandwidth',[0.5 0.05]);
@@ -447,8 +460,8 @@ for i=1:4
     rho   = corr(Mdist{i}(:),Edist(:),'Type','Spearman');
     rho_p = partialcorr(Mdist{i}(:),Edist(:),Gdist(:),'Type','Spearman');
     title({ttls{i},['Rank Correlation = ' num2str(rho)],['Partial Rank Correlation = ' num2str(rho_p)]})
-    xlabel({'Environmental distance'})
-    ylabel({'Community distance'})
+    xlabel({'Environmental distance'},'FontSize',20)
+    ylabel({'Community distance'},'FontSize',20)
     
 end
 
@@ -484,48 +497,109 @@ figure(55)
 clf
 clear xp yp in_smpl sind1 xlon ylat rgb xdata
 
-if false % gridded points
-    [xp yp] = meshgrid(0:5:360,-90:2:90);
-    [~,sind1] = min(sqrt((ocean{1}.lon-xp(:)').^2 + (ocean{1}.lat-yp(:)').^2),[],1);
-    in_smpl=unique(sind1);
-    in_smpl=in_smpl(randperm(numel(in_smpl)));
-else
-    in_smpl=randperm(60646,1000);
-end
+% initial analysis with fewer sample points 
+in_smpl=randperm(60646,1000);
 
 xlon = ocean{1}.lon(in_smpl);
 ylat = ocean{1}.lat(in_smpl);
 
-for i=2%1:4  clear sin
-    xdata = full(xxx{i}(in_smpl,1:94));  
+i=2
+
+xdata = full(xxx{i}(in_smpl,1:94));  
     
-    rgb = tsne(xdata,...
-        'Algorithm','exact',... % 'exact' or 'barneshut'
+rgb = tsne(xdata,...
+    'Algorithm','barneshut',... % 'exact' or 'barneshut'
+    'Distance', @bray_curtis,...
+    'NumDimensions',3,...
+    'Options',opts,...
+    'Verbose',1,'NumPrint',1000);
+
+rgb = normalize(rgb,'range');
+
+%%
+
+[X,Y,Z] = sph2cart(deg2rad(ocean{1}.lon),deg2rad(ocean{1}.lat),1);
+
+clear F
+for ic=1:3
+    disp(ic)
+    F{ic} = scatteredInterpolant(X(in_smpl),Y(in_smpl),Z(in_smpl),rgb(:,ic),'natural');
+end
+clear Vq
+for ic=1:3
+    disp(ic)
+    Vq(:,ic) = F{ic}(X,Y,Z);
+end
+
+% subplot(312)
+[ax] = plot_image(Vq,mygrid,ocean{1})
+geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]);
+axis off
+drawnow
+
+sname=['Global_rgb1.png'];
+set(gcf,'Color','w')
+export_fig(sname,'-r300')
+
+return
+%% Repeat at higher sampling using last iteration as initial condition
+
+in_smpl=randperm(60646,5000);
+
+xlon = ocean{1}.lon(in_smpl);
+ylat = ocean{1}.lat(in_smpl)
+
+rgb2 = tsne(full(xxx{i}(in_smpl,1:94)),...
+        'Algorithm','barneshut',... % 'exact' or 'barneshut'
         'Distance', @bray_curtis,...
         'NumDimensions',3,...
         'Options',opts,...
-        'Verbose',1,'NumPrint',1000);
+        'InitialY',Vq(in_smpl,:),...
+        'Verbose',1,'NumPrint',100);
     
-    rgb = normalize(rgb,'range');
-    
-    
-    
-    subplot(2,2,i)
-    ax=axesm('MapProjection','mollweid','frame','on','MapLonLimit',[-245 115],'MapLatLimit',[-90 90]);
-    geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]);
-    scatterm(ocean{1}.lat(in_smpl),ocean{1}.lon(in_smpl),25,rgb,'filled');
-    axis off
-    drawnow
+rgb2 = normalize(rgb2,'range');
+
+
+ax=axesm ('eqaazim','frame','on','FlineWidth',0.5,'Origin',[-46.283333,-86.666665]);
+scatterm(ocean{1}.lat(in_smpl),ocean{1}.lon(in_smpl),10,rgb2,'filled');
+geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]);
+axis off
+drawnow
+
+
+
+[X,Y,Z] = sph2cart(deg2rad(ocean{1}.lon),deg2rad(ocean{1}.lat),1);
+
+clear F2
+for ic=1:3
+    disp(ic)
+    F2{ic} = scatteredInterpolant(X(in_smpl),Y(in_smpl),Z(in_smpl),rgb2(:,ic),'natural');
+end
+clear Vq2
+for ic=1:3
+    disp(ic)
+    Vq2(:,ic) = F2{ic}(X,Y,Z);
 end
 
+% subplot(312)
+clf
+[ax] = plot_image(Vq2,mygrid,ocean{1})
+[x,y,u,v] = get_circ_vectors(ocean{i}); % second input is coarse graining resolution
+iplot=randsample(60646,1e4);
+h=quiverm(y(iplot),x(iplot),v(iplot),u(iplot),'k');
+geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7]);
+axis off
+set(gcf,'Color','w')
+drawnow
+
+Vq=Vq2;
+
+sname=['Global_rgb3.png'];
+set(gcf,'Color','w')
+export_fig(sname,'-r300')
 
 
-
-
-
-
-
-
+return
 
 
 

@@ -78,9 +78,9 @@ for i=1:2
     ch.Ticks=log10([1 2 5 10 20 50 100]);
     ch.TickLabels={'1','2','5','10','20','50','100 years'};
     
-    text(-2.6,1.3,['(' char(96+i) ')'],'FontSize',15,'FontWeight','bold')
+    text(-2.6,1.3,['(' char(96+i) ')'],'FontSize',15,'FontWeight','bold','FontSize',20)
     drawnow
-    
+    set(gca,'FontSize',20)
 end
 ax.Position(2)=ax.Position(2)+0.025;
 
@@ -99,7 +99,8 @@ ch=colorbar('Location','EastOutside');
 ch.Ticks=log10([1/10 1/5 1/2 1 2 5 10]);
 ch.TickLabels={'\div10','\div5','\div2','\times1','\times2','\times5','\times10'};
 
-text(-2.6,1.3,['(c)'],'FontSize',15,'FontWeight','bold')
+text(-2.6,1.3,['(c)'],'FontSize',15,'FontWeight','bold','FontSize',20)
+set(gca,'FontSize',20)
 drawnow
     
 sname=['~/GitHub/EPMD_description/EPMD_Figures/Figure_2.png'];

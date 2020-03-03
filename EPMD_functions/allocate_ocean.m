@@ -1,9 +1,10 @@
 function [ocean] = allocate_ocean(run_options,varargin)
 
+% Load pre-allocated ocean grid
 load(['TM_data/pre-rolled/' run_options.TM_scheme '.mat']);
 
-% generate equally spaced points on surface of a sphere
-
+%% generate seed locations using SubdivideSphericalMesh
+% (equally spaced points on surface of a sphere)
 if nargin == 1
     n    = 3;
 elseif nargin==2
@@ -24,8 +25,6 @@ elseif nargin==3
     end
 end
 
-
-    
 switch mesh
     case 'tri'
         TR=SubdivideSphericalMesh(IcosahedronMesh,n);
@@ -35,6 +34,8 @@ switch mesh
         xyz=fv.vertices;
 end
 
+%%
+
 % convert to spherical coordinates
 [thetaR,phi,~]=cart2sph(xyz(:,1),xyz(:,2),xyz(:,3));
 
@@ -42,9 +43,6 @@ end
 xs=rad2deg(thetaR);
 xs(xs<0)=xs(xs<0)+360;
 ys=rad2deg(phi);
-
-lon = ocean.lon;
-lat = ocean.lat;
 
 % find sample points nearest to each model gridpoint
 Kall = dsearchn([xs ys],[ocean.lon ocean.lat]);
@@ -56,6 +54,7 @@ Kall = dsearchn([xs ys],[ocean.lon ocean.lat]);
 % find index of those coordinates in model grid
 K = dsearchn([ocean.lon ocean.lat],[xs(K),ys(K)]);
 
+% place in structural array
 ocean.sample_points = K;
 
 disp(['Placed ' num2str(numel(K)) ' seed sites'])

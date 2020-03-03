@@ -101,6 +101,7 @@ set(gcf,'defaultAxesColorOrder',[023 063 095;
                                  236 085 059;
                                  000 000 000
                                  255 000 000]./255)
+
 xscale='log';
 
 for i=1:numel(input_filename)
@@ -135,7 +136,7 @@ for i=1:numel(input_filename)
         case 'log'
             set(gca,'XScale','log')
             xlim([7/365 100])
-            set(gca,'XTick',[7/365 1/12 1 10 100],'YTick',0:0.1:1);
+            set(gca,'XTick',[7/365 1/12 1 10 100],'YTick',0:0.1:1,'FontSize',20);
             set(gca,'XTickLabels',{'week','month','year','decade','century'});
             grid on
             ax.XMinorTick = 'off';
@@ -151,7 +152,7 @@ for i=1:numel(input_filename)
 %     if contains(input_filename{i},'GUD_X17_surface_transport')
 %         delete(hp)
 %     end
-    set(gca,'FontSize',14)
+    set(gca,'FontSize',20)
 end
 % subplot(211);
 switch xscale

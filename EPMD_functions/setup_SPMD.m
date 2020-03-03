@@ -24,7 +24,6 @@ ii=[0 cumsum(idiv)];                   % sort ii as for idiv
 %%
 
 mutation = run_options.mutation;
-xsparse  = run_options.xsparse;
 
 spmd(run_options.parp_size)
     
@@ -50,14 +49,12 @@ spmd(run_options.parp_size)
     
     tseries_xD  = codistributed(zeros(n_tseries_loc,nxc,nday),codistr);
     
-    if ~xsparse
-        xD          = full(xD);
-        XD          = full(XD);
-        T_optD      = full(T_optD);
-        tseries_xD  = full(tseries_xD);
-        t_occD      = full(t_occD);
-        t_occupied  = full(t_occupied);
-    end
+    xD          = full(xD);
+    XD          = full(XD);
+    T_optD      = full(T_optD);
+    tseries_xD  = full(tseries_xD);
+    t_occD      = full(t_occD);
+    t_occupied  = full(t_occupied);
     
     % Initialise local arrays
     x      = getLocalPart(xD);

@@ -9,8 +9,10 @@ load coastlines
 land = shaperead('landareas', 'UseGeoCoords', true);
 
 
-Biodiversity_type = 'Metagenomic'; % 'Metagenomic or OTU
-for Size_class        = 1%:6 % 1 to 6
+
+Biodiversity_type = 'OTU'; % 'Metagenomic or OTU
+for Size_class        = 3%1:6 % 1 to 6
+    disp(Size_class)
     
     fnames = dir('~/GitHub/EPMD/Richter_2020/*dissimilarity*');
     
@@ -106,18 +108,22 @@ for Size_class        = 1%:6 % 1 to 6
     
     
     %% plot Martiny clusters
+    fsize=20;
+    
     f1=figure(1);
     f1.Position = [73 536 913 809];
     clf
     
+    dotsz=100;
+    
     sh1=subplot(221);
-    scatter(Com(:,1),Com(:,2),75,grp2idx(OceanBasin(ia)),'filled')
+    scatter(Com(:,1),Com(:,2),dotsz,grp2idx(OceanBasin(ia)),'filled')
     hold on
-    scatter(Com(:,1),Com(:,2),75,'k')
+    scatter(Com(:,1),Com(:,2),dotsz,'k')
     sh1.Position(1)=sh1.Position(1)+0.1;
     shpos=sh1.Position;
     axis square,box on
-    title(['(a) Ocean basin'])
+    title(['(a) Ocean basin'],'FontSize',fsize)
     axis([-0.05 1.05 -0.05 1.05])
     set(gca,'XTick',[],'YTick',[])
     sh1.Colormap=bsnclr;
@@ -125,14 +131,15 @@ for Size_class        = 1%:6 % 1 to 6
     ch.Location='westoutside';
     ch.Ticks=linspace(1.4375,7.5625,8);
     ch.TickLabels=cellstr(unique(OceanBasin));
+    ch.FontSize=14;
     caxis([1 8])
     sh1.Position=shpos;
     
     sh2=subplot(222);
-    scatter(Com(:,1),Com(:,2),75,Com3,'filled')
+    scatter(Com(:,1),Com(:,2),dotsz,Com3,'filled')
     hold on
-    scatter(Com(:,1),Com(:,2),75,'k')
-    title(['(b) ' Biodiversity_type ' clusters'])
+    scatter(Com(:,1),Com(:,2),dotsz,'k')
+    title(['(b) ' Biodiversity_type ' clusters'],'FontSize',fsize)
     axis square,box on
     axis([-0.05 1.05 -0.05 1.05])
     set(gca,'XTick',[],'YTick',[])
@@ -141,13 +148,13 @@ for Size_class        = 1%:6 % 1 to 6
     sh2.Position(1)=sh2.Position(1)-0.1;
     
     sh3=subplot(223);
-    scatter(Com(:,1),Com(:,2),75,Env(:,1:3),'filled')
+    scatter(Com(:,1),Com(:,2),dotsz,Env(:,1:3),'filled')
     hold on
     axis([-0.05 1.05 -0.05 1.05])
-    scatter(Com(:,1),Com(:,2),75,'k')
+    scatter(Com(:,1),Com(:,2),dotsz,'k')
     rho   = corr(Edist(:),Mdist(:),'Type','Spearman');
     rho_p = partialcorr(Mdist(:),Edist(:),Gdist(:),'Type','Spearman');
-    title(['(b) Environmental clusters'])
+    title(['(c) Environmental clusters'],'FontSize',fsize)
     axis square,box on
     set(gca,'XTick',[],'YTick',[])
     sh3.Position(1)=sh3.Position(1)+0.1;
@@ -155,13 +162,13 @@ for Size_class        = 1%:6 % 1 to 6
     sh3.Position(2)=sh3.Position(2)+0.09;
     
     sh4=subplot(224);
-    scatter(Com(:,1),Com(:,2),75,Geo(:,1:3),'filled')
+    scatter(Com(:,1),Com(:,2),dotsz,Geo(:,1:3),'filled')
     hold on
     axis([-0.05 1.05 -0.05 1.05])
-    scatter(Com(:,1),Com(:,2),75,'k')
+    scatter(Com(:,1),Com(:,2),dotsz,'k')
     rho   = corr(Gdist(:),Mdist(:),'Type','Spearman');
     rho_p = partialcorr(Mdist(:),Gdist(:),Edist(:),'Type','Spearman');
-    title(['(b) Geographic distance clusters'])
+    title(['(d) Geographic distance clusters'],'FontSize',fsize)
     axis square,box on
     set(gca,'XTick',[],'YTick',[])
     sh4.Position(1)=sh4.Position(1)+0.1;
@@ -178,7 +185,6 @@ for Size_class        = 1%:6 % 1 to 6
     f2 = figure(2);
     f2.Position = [537 8 873 1337];
     clf
-    fsize=18;
     
     % plot dendrogram
     subplot(1,5,[1 2])
@@ -269,7 +275,7 @@ for Size_class        = 1%:6 % 1 to 6
         g=bsnclr(grp2idx(Tara_Basin(jj)),2);
         b=bsnclr(grp2idx(Tara_Basin(jj)),3);
         ticklabels_new{ii} = ['\color[rgb]{' num2str(r) ',' num2str(g) ',' num2str(b) '} ' ticklabels{ii}];
-        text(5.5,ii,ticklabels_new{ii})
+        text(5.5,ii,ticklabels_new{ii},'FontSize',12)
     end
     % set the tick labels
 %     set(gca, 'YTickLabel', ticklabels_new);
@@ -296,7 +302,7 @@ for Size_class        = 1%:6 % 1 to 6
     geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7])
     scatterm(Latitude(ia),Longitude(ia),dotsz,Com3,'filled')
     scatterm(Latitude(ia),Longitude(ia),dotsz,'k')
-    title({'Community clustering'})
+    title({'Community clustering'},'FontSize',fsize)
     axis off
     
     if save_figs
@@ -314,7 +320,7 @@ for Size_class        = 1%:6 % 1 to 6
     geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7])
     scatterm(Latitude(ia),Longitude(ia),dotsz,Geo(:,1:3),'filled')
     scatterm(Latitude(ia),Longitude(ia),dotsz,'k')
-    title('Geographic clustering')
+    title('Geographic clustering','FontSize',fsize)
     axis off
     
     sh=subplot(212);
@@ -322,7 +328,7 @@ for Size_class        = 1%:6 % 1 to 6
     geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7])
     scatterm(Latitude(ia),Longitude(ia),dotsz,Env(:,1:3),'filled')
     scatterm(Latitude(ia),Longitude(ia),dotsz,'k')
-    title('Environmental clustering')
+    title('Environmental clustering','FontSize',fsize)
     axis off
     sh.Position(2)=sh.Position(2)+0.1;
     
@@ -347,13 +353,13 @@ ax=axesm('MapProjection','mollweid','frame','on');
 geoshow(ax, land, 'FaceColor', [0.7 0.7 0.7])
 scatterm(Latitude(ia),Longitude(ia),dotsz,Com3,'filled')
 scatterm(Latitude(ia),Longitude(ia),dotsz,'k')
-title({'(a)'})
+title({'(a)'},'FontSize',fsize)
 axis off
 
 sh=subplot(133);
-scatter(Com(:,1),Com(:,2),75,grp2idx(OceanBasin(ia)),'filled')
+scatter(Com(:,1),Com(:,2),150,grp2idx(OceanBasin(ia)),'filled')
 hold on
-scatter(Com(:,1),Com(:,2),75,'k')
+scatter(Com(:,1),Com(:,2),150,'k')
 shpos=sh.Position;
 sh.Position(1)=shpos(1)-0.05;
 shpos=sh.Position;
@@ -362,8 +368,9 @@ ch=colorbar;
 ch.Location='eastoutside';
 ch.Ticks=linspace(1.4375,7.5625,8);
 ch.TickLabels=cellstr(unique(Tara_Basin));
+    ch.FontSize=14;
 caxis([1 8])
-title(['(b)'])
+title(['(b)'],'FontSize',fsize)
 box on
 axis([-0.05 1.05 -0.05 1.05])
 sh.Position=shpos;

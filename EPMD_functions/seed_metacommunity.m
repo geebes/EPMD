@@ -16,13 +16,16 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
         
     switch run_options.annual_cycle
         case 'static'
+            % temperature and carrying capacity set to annual mean
             ocean.forcing_temp       = repmat(mean(ocean.theta,2),1,run_options.nday);
             ocean.forcing_PCapacity  = repmat(mean(run_options.PCapacity,2),1,run_options.nday);
         case 'seasonal'
+            % temperature and carrying capacity interpolated to daily from monthly data
             ocean.forcing_temp        = interp1(0:12,[ocean.theta ocean.theta(:,1)]',linspace(0,12,run_options.nday))';
             ocean.forcing_PCapacity   = interp1(0:12,[run_options.PCapacity run_options.PCapacity(:,1)]',linspace(0,12,run_options.nday))';
     end
     
+    % save environmental variables in structural array
     T_opt       = run_options.T_opt;
     delta_Topt  = run_options.delta_Topt;
     nphen       = run_options.nphen;
@@ -35,20 +38,23 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Set initial abundance distributions
+
+
+%% Set initial abundance distributions from options ('preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal')
     switch run_options.seed_dist
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        case 'equal'
+        case 'equal' 
             % share initial abundance among all types equally
-            x=ones(length(B),nphen)./nphen;
-            
+            x=ones(length(B),nphen)./nphen;            
             run_options.solver    = 'serial';	% serial or parallel
             run_options.mutation  = true;	
             run_options.selection = true;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        case 'preadapted' % set one completely dominant type preadapted to each location
+        case 'preadapted' 
+            % set one completely dominant type preadapted to each location
+            
             % bin  temperature according to T_opt range
             [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
             % initialise EiE matrix
@@ -65,7 +71,9 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        case 'neutral_lineages' % set locally adapted phenotype as x=1 in each location
+        case 'neutral_lineages' 
+            % set locally adapted phenotype as x=1 in each location
+            
             % bin  temperature according to T_opt range
             [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
             % initialise EiE matrix
@@ -91,7 +99,9 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        case 'lineages' % set locally addapted phenotype as x=1 in each location
+        case 'lineages' 
+            % set locally addapted phenotype as x=1 in each location
+            
             % bin  temperature according to T_opt range
             [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
             % initialise EiE matrix
@@ -117,6 +127,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'neutral'
+            % set ecologically neutral types at seed locations
 
             nlineages=size(ocean.sample_points,1);
             
@@ -139,6 +150,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'selective_dispersal'
+            % thermally adapted (and adapting) phenotypes under selection
 
             nlineages   = size(ocean.sample_points,1);
             
@@ -183,6 +195,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'nonadaptive_dispersal'
+            % thermally adapted phenotypes under selection but not adapting
 
             nlineages   = size(ocean.sample_points,1);
             

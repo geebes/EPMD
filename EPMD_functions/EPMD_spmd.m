@@ -61,7 +61,7 @@ for yr=1:run_options.nyear
 
             if selection
                 % CALCULATE SELECTION COEFFICIENT (s) AS FUNCTION OF TEMPERATURE AND PREFERENCE (s<=1)
-                s = exp(-((mean(forcing_temp(:,dy-4:dy),2)-T_opt)./w).^2);  % Seasonal Temperature limitation
+                s = exp(-((mean(forcing_temp(:,dy),2)-T_opt)./w).^2);  % Seasonal Temperature limitation
             else
                 s = 1;
             end
@@ -82,8 +82,7 @@ for yr=1:run_options.nyear
                 
                 % SELECTION (abundance and fitness weighted or just abundance weighted)
                 % calculate abundance and fitness weighted probability of
-                % selection in next generation, normalising so sum(x)=1
-                
+                % selection in next generation, normalising so sum(x)=1                
                 popn_selected = s.*x;
                 comn_selected = sum(popn_selected,2);
                 global_comn_selected = gplus(comn_selected);
