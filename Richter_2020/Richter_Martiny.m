@@ -10,8 +10,8 @@ land = shaperead('landareas', 'UseGeoCoords', true);
 
 
 
-Biodiversity_type = 'OTU'; % 'Metagenomic or OTU
-for Size_class        = 3%1:6 % 1 to 6
+Biodiversity_type = 'Metagenomic'; % 'Metagenomic or OTU
+for Size_class        = 2 % 1 to 6
     disp(Size_class)
     
     fnames = dir('~/GitHub/EPMD/Richter_2020/*dissimilarity*');
@@ -82,9 +82,9 @@ for Size_class        = 3%1:6 % 1 to 6
     Gdist = Geographic_distance(C,C);
         
     % classical MDS
-    [Geo eigen1] = cmdscale(Gdist,10);
-    [Env eigen2] = cmdscale(Edist,10);
-%     [Com eigen3] = cmdscale(Mdist,10);
+    [Geo eigen1] = cmdscale(Gdist,3);
+    [Env eigen2] = cmdscale(Edist,3);
+    [Com eigen3] = cmdscale(Mdist,3);
     
     opts = statset('MaxIter',1e5);
     Com  = tsne(Mdist,'Algorithm','exact',...
@@ -97,6 +97,8 @@ for Size_class        = 3%1:6 % 1 to 6
                       'Distance',@dist2dist,...
                       'Perplexity',20,...
                       'Options',opts);
+%     Com3=Com;
+%     Com=Com(:,1:2);
         
     % normalise distances
     Geo  = normalize(Geo,'range');
@@ -188,7 +190,18 @@ for Size_class        = 3%1:6 % 1 to 6
     
     % plot dendrogram
     subplot(1,5,[1 2])
-    tree = linkage(squareform(Mdist),'ward');
+    % test different clustering methods
+    method={'single','complete','average','weighted','centroid','median','ward'};
+    for imeth=1:7
+        tree = linkage(squareform(Mdist),method{imeth});
+        cnet(imeth)=cophenet(tree,squareform(Mdist));
+    end
+    [~,iord] = sort(cnet,'descend');
+    disp(['UPGMA ranked #' num2str(find(iord==3)) '.'])
+    disp(['(''' method{iord(1)} ''' ranked #1.)'])
+    
+    % then use UPGMA
+    tree = linkage(squareform(Mdist),'average');
     leafOrder = optimalleaforder(tree,Mdist);
     [H,T,outperm] = dendrogram(tree,0,...
         ...'Reorder',leafOrder,...

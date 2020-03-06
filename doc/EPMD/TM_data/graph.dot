@@ -1,8 +1,0 @@
-/* Created by mdot for Matlab */
-digraph m2html {
-  preallocate_ocean -> no_negatives;
-
-  extract_GUD [URL="extract_GUD.html"];
-  no_negatives [URL="no_negatives.html"];
-  preallocate_ocean [URL="preallocate_ocean.html"];
-}

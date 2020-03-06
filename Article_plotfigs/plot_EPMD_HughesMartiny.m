@@ -140,6 +140,9 @@ for i=1:4
                         'Perplexity',perplexity,...
                         'Options',opts);
     disp('----------------------------------')
+%     C3D{i} = cmdscale(Mdist{i},3);
+%     C2D{i} = C3D{i}(:,1:2);
+
     
 %     C2D{i}=normalize(C2D{i},'range');
 %     C3D{i}=normalize(C3D{i},'range');
