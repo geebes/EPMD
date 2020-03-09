@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of run_EPMD</title>
+  <meta name="keywords" content="run_EPMD">
+  <meta name="description" content="Script to run EPMD">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html EPMD -->
+<h1>run_EPMD
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Script to run EPMD</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Script to run EPMD</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../EPMD/EPMD_functions/EPMD_spmd.html" class="code" title="function EPMD_spmd(run_options)">EPMD_spmd</a>	Wrapper function for EPMD</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Script to run EPMD</span>
+0002 
+0003 <span class="comment">%  Copyright (C) 2020 Ben Ward &lt;b.a.ward@soton.ac.uk&gt;</span>
+0004 
+0005 
+0006 clear
+0007 clc
+0008 
+0009 cd ~/GitHub/EPMD
+0010 addpath(genpath(<span class="string">'~/GitHub/EPMD'</span>))
+0011 addpath EPMD_functions
+0012 
+0013 <span class="comment">%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0014 
+0015 <span class="comment">% set options</span>
+0016 run_options.TM_scheme       = <span class="string">'GUD_X01_weighted_transport'</span>; <span class="comment">% 'surface_transport' or 'GUD_X01_weighted_transport', or similar</span>
+0017 run_options.seed_dist       = <span class="string">'neutral'</span>;    <span class="comment">% 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal'</span>
+0018 run_options.trajectory      = <span class="string">'stochastic'</span>; <span class="comment">% 'stochastic' or 'deterministic'</span>
+0019 run_options.annual_cycle    = <span class="string">'static'</span>;     <span class="comment">% 'static' or 'seasonal'</span>
+0020 run_options.seedseed        = 2;            <span class="comment">% seed for global seeding sites</span>
+0021 
+0022 <span class="comment">% optional string to add to output filenames</span>
+0023 run_options.suffix          = <span class="string">'_NULL'</span>;
+0024 
+0025 <span class="comment">% note depth-integrated TMs are each associated with a particular abundance distribution</span>
+0026 <span class="comment">% (this will be overwritten if using depth-integrated biomass-weighted transport)</span>
+0027 run_options.DARWIN_pop      = <span class="string">'X01'</span>; 
+0028 
+0029 run_options.save_data       = true;
+0030 
+0031 run_options.nyear           = 100;          
+0032 run_options.nday            = 365;          
+0033 
+0034 <span class="comment">% N.B. not applicable for neutral model</span>
+0035 run_options.nphen           = 77;           <span class="comment">% number of phenotypes</span>
+0036 run_options.w               = 6;               <span class="comment">% Niche breadth</span>
+0037 run_options.sigma_m         = 0.1;          <span class="comment">% Mutation size</span>
+0038 
+0039 <span class="comment">%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0040 <span class="comment">% Run EPMD_spmd</span>
+0041 <a href="../EPMD/EPMD_functions/EPMD_spmd.html" class="code" title="function EPMD_spmd(run_options)">EPMD_spmd</a>(run_options)</pre></div>
+<hr><address>Generated on Mon 09-Mar-2020 16:36:03 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

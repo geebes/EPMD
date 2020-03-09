@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Test_functions</title>
+  <meta name="keywords" content="Test_functions">
+  <meta name="description" content="Setup path to all subdirectories of EPMD">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html EPMD --><!-- menu.html Visualisation_scripts -->
+<h1>Test_functions
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Setup path to all subdirectories of EPMD</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Setup path to all subdirectories of EPMD</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../EPMD/Diagnostic_funcs/load_EPMD_output.html" class="code" title="function [ocean,run_options,t_occ,x,i_lastyr] = load_EPMD_output(input_filename,pathname)">load_EPMD_output</a>	load_EPMD_output Load EPMD .mat output file</li><li><a href="../../EPMD/Diagnostic_funcs/load_geo_grid.html" class="code" title="function [coastlat coastlon mygrid land] = load_geo_grid(nctiles_path)">load_geo_grid</a>	LOAD_GEO_GRID Load ocean grid data</li><li><a href="../../EPMD/Diagnostic_funcs/plot_vector.html" class="code" title="function [ax] = plot_vector(x,cscale,mygrid,ocean,proj)">plot_vector</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Setup path to all subdirectories of EPMD</span>
+0002 addpath(genpath(<span class="string">'~/GitHub/EPMD'</span>))
+0003 
+0004 clear
+0005 
+0006 <span class="comment">%% load simulation data and metadata</span>
+0007 filename = <span class="string">'neutral_stochastic_static_GUD_X01_weighted_transport'</span>;
+0008 pathname = <span class="string">'../Output/'</span>;
+0009 
+0010 [ocean,run_options,t_occ,x,i_lastyr] = <a href="../../EPMD/Diagnostic_funcs/load_EPMD_output.html" class="code" title="function [ocean,run_options,t_occ,x,i_lastyr] = load_EPMD_output(input_filename,pathname)">load_EPMD_output</a>(filename,pathname);
+0011 
+0012 
+0013 <span class="comment">%% load geo grid data and Tara sites</span>
+0014 [coastlat coastlon mygrid land] = <a href="../../EPMD/Diagnostic_funcs/load_geo_grid.html" class="code" title="function [coastlat coastlon mygrid land] = load_geo_grid(nctiles_path)">load_geo_grid</a>(<span class="string">'~/GitHub/EPMD/nctiles_grid/'</span>);
+0015 
+0016 <span class="comment">%% Load Tara site indices</span>
+0017 
+0018 <span class="comment">% Load Tara station coordiantes</span>
+0019 load Tara_sites.mat
+0020 
+0021 <span class="comment">% Surface samples only...</span>
+0022 insurf          = find(Tara.depth==<span class="string">'SRF'</span>);
+0023 Tara.lat        = Tara.lat(insurf);
+0024 Tara.lon        = Tara.lon(insurf);
+0025 Tara.depth      = Tara.depth(insurf);
+0026 Tara.StationID    = Tara.StationID(insurf);
+0027 
+0028 <span class="comment">% locations of sites sampled in size fraction #2</span>
+0029 loaddata = load(<span class="string">'StatID_sz2.mat'</span>);
+0030 StatID_sz2 = loaddata.StatID_sz2;
+0031 
+0032 
+0033 [~,ia,~] = intersect(Tara.StationID,StatID_sz2);
+0034 
+0035 <span class="comment">% get coordinates</span>
+0036 Tlat = Tara.lat(ia);
+0037 Tlon = Tara.lon(ia);
+0038 Tlon(Tlon&lt;0) = Tlon(Tlon&lt;0)+360;
+0039 
+0040 <span class="comment">% Find nearest points in model grid</span>
+0041 EucDist = sqrt( (Tlat - ocean.lat').^2 + (Tlon - ocean.lon').^2 );
+0042 [~,Tara_ind] = min(EucDist,[],2);
+0043 
+0044 <span class="comment">%% extract abundance data for year = plot_yr</span>
+0045 plot_yr   = 100;
+0046 
+0047 x_freq = x{plot_yr,1};
+0048 <span class="keyword">switch</span> run_options.seed_dist
+0049     <span class="keyword">case</span> <span class="string">'nonadaptive_dispersal'</span>
+0050         <span class="comment">% sum across phenotypes for each seed population</span>
+0051         tmp = reshape(full(x_freq),60646,run_options.nphen,run_options.nlineages);
+0052         x_freq  = squeeze(sum(tmp,2));
+0053 <span class="keyword">end</span>
+0054 
+0055 x_freq=x_freq(:,1:numel(ocean.sample_points)); <span class="comment">% extract seed populations only</span>
+0056                                                <span class="comment">% i.e. no global resident</span>
+0057 
+0058 <span class="comment">%% plot global 95th percentile dispersal times</span>
+0059 figure(1)
+0060 clf
+0061 
+0062 prc=95;
+0063 t_occ(isnan(t_occ))=100; <span class="comment">% set unconnected points to 100 years</span>
+0064 t_immigration = prctile(t_occ,prc,2);
+0065 t_emigration  = prctile(t_occ,prc,1);
+0066 cscale=<span class="string">'log'</span>;
+0067 
+0068 <span class="comment">% Background map of immigration times</span>
+0069 [ax] = <a href="../../EPMD/Diagnostic_funcs/plot_vector.html" class="code" title="function [ax] = plot_vector(x,cscale,mygrid,ocean,proj)">plot_vector</a>(t_immigration,cscale,mygrid,ocean,<span class="string">'mollweid'</span>);
+0070 geoshow(ax, land, <span class="string">'FaceColor'</span>, [0.7 0.7 0.7]); <span class="comment">% Very SLOW!!!!!</span>
+0071 
+0072 <span class="comment">% Overlaid scatterplot of emigration times</span>
+0073 scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),100,log10(t_emigration),<span class="string">'filled'</span>)
+0074 scatterm(ocean.lat(ocean.sample_points),ocean.lon(ocean.sample_points),100,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,0.1)
+0075 
+0076 caxis(log10([2 100]))
+0077 ch=colorbar;
+0078 ch.Ticks=log10([2 5 10 20 50 100]);
+0079 ch.TickLabels={<span class="string">'2'</span>,<span class="string">'5'</span>,<span class="string">'10'</span>,<span class="string">'20'</span>,<span class="string">'50'</span>,<span class="string">'100'</span>};
+0080 colormap(flipud(turbo))
+0081 
+0082 <span class="comment">%% plot dispersal of seed population n</span>
+0083 figure(2)
+0084 clf
+0085 
+0086 n=8;
+0087 cscale=<span class="string">'lin'</span>;
+0088 dotsz=75;
+0089 
+0090 X = x_freq(:,n).*ocean.ann_abundance;
+0091 
+0092 [ax] = <a href="../../EPMD/Diagnostic_funcs/plot_vector.html" class="code" title="function [ax] = plot_vector(x,cscale,mygrid,ocean,proj)">plot_vector</a>(X,cscale,mygrid,ocean,<span class="string">'mollweid'</span>);
+0093 geoshow(ax, land, <span class="string">'FaceColor'</span>, [0.7 0.7 0.7]); <span class="comment">% Very SLOW!!!!!</span>
+0094 
+0095 smpl_pnts = ocean.sample_points;
+0096 scatterm(ocean.lat(smpl_pnts(n)),ocean.lon(smpl_pnts(n)),dotsz,<span class="string">'m'</span>,<span class="string">'filled'</span>)
+0097 scatterm(ocean.lat(smpl_pnts(n)),ocean.lon(smpl_pnts(n)),dotsz,<span class="string">'k'</span>)
+0098 
+0099 ch=colorbar;
+0100 caxis([0 max(caxis)]);
+0101 colormap(turbo)
+0102 
+0103 <span class="comment">%% t-SNE analysis of model data at Tara sites</span>
+0104 
+0105 x=x_freq./sum(x_freq,2); <span class="comment">% normalise so sum x is 1 at each site</span>
+0106 S=full(x(Tara_ind,:)); <span class="comment">% extract Tara sites</span>
+0107 S=S./sum(S,2); <span class="comment">% normalise so sum x is 1 at each site</span>
+0108 
+0109 opts = statset(<span class="string">'MaxIter'</span>,1e5);
+0110 perplexity=20;
+0111 disp([<span class="string">'Analysing '</span> filename])
+0112 disp(<span class="string">'Performing 2D t-SNE analysis'</span>)
+0113 C2D  = tsne(S,<span class="string">'Algorithm'</span>,<span class="string">'exact'</span>,<span class="keyword">...</span>
+0114               <span class="string">'NumDimensions'</span>,2,<span class="keyword">...</span>
+0115               <span class="string">'Distance'</span>,@bray_curtis,<span class="keyword">...</span>
+0116               <span class="string">'Perplexity'</span>,perplexity,<span class="keyword">...</span>
+0117               <span class="string">'Options'</span>,opts);
+0118 disp(<span class="string">'Performing 3D t-SNE analysis'</span>)
+0119 C3D  = tsne(S,<span class="string">'Algorithm'</span>,<span class="string">'exact'</span>,<span class="keyword">...</span>
+0120               <span class="string">'NumDimensions'</span>,3,<span class="keyword">...</span>
+0121               <span class="string">'Distance'</span>,@bray_curtis,<span class="keyword">...</span>
+0122               <span class="string">'Perplexity'</span>,perplexity,<span class="keyword">...</span>
+0123               <span class="string">'Options'</span>,opts);
+0124 disp(<span class="string">'----------------------------------'</span>)
+0125 
+0126 <span class="comment">% Normalise in range 0-1 (scale to max value in all dimensions)</span>
+0127 C2D = (C2D - min(C2D(:))) ./ (max(C2D(:)) - min(C2D(:)));
+0128 C3D = (C3D - min(C3D(:))) ./ (max(C3D(:)) - min(C3D(:)));
+0129 
+0130 <span class="comment">%%</span>
+0131 figure(3)
+0132 clf
+0133 
+0134 subplot(211)
+0135 ax=axesm(<span class="string">'MapProjection'</span>,<span class="string">'mollweid'</span>,<span class="string">'frame'</span>,<span class="string">'on'</span>,<span class="string">'MapLonLimit'</span>,[-245 115],<span class="string">'MapLatLimit'</span>,[-90 90]);
+0136 geoshow(ax, land, <span class="string">'FaceColor'</span>, [0.7 0.7 0.7])
+0137 scatterm(ocean.lat(Tara_ind),ocean.lon(Tara_ind),dotsz,C3D,<span class="string">'filled'</span>)
+0138 scatterm(ocean.lat(Tara_ind),ocean.lon(Tara_ind),dotsz,<span class="string">'k'</span>)
+0139 
+0140 
+0141 
+0142 <span class="comment">% Tara ocean basin index and colour scale</span>
+0143 load Tara_Basin_sz2.mat
+0144 load Basin8.mat
+0145 
+0146 sh=subplot(223);
+0147 shpos=sh.Position;
+0148 scatter(C2D(:,1),C2D(:,2),dotsz,grp2idx(Tara_Basin),<span class="string">'filled'</span>)
+0149 hold on
+0150 scatter(C2D(:,1),C2D(:,2),dotsz,<span class="string">'k'</span>)
+0151 axis square
+0152 set(gca,<span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[])
+0153 box on
+0154 axis([-0.05 1.05 -0.05 1.05])
+0155 ch=colorbar;
+0156 ch.Ticks=linspace(1.4375,7.5625,8);
+0157 ch.TickLabels=cellstr(unique(Tara_Basin));
+0158 ch.Location=<span class="string">'westoutside'</span>;
+0159 sh.Colormap=bsnclr;
+0160 caxis([1 8])
+0161 sh.Position=shpos;
+0162 
+0163 sh=subplot(224);
+0164 scatter(C2D(:,1),C2D(:,2),dotsz,C3D,<span class="string">'filled'</span>)
+0165 hold on
+0166 scatter(C2D(:,1),C2D(:,2),dotsz,<span class="string">'k'</span>)
+0167 axis square
+0168 set(gca,<span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[])
+0169 box on
+0170 axis([-0.05 1.05 -0.05 1.05])
+0171 
+0172 
+0173 
+0174 
+0175 
+0176 
+0177 
+0178 
+0179</pre></div>
+<hr><address>Generated on Mon 09-Mar-2020 16:36:03 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

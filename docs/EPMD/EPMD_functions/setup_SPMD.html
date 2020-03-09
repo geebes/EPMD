@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of setup_SPMD</title>
+  <meta name="keywords" content="setup_SPMD">
+  <meta name="description" content="Initialise SPMD variables...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html EPMD --><!-- menu.html EPMD_functions -->
+<h1>setup_SPMD
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Initialise SPMD variables...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]= setup_SPMD(run_options,x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Initialise SPMD variables...
+ 
+  Syntax:
+    [...] = setup_SPMD(run_options,x)
+
+  (run_options is structural array defined in run_EPMD)
+  (output is full list of SPMD variables)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="open_parallel.html" class="code" title="function open_parallel(parp_size)">open_parallel</a>	Initialise parallel pool...</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="EPMD_spmd.html" class="code" title="function EPMD_spmd(run_options)">EPMD_spmd</a>	Wrapper function for EPMD</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]</a><span class="keyword">...</span>
+0002           = setup_SPMD(run_options,x)
+0003 <span class="comment">% Initialise SPMD variables...</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%  Syntax:</span>
+0006 <span class="comment">%    [...] = setup_SPMD(run_options,x)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  (run_options is structural array defined in run_EPMD)</span>
+0009 <span class="comment">%  (output is full list of SPMD variables)</span>
+0010 
+0011 <span class="comment">%  Copyright (C) 2020 Ben Ward &lt;b.a.ward@soton.ac.uk&gt;</span>
+0012 
+0013 
+0014 disp(<span class="string">'Setting up SPMD variables'</span>)
+0015 
+0016 <span class="comment">% Do not use more processsors than model has independent lineages</span>
+0017 run_options.parp_size = min(run_options.parp_size,run_options.nlineages);
+0018 
+0019 <span class="comment">% open parallel pool</span>
+0020 <a href="open_parallel.html" class="code" title="function open_parallel(parp_size)">open_parallel</a>(run_options.parp_size);
+0021 
+0022 parp_size       = run_options.parp_size;
+0023 nphen           = run_options.nphen;
+0024 nlineages       = run_options.nlineages;
+0025 nxc             = run_options.nxc;
+0026 nxr             = run_options.nxr;
+0027 T_opt           = run_options.T_opt;
+0028 mutmat1         = run_options.mutmat;
+0029 nday            = run_options.nday;
+0030 n_tseries_loc   = run_options.n_tseries_loc;
+0031 t_occupied      = run_options.t_occupied;
+0032 
+0033 ii=round(linspace(0,nlineages,parp_size+1)).*nphen; <span class="comment">% divide populations among n proc</span>
+0034 idiv = sort(diff(ii),<span class="string">'descend'</span>);       <span class="comment">% get size of blocks on each proc</span>
+0035 ii=[0 cumsum(idiv)];                   <span class="comment">% sort ii as for idiv</span>
+0036 
+0037 <span class="comment">%%</span>
+0038 
+0039 mutation = run_options.mutation;
+0040 
+0041 spmd(run_options.parp_size)
+0042     
+0043     <span class="keyword">if</span> mutation
+0044         <span class="comment">% replicate mutation array along diagonal according to size of block</span>
+0045         nrep=idiv(labindex)./nphen;
+0046         mutmat=kron(eye(nrep),mutmat1); <span class="comment">% order is important (identity first)</span>
+0047     <span class="keyword">end</span>
+0048 
+0049     <span class="comment">% create index to assign 'x' to workers</span>
+0050     codistr = codistributor1d(2, idiv, [nxr nxc]);
+0051 
+0052     <span class="comment">% assign 'x' to workers according to codistr</span>
+0053     xD=codistributed(x,codistr);
+0054     XD=xD.*0; <span class="comment">% also initialise X</span>
+0055     t_occD = XD; <span class="comment">% and t_occupied</span>
+0056 
+0057     T_optD=codistributed(T_opt,codistr); <span class="comment">% distribute</span>
+0058     
+0059     <span class="comment">% indexing needs to be done manually</span>
+0060     <span class="comment">% https://uk.mathworks.com/help/parallel-computing/codistributed.colon.html</span>
+0061     indx=(ii(labindex)+1):(ii(labindex+1));
+0062     
+0063     tseries_xD  = codistributed(zeros(n_tseries_loc,nxc,nday),codistr);
+0064     
+0065     xD          = full(xD);
+0066     XD          = full(XD);
+0067     T_optD      = full(T_optD);
+0068     tseries_xD  = full(tseries_xD);
+0069     t_occD      = full(t_occD);
+0070     t_occupied  = full(t_occupied);
+0071     
+0072     <span class="comment">% Initialise local arrays</span>
+0073     x      = getLocalPart(xD);
+0074     X      = getLocalPart(XD);
+0075     T_opt  = getLocalPart(T_optD);
+0076     tser_x = getLocalPart(tseries_xD);
+0077     t_occ  = getLocalPart(t_occD);
+0078     nxc    = size(x,2);
+0079     
+0080 <span class="keyword">end</span>
+0081 
+0082 
+0083 
+0084 
+0085 
+0086 
+0087 
+0088 
+0089 
+0090 
+0091     
+0092</pre></div>
+<hr><address>Generated on Mon 09-Mar-2020 16:36:03 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

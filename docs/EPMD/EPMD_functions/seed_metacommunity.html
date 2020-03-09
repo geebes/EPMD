@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of seed_metacommunity</title>
+  <meta name="keywords" content="seed_metacommunity">
+  <meta name="description" content="Initialise EPMD population for defined options...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html EPMD --><!-- menu.html EPMD_functions -->
+<h1>seed_metacommunity
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Initialise EPMD population for defined options...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [x,run_options,ocean] = seed_metacommunity(run_options,ocean) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Initialise EPMD population for defined options...
+ ('preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal')
+ 
+  Syntax:
+    [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
+
+  (run_options is structural array defined in run_EPMD)
+  (ocean is structural array defined in allocate_ocean)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="EPMD_spmd.html" class="code" title="function EPMD_spmd(run_options)">EPMD_spmd</a>	Wrapper function for EPMD</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)</a>
+0002 <span class="comment">% Initialise EPMD population for defined options...</span>
+0003 <span class="comment">% ('preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal')</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%  Syntax:</span>
+0006 <span class="comment">%    [x,run_options,ocean] = seed_metacommunity(run_options,ocean)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  (run_options is structural array defined in run_EPMD)</span>
+0009 <span class="comment">%  (ocean is structural array defined in allocate_ocean)</span>
+0010 
+0011 <span class="comment">%  Copyright (C) 2020 Ben Ward &lt;b.a.ward@soton.ac.uk&gt;</span>
+0012 
+0013     <span class="comment">% Load carrying capacity</span>
+0014     <span class="keyword">if</span> startsWith(run_options.TM_scheme,<span class="string">'GUD'</span>)
+0015         <span class="comment">% Predefined if using depth-integrated abundance</span>
+0016         run_options.PCapacity = ocean.abundance;
+0017     <span class="keyword">else</span>
+0018         <span class="comment">% Abundance needs to be specified if using surface transport</span>
+0019         load([<span class="string">'../GUD_forcing/GUD_'</span> run_options.DARWIN_pop <span class="string">'_abundance.mat'</span>]);
+0020         run_options.PCapacity = abundance(ocean.Ib,:) .* ocean.volume;
+0021     <span class="keyword">end</span>
+0022     
+0023     <span class="comment">% initialise populations adapted to annual temperature</span>
+0024     temp=ocean.ann_theta;
+0025         
+0026     <span class="keyword">switch</span> run_options.annual_cycle
+0027         <span class="keyword">case</span> <span class="string">'static'</span>
+0028             <span class="comment">% temperature and carrying capacity set to annual mean</span>
+0029             ocean.forcing_temp       = repmat(mean(ocean.theta,2),1,run_options.nday);
+0030             ocean.forcing_PCapacity  = repmat(mean(run_options.PCapacity,2),1,run_options.nday);
+0031         <span class="keyword">case</span> <span class="string">'seasonal'</span>
+0032             <span class="comment">% temperature and carrying capacity interpolated to daily from monthly data</span>
+0033             ocean.forcing_temp        = interp1(0:12,[ocean.theta ocean.theta(:,1)]',linspace(0,12,run_options.nday))';
+0034             ocean.forcing_PCapacity   = interp1(0:12,[run_options.PCapacity run_options.PCapacity(:,1)]',linspace(0,12,run_options.nday))';
+0035     <span class="keyword">end</span>
+0036     
+0037     <span class="comment">% save environmental variables in structural array</span>
+0038     T_opt       = run_options.T_opt;
+0039     delta_Topt  = run_options.delta_Topt;
+0040     nphen       = run_options.nphen;
+0041     K           = ocean.sample_points;
+0042     B           = ocean.B;
+0043     
+0044     run_options.nlineages    = 1;
+0045     run_options.t_occupied  = [];
+0046 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0047 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0048 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0049 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0050 
+0051 
+0052 <span class="comment">%% Set initial abundance distributions from options ('preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal')</span>
+0053     <span class="keyword">switch</span> run_options.seed_dist
+0054 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0055 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0056         <span class="keyword">case</span> <span class="string">'equal'</span> 
+0057             <span class="comment">% share initial abundance among all types equally</span>
+0058             x=ones(length(B),nphen)./nphen;            
+0059             run_options.solver    = <span class="string">'serial'</span>;    <span class="comment">% serial or parallel</span>
+0060             run_options.mutation  = true;    
+0061             run_options.selection = true;
+0062 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0063 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0064         <span class="keyword">case</span> <span class="string">'preadapted'</span> 
+0065             <span class="comment">% set one completely dominant type preadapted to each location</span>
+0066             
+0067             <span class="comment">% bin  temperature according to T_opt range</span>
+0068             [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
+0069             <span class="comment">% initialise EiE matrix</span>
+0070             x=zeros(length(B),nphen);
+0071             <span class="comment">% find matching seed locations in EiE matrix</span>
+0072             iseed=sub2ind(size(x),ocean.Ib,bin);
+0073             <span class="comment">% set type abundance of best adapted type to 1 in each location</span>
+0074             x(iseed)=1;
+0075             x=sparse(x);
+0076             
+0077             run_options.solver    = <span class="string">'serial'</span>;    <span class="comment">% serial or parallel</span>
+0078             run_options.mutation  = true;    
+0079             run_options.selection = true;
+0080             
+0081 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0082 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0083         <span class="keyword">case</span> <span class="string">'neutral_lineages'</span> 
+0084             <span class="comment">% set locally adapted phenotype as x=1 in each location</span>
+0085             
+0086             <span class="comment">% bin  temperature according to T_opt range</span>
+0087             [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
+0088             <span class="comment">% initialise EiE matrix</span>
+0089             x1=sparse(length(B),nphen);
+0090             <span class="comment">% find matching seed locations in EiE matrix</span>
+0091             iseed=sub2ind(size(x1),ocean.Ib,bin);
+0092             <span class="comment">% set type abundance of best adapted type to 1 in each location</span>
+0093             x1(iseed)=1;
+0094             
+0095             nlineages = nphen;
+0096             
+0097             ilin    = (1:nlineages);
+0098             linindx = (ilin-1).*nphen + ilin;
+0099             
+0100             x=sparse(length(B),nphen*nlineages);
+0101             x(:,linindx) = x1;
+0102             
+0103             run_options.T_opt     = repmat(T_opt,1,nlineages); <span class="comment">% replicate T_opt for ancestral species</span>
+0104             run_options.nlineages = nlineages;
+0105             run_options.mutation  = true;
+0106             run_options.selection = false;
+0107             run_options.solver    = <span class="string">'parallel'</span>;    <span class="comment">% serial or parallel</span>
+0108             
+0109 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0110 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0111         <span class="keyword">case</span> <span class="string">'lineages'</span> 
+0112             <span class="comment">% set locally addapted phenotype as x=1 in each location</span>
+0113             
+0114             <span class="comment">% bin  temperature according to T_opt range</span>
+0115             [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
+0116             <span class="comment">% initialise EiE matrix</span>
+0117             x1=sparse(length(B),nphen);
+0118             <span class="comment">% find matching seed locations in EiE matrix</span>
+0119             iseed=sub2ind(size(x1),ocean.Ib,bin);
+0120             <span class="comment">% set type abundance of best adapted type to 1 in each location</span>
+0121             x1(iseed)=1;
+0122             
+0123             nlineages = nphen;
+0124             
+0125             ilin    = (1:nlineages);
+0126             linindx = (ilin-1).*nphen + ilin;
+0127             
+0128             x=sparse(length(B),nphen*nlineages);
+0129             x(:,linindx) = x1;
+0130             
+0131             run_options.T_opt     = repmat(T_opt,1,nlineages); <span class="comment">% replicate T_opt for ancestral species</span>
+0132             run_options.nlineages = nlineages;
+0133             run_options.mutation  = true;
+0134             run_options.selection = true;
+0135             run_options.solver    = <span class="string">'parallel'</span>;    <span class="comment">% serial or parallel</span>
+0136 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0137 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0138         <span class="keyword">case</span> <span class="string">'neutral'</span>
+0139             <span class="comment">% set ecologically neutral types at seed locations</span>
+0140 
+0141             nlineages=size(ocean.sample_points,1);
+0142             
+0143             x=sparse(ocean.sample_points,1:nlineages,1,length(B),nlineages);
+0144             <span class="comment">% add global resident population</span>
+0145             x(:,end+1)=1;
+0146             x(ocean.sample_points,end)=0;
+0147             
+0148             run_options.nlineages = nlineages+1;
+0149             run_options.nphen     = 1;
+0150             run_options.T_opt     = zeros(1,run_options.nlineages);
+0151             run_options.selection = false;
+0152             run_options.mutation  = false;
+0153             run_options.rel_s     = 1;
+0154             run_options.solver    = <span class="string">'parallel'</span>;    <span class="comment">% serial or parallel</span>
+0155             
+0156             <span class="comment">% initialise array for connectivity times</span>
+0157             run_options.t_occupied=zeros(size(x));
+0158             
+0159 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0160 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0161         <span class="keyword">case</span> <span class="string">'selective_dispersal'</span>
+0162             <span class="comment">% thermally adapted (and adapting) phenotypes under selection</span>
+0163 
+0164             nlineages   = size(ocean.sample_points,1);
+0165             
+0166             x1=sparse(ocean.sample_points,1:nlineages,1,length(B),nlineages);
+0167             
+0168             <span class="comment">% find temperature of water at seed locations</span>
+0169             Tsample=ocean.ann_theta(ocean.sample_points);
+0170             diffT=abs(Tsample-run_options.T_opt);
+0171             [~,isample]=min(diffT,[],2);
+0172             
+0173             ilin    = (1:nlineages);
+0174             linindx = (ilin-1).*nphen + isample';
+0175             
+0176             x=sparse(length(B),nlineages*nphen);
+0177             x(:,linindx) = x1;
+0178             
+0179             <span class="comment">% add global resident population</span>
+0180             <span class="comment">% find best adapted phenotype for each location</span>
+0181             diffT=abs(ocean.ann_theta-run_options.T_opt);
+0182             [~,isample]=min(diffT,[],2);
+0183             <span class="comment">% add nphen columns for resident</span>
+0184             x(:,end+1:end+nphen)=0;
+0185             <span class="comment">% get index of best adapted phenotype in each location</span>
+0186             resind = sub2ind(size(x),(1:size(x,1))',nlineages*nphen+isample);
+0187             <span class="comment">% set resident to 1</span>
+0188             x(resind)=1;
+0189             <span class="comment">% reset sample sites to zero</span>
+0190             x(resind(ocean.sample_points))=0; 
+0191                         
+0192             nlineages = nlineages + 1;
+0193             
+0194             run_options.T_opt     = repmat(T_opt,1,nlineages); <span class="comment">% replicate T_opt for ancestral species</span>
+0195             run_options.nlineages = nlineages;
+0196             run_options.npopn     = nphen;
+0197             run_options.selection = true;
+0198             run_options.mutation  = true;
+0199             run_options.rel_s     = 1;
+0200             run_options.solver    = <span class="string">'parallel'</span>;    <span class="comment">% serial or parallel</span>
+0201             
+0202             <span class="comment">% initialise array for connectivity times</span>
+0203             run_options.t_occupied=sparse(size(x));
+0204 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0205 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0206         <span class="keyword">case</span> <span class="string">'nonadaptive_dispersal'</span>
+0207             <span class="comment">% thermally adapted phenotypes under selection but not adapting</span>
+0208 
+0209             nlineages   = size(ocean.sample_points,1);
+0210             
+0211             x1=sparse(ocean.sample_points,1:nlineages,1,length(B),nlineages);
+0212             
+0213             <span class="comment">% find temperature of water at seed locations</span>
+0214             Tsample=ocean.ann_theta(ocean.sample_points);
+0215             diffT=abs(Tsample-run_options.T_opt);
+0216             [~,isample]=min(diffT,[],2);
+0217             
+0218             ilin    = (1:nlineages);
+0219             linindx = (ilin-1).*nphen + isample';
+0220             
+0221             x=sparse(length(B),nlineages*nphen);
+0222             x(:,linindx) = x1;
+0223             x=full(x);
+0224             
+0225             <span class="comment">% add global resident population</span>
+0226             <span class="comment">% find best adapted phenotype for each location</span>
+0227             diffT=abs(ocean.ann_theta-run_options.T_opt);
+0228             [~,isample]=min(diffT,[],2);
+0229             <span class="comment">% add nphen columns for resident</span>
+0230             x(:,end+1:end+nphen)=0;
+0231             <span class="comment">% get index of best adapted phenotype in each location</span>
+0232             resind = sub2ind(size(x),(1:size(x,1))',nlineages*nphen+isample);
+0233             <span class="comment">% set resident to 1</span>
+0234             x(resind)=1;
+0235             <span class="comment">% reset sample sites to zero</span>
+0236             x(resind(ocean.sample_points))=0; 
+0237                         
+0238             nlineages = nlineages + 1;
+0239             
+0240             run_options.T_opt     = repmat(T_opt,1,nlineages); <span class="comment">% replicate T_opt for ancestral species</span>
+0241             run_options.nlineages = nlineages;
+0242             run_options.npopn     = nphen;
+0243             run_options.selection = true;
+0244             run_options.mutation  = false;
+0245             run_options.rel_s     = 1;
+0246             run_options.solver    = <span class="string">'parallel'</span>;    <span class="comment">% serial or parallel</span>
+0247             run_options.xsparse   = true;
+0248             
+0249             <span class="comment">% initialise array for connectivity times</span>
+0250             run_options.t_occupied=sparse(size(x));
+0251 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0252 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0253     <span class="keyword">end</span>
+0254 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0255 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0256 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0257 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0258     
+0259     run_options.nxr =size(x,1); <span class="comment">% n grid cells</span>
+0260     run_options.nxc =size(x,2); <span class="comment">% n phenotypes</span>
+0261     
+0262 
+0263 <span class="keyword">end</span>
+0264 
+0265 
+0266 
+0267 
+0268 
+0269 
+0270 
+0271 
+0272 
+0273 
+0274</pre></div>
+<hr><address>Generated on Mon 09-Mar-2020 16:36:03 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

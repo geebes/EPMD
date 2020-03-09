@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plot_vector</title>
+  <meta name="keywords" content="plot_vector">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html EPMD --><!-- menu.html Diagnostic_funcs -->
+<h1>plot_vector
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [ax] = plot_vector(x,cscale,mygrid,ocean,proj) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../EPMD/Visualisation_scripts/Test_functions.html" class="code" title="">Test_functions</a>	Setup path to all subdirectories of EPMD</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ax] = plot_vector(x,cscale,mygrid,ocean,proj)</a>
+0002 
+0003 
+0004 ax=axesm (proj,<span class="string">'frame'</span>,<span class="string">'on'</span>,<span class="string">'FlineWidth'</span>,0.5,<span class="string">'MapLonLimit'</span>,[-245 115],<span class="string">'MapLatLimit'</span>,[-90 90]);
+0005 <span class="comment">% ax=axesm ('eqaazim','frame','on','FlineWidth',0.5,'Origin',[-46.283333,-86.666665]);</span>
+0006 
+0007 ax.Position=ax.Position+[-0.1 -0.2 2 4].*0.01;
+0008 
+0009 fld=vector2gcmfaces(x,ocean.iface,ocean.ix,ocean.iy,ocean.iz);
+0010 
+0011 [lon lat Xmap]=convert2pcol(mygrid.XC,mygrid.YC,fld);
+0012 
+0013 Xmap(Xmap==0)=NaN;
+0014 
+0015 <span class="keyword">if</span> cscale==<span class="string">'log'</span>
+0016     Xmap=log10(Xmap);
+0017 <span class="keyword">end</span>
+0018 
+0019 sh=surfacem(lat, lon, Xmap);
+0020 
+0021 axis off
+0022 
+0023 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Mon 09-Mar-2020 16:36:03 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

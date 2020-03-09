@@ -1,7 +1,6 @@
 cd ~/GitHub
 
-
-!rm -rf /Users/baw103/GitHub/EPMD/doc
+!rm -rf /Users/baw103/GitHub/EPMD/docs
 
 
 PATH = getenv('PATH');

@@ -106,10 +106,6 @@ x=x_freq./sum(x_freq,2); % normalise so sum x is 1 at each site
 S=full(x(Tara_ind,:)); % extract Tara sites
 S=S./sum(S,2); % normalise so sum x is 1 at each site
 
-for isites=1:size(S,1)
-    Mdist(:,isites) = bray_curtis(S(isites,:),S);
-end
-
 opts = statset('MaxIter',1e5);
 perplexity=20;
 disp(['Analysing ' filename])

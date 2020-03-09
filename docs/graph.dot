@@ -1,0 +1,35 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  EPMD_spmd -> allocate_ocean;
+  EPMD_spmd -> initialise_output;
+  EPMD_spmd -> make_mutation_matrix;
+  EPMD_spmd -> seed_metacommunity;
+  EPMD_spmd -> setup_SPMD;
+  EPMD_spmd -> write_output;
+  setup_SPMD -> open_parallel;
+  preallocate_ocean -> gcmfaces2vector;
+  preallocate_ocean -> no_negatives;
+  Test_functions -> load_EPMD_output;
+  Test_functions -> load_geo_grid;
+  Test_functions -> plot_vector;
+  run_EPMD -> EPMD_spmd;
+
+  load_EPMD_output [URL="EPMD/Diagnostic_funcs/load_EPMD_output.html"];
+  load_geo_grid [URL="EPMD/Diagnostic_funcs/load_geo_grid.html"];
+  plot_vector [URL="EPMD/Diagnostic_funcs/plot_vector.html"];
+  EPMD_spmd [URL="EPMD/EPMD_functions/EPMD_spmd.html"];
+  allocate_ocean [URL="EPMD/EPMD_functions/allocate_ocean.html"];
+  gcmfaces2vector [URL="EPMD/EPMD_functions/gcmfaces2vector.html"];
+  initialise_output [URL="EPMD/EPMD_functions/initialise_output.html"];
+  make_mutation_matrix [URL="EPMD/EPMD_functions/make_mutation_matrix.html"];
+  open_parallel [URL="EPMD/EPMD_functions/open_parallel.html"];
+  seed_metacommunity [URL="EPMD/EPMD_functions/seed_metacommunity.html"];
+  setup_SPMD [URL="EPMD/EPMD_functions/setup_SPMD.html"];
+  write_output [URL="EPMD/EPMD_functions/write_output.html"];
+  extract_GUD [URL="EPMD/TM_data/extract_GUD.html"];
+  no_negatives [URL="EPMD/TM_data/no_negatives.html"];
+  preallocate_ocean [URL="EPMD/TM_data/preallocate_ocean.html"];
+  Test_functions [URL="EPMD/Visualisation_scripts/Test_functions.html"];
+  refresh_docs [URL="EPMD/refresh_docs.html"];
+  run_EPMD [URL="EPMD/run_EPMD.html"];
+}

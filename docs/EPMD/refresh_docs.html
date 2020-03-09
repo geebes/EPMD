@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of refresh_docs</title>
+  <meta name="keywords" content="refresh_docs">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html EPMD -->
+<h1>refresh_docs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 cd ~/GitHub
+0002 
+0003 !rm -rf /Users/baw103/GitHub/EPMD/docs
+0004 
+0005 
+0006 PATH = getenv(<span class="string">'PATH'</span>);
+0007 <span class="keyword">if</span> ~contains(PATH,<span class="string">'/usr/local/Cellar/graphviz/2.42.2/bin'</span>);
+0008     setenv(<span class="string">'PATH'</span>, [PATH <span class="string">':/usr/local/Cellar/graphviz/2.42.2/bin'</span>]);
+0009 <span class="keyword">end</span>
+0010 
+0011 m2html(<span class="string">'mfiles'</span>,<span class="string">'EPMD'</span>,<span class="keyword">...</span>
+0012        <span class="string">'htmldir'</span>,<span class="string">'EPMD/docs'</span>,<span class="keyword">...</span>
+0013        <span class="string">'ignoredDir'</span>,{<span class="string">'Richter_2020'</span>,<span class="string">'SphereSample'</span>,<span class="string">'docs'</span>},<span class="keyword">...</span>
+0014        <span class="string">'recursive'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0015        <span class="string">'global'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0016        <span class="string">'globalHypertextLinks'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0017        <span class="string">'template'</span>,<span class="string">'frame'</span>,<span class="keyword">...</span>
+0018        <span class="string">'index'</span>,<span class="string">'menu'</span>,<span class="keyword">...</span>
+0019        <span class="string">'graph'</span>,<span class="string">'on'</span>);</pre></div>
+<hr><address>Generated on Mon 09-Mar-2020 16:36:03 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
