@@ -4,7 +4,7 @@
 <head>
   <title>Description of bray_curtis</title>
   <meta name="keywords" content="bray_curtis">
-  <meta name="description" content="">
+  <meta name="description" content="Calculate Bray-Curtis Dissimilarity">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -20,13 +20,22 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong></strong></div>
+<div class="box"><strong>Calculate Bray-Curtis Dissimilarity</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="box"><strong>function D2 = bray_curtis(ZI,ZJ) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"></pre></div>
+<div class="fragment"><pre class="comment"> Calculate Bray-Curtis Dissimilarity
+
+ bray_curtis takes ZI and ZJ as inputs and returns the Bray-Curtis dissimilarity matrix.
+ ZI is a 1-by-n vector containing a single row from the metacommunity
+ matrix (representing 1 local community).
+ 
+ ZJ is the full metacommunity matrix (representing all sampled communities)
+
+ Bray-Curtis returns D2, which is an m-by-1 vector of dissimilarities. 
+ The jth element of D2 is the distance between the community ZI and community ZJ(j,:).</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -42,13 +51,23 @@ This function is called by:
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function D2 = bray_curtis(ZI,ZJ)</a>
-0002 
-0003 D2=zeros(size(ZI'));
-0004 
-0005 C  = sum(min(ZI,ZJ),2); <span class="comment">% sum of minimum count of each species between sites</span>
-0006 SS = sum(ZI+ZJ,2);      <span class="comment">% sum of each species across both sites</span>
-0007 
-0008 D2 = 1-2.*C./SS;</pre></div>
-<hr><address>Generated on Tue 10-Mar-2020 11:06:02 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0002 <span class="comment">% Calculate Bray-Curtis Dissimilarity</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% bray_curtis takes ZI and ZJ as inputs and returns the Bray-Curtis dissimilarity matrix.</span>
+0005 <span class="comment">% ZI is a 1-by-n vector containing a single row from the metacommunity</span>
+0006 <span class="comment">% matrix (representing 1 local community).</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% ZJ is the full metacommunity matrix (representing all sampled communities)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Bray-Curtis returns D2, which is an m-by-1 vector of dissimilarities.</span>
+0011 <span class="comment">% The jth element of D2 is the distance between the community ZI and community ZJ(j,:).</span>
+0012 
+0013 D2=zeros(size(ZI'));
+0014 
+0015 C  = sum(min(ZI,ZJ),2); <span class="comment">% sum of minimum count of each species between sites</span>
+0016 SS = sum(ZI+ZJ,2);      <span class="comment">% sum of each species across both sites</span>
+0017 
+0018 D2 = 1-2.*C./SS;</pre></div>
+<hr><address>Generated on Tue 10-Mar-2020 11:15:48 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

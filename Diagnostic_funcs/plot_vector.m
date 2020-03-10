@@ -1,5 +1,7 @@
 function [ax] = plot_vector(x,cscale,mygrid,ocean,proj)
-
+% plot ocean surface vector ('x') as a 2D map with projection 'proj'
+% cscale = 'lin' or 'log'
+% mygrid and ocean are predefined structural arrays
 
 ax=axesm (proj,'frame','on','FlineWidth',0.5,'MapLonLimit',[-245 115],'MapLatLimit',[-90 90]);
 % ax=axesm ('eqaazim','frame','on','FlineWidth',0.5,'Origin',[-46.283333,-86.666665]);
