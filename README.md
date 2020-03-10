@@ -7,6 +7,6 @@ Created by Ben Ward (b.a.ward@soton.ac.uk)
 
 NOTE: The full model (including environmental forcing data) can only be downloaded with Git LFS (https://git-lfs.github.com)
 
-
+[![DOI](https://zenodo.org/badge/222477639.svg)](https://zenodo.org/badge/latestdoi/222477639)
   
   
