@@ -1,10 +1,15 @@
 % Setup path to all subdirectories of EPMD
 addpath(genpath('~/GitHub/EPMD'))
-
 clear
 
+fnames = {'neutral_stochastic_static_GUD_X01_surface_transport',...
+          'neutral_stochastic_static_GUD_X01_weighted_transport',...
+          'nonadaptive_dispersal_stochastic_static_GUD_X01_weighted_transport',...
+          'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.01',...
+          'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.1'};
+
 %% load simulation data and metadata
-filename = 'neutral_stochastic_static_GUD_X01_weighted_transport';
+filename=fnames{2};
 pathname = '../Output/';
 
 [ocean,run_options,t_occ,x,i_lastyr] = load_EPMD_output(filename,pathname);
@@ -48,7 +53,7 @@ x_freq = x{plot_yr,1};
 switch run_options.seed_dist
     case 'nonadaptive_dispersal'
         % sum across phenotypes for each seed population
-        tmp = reshape(full(x_freq),60646,run_options.nphen,run_options.nlineages);
+        tmp = reshape(full(x_freq),60646,run_options.nphen,[]);
         x_freq  = squeeze(sum(tmp,2));
 end
 
