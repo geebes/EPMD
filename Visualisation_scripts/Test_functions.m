@@ -1,15 +1,22 @@
+% Script showing examples of visualisations
+
 % Setup path to all subdirectories of EPMD
 addpath(genpath('~/GitHub/EPMD'))
 clear
 
+% Candidate simulation IDs
 fnames = {'neutral_stochastic_static_GUD_X01_surface_transport',...
           'neutral_stochastic_static_GUD_X01_weighted_transport',...
           'nonadaptive_dispersal_stochastic_static_GUD_X01_weighted_transport',...
           'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.01',...
           'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_m0.1'};
 
-%% load simulation data and metadata
+
+%% Choose simulation ID
 filename=fnames{2};
+
+%% load simulation data and metadata
+
 pathname = '../Output/';
 
 [ocean,run_options,t_occ,x,i_lastyr] = load_EPMD_output(filename,pathname);
