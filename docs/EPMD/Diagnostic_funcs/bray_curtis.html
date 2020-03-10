@@ -2,9 +2,9 @@
                 "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
 <head>
-  <title>Description of load_geo_grid</title>
-  <meta name="keywords" content="load_geo_grid">
-  <meta name="description" content="LOAD_GEO_GRID Load ocean grid data">
+  <title>Description of bray_curtis</title>
+  <meta name="keywords" content="bray_curtis">
+  <meta name="description" content="">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -16,17 +16,17 @@
 <body>
 <a name="_top"></a>
 <!-- ../menu.html EPMD --><!-- menu.html Diagnostic_funcs -->
-<h1>load_geo_grid
+<h1>bray_curtis
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>LOAD_GEO_GRID Load ocean grid data</strong></div>
+<div class="box"><strong></strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function [coastlat coastlon mygrid land] = load_geo_grid(nctiles_path) </strong></div>
+<div class="box"><strong>function D2 = bray_curtis(ZI,ZJ) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre class="comment">LOAD_GEO_GRID Load ocean grid data</pre></div>
+<div class="fragment"><pre class="comment"></pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -41,16 +41,14 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [coastlat coastlon mygrid land] = load_geo_grid(nctiles_path)</a>
-0002 <span class="comment">%LOAD_GEO_GRID Load ocean grid data</span>
-0003 <span class="comment">%</span>
-0004     grid_load(nctiles_path,5,<span class="string">'nctiles'</span>)
-0005     gcmfaces_global
-0006     load coastlines
-0007     land = shaperead(<span class="string">'landareas'</span>, <span class="string">'UseGeoCoords'</span>, true);
-0008 
-0009 <span class="keyword">end</span>
-0010</pre></div>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function D2 = bray_curtis(ZI,ZJ)</a>
+0002 
+0003 D2=zeros(size(ZI'));
+0004 
+0005 C  = sum(min(ZI,ZJ),2); <span class="comment">% sum of minimum count of each species between sites</span>
+0006 SS = sum(ZI+ZJ,2);      <span class="comment">% sum of each species across both sites</span>
+0007 
+0008 D2 = 1-2.*C./SS;</pre></div>
 <hr><address>Generated on Tue 10-Mar-2020 10:09:19 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

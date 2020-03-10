@@ -9,11 +9,13 @@ digraph m2html {
   setup_SPMD -> open_parallel;
   preallocate_ocean -> gcmfaces2vector;
   preallocate_ocean -> no_negatives;
+  Test_functions -> bray_curtis;
   Test_functions -> load_EPMD_output;
   Test_functions -> load_geo_grid;
   Test_functions -> plot_vector;
   run_EPMD -> EPMD_spmd;
 
+  bray_curtis [URL="EPMD/Diagnostic_funcs/bray_curtis.html"];
   load_EPMD_output [URL="EPMD/Diagnostic_funcs/load_EPMD_output.html"];
   load_geo_grid [URL="EPMD/Diagnostic_funcs/load_geo_grid.html"];
   plot_vector [URL="EPMD/Diagnostic_funcs/plot_vector.html"];
