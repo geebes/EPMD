@@ -9,7 +9,7 @@ cd ~/GitHub/EPMD/TM_data
 addpath(genpath('~/GitHub/EPMD'))
 
 %%
-depth_scheme = 'alldepths'; % 'surface_transport', surface_depth_integ or 'alldepths'
+depth_scheme = 'surface_transport'; % 'surface_transport', surface_depth_integ or 'alldepths'
 specID       = 'GUD_X01';
 
 %%
@@ -79,8 +79,8 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
 
     % Pre-process TMs
     disp('Correcting TM for mass conservation')
-    A_conc = no_negatives(Aexpms,volb);
-
+%     A_conc = no_negatives(Aexpms,volb);
+    A_conc = Aexpms;
     
 %%
 
@@ -211,7 +211,9 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
     ocean.B     =B+I;
 
     % remove any remaining negative fluxes
-    ocean.B(ocean.B<0)=0; % causes a bug for 'alldepths' case!!!
+    ocean.B = no_negatives(ocean.B,volb(ocean.Ib));
+    
+%     ocean.B(ocean.B<0)=0; % causes a bug for 'alldepths' case!!!
 
 
 
