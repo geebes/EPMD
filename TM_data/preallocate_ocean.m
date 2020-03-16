@@ -9,7 +9,7 @@ cd ~/GitHub/EPMD/TM_data
 addpath(genpath('~/GitHub/EPMD'))
 
 %%
-depth_scheme = 'surface_transport'; % 'surface_transport', surface_depth_integ or 'alldepths'
+depth_scheme = 'alldepths'; % 'surface_transport', surface_depth_integ or 'alldepths'
 specID       = 'GUD_X01';
 
 %%
@@ -103,7 +103,7 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
         Fdn     = sum(Bdn,1); 
         
         I       = speye(size(B_mass));
-        dindx   = find(speye(size(B_mass))); % get index for diagonal
+        dindx   = find(I); % get index for diagonal
         
         % Generate new surface-only matrix
         B_mass(dindx) = B_mass(dindx) + Fdn'; 
@@ -117,7 +117,7 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
         B_conc=sparse(isnk,isrc,val,size(B_mass,1),size(B_mass,2));
         
     elseif strmatch(depth_scheme,'surface_depth_integ')
-        disp('Generating surface-only transport matrix with depth-integrated abundance')
+        disp('Generating surface-only transport matrix but save depth-integrated abundance')
         disp(' - fluxes originating in interior are set to zero')
         disp(' - fluxes from surface to interior are kept at source (i.e. put on diagonal)')
         
@@ -206,16 +206,15 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
         ocean.ann_abundance = M1*ann_abundance;     % save annual water-column abundances
     end
 
-    B           =B_conc.*ocean.dt_sec;%.*1e-3;
-    I           =speye(size(B));
-    ocean.B     =B+I;
+    B           =B_conc.*ocean.dt_sec;
 
     % remove any remaining negative fluxes
-    ocean.B = no_negatives(ocean.B,volb(ocean.Ib));
+    B = no_negatives(B,ocean.volume);
+
+    I           = speye(size(B));
+    ocean.B     = B+I;
     
-%     ocean.B(ocean.B<0)=0; % causes a bug for 'alldepths' case!!!
-
-
+    ocean.B(ocean.B<0)=0;
 
 
 end
