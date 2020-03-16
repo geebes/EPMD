@@ -13,7 +13,7 @@ addpath EPMD_functions
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % set options
-run_options.TM_scheme       = 'GUD_X01_weighted_transport'; % 'surface_transport' or 'GUD_X01_weighted_transport', or similar
+run_options.TM_scheme       = 'GUD_X01_surface_transport'; % 'surface_transport' or 'GUD_X01_weighted_transport', or similar
 run_options.seed_dist       = 'neutral';    % 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal'
 run_options.trajectory      = 'stochastic'; % 'stochastic' or 'deterministic'
 run_options.annual_cycle    = 'static';     % 'static' or 'seasonal'
@@ -28,7 +28,7 @@ run_options.DARWIN_pop      = 'X01';
 
 run_options.save_data       = true;
 
-run_options.nyear           = 100;          
+run_options.nyear           = 1;          
 run_options.nday        	= 365;          
 
 % N.B. not applicable for neutral model

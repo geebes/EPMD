@@ -9,7 +9,7 @@ cd ~/GitHub/EPMD/TM_data
 addpath(genpath('~/GitHub/EPMD'))
 
 %%
-depth_scheme = 'surface_depth_integ'; % 'surface_transport', surface_depthinteg or 'alldepths'
+depth_scheme = 'alldepths'; % 'surface_transport', surface_depth_integ or 'alldepths'
 specID       = 'GUD_X01';
 
 %%
@@ -38,10 +38,10 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
     disp('Initialising ocean metadata')
 
     % load transport matrix data
-    TM_boxes        = load('~/Transport_Matrices/MITgcm_ECCO_v4/Matrix13/Data/boxes.mat');
-    TM_matrices     = load('~/Transport_Matrices/MITgcm_ECCO_v4/Matrix13/TMs/matrix_nocorrection_annualmean.mat','Aexpms');
-    TM_grid         = load('~/Transport_Matrices/MITgcm_ECCO_v4/grid.mat');
-    TM_basin_mask   = load('~/Transport_Matrices/MITgcm_ECCO_v4/GCM/basin_mask.mat');
+    TM_boxes        = load('~/TM_data/MITgcm_ECCO_v4/Matrix13/Data/boxes.mat');
+    TM_matrices     = load('~/TM_data/MITgcm_ECCO_v4/Matrix13/TMs/matrix_nocorrection_annualmean.mat','Aexpms');
+    TM_grid         = load('~/TM_data/MITgcm_ECCO_v4/grid.mat');
+    TM_basin_mask   = load('~/TM_data/MITgcm_ECCO_v4/GCM/basin_mask.mat');
     gcmfaces_global
     grid_load('../nctiles_grid/',5,'nctiles');
 
@@ -134,7 +134,7 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
         Fdn     = sum(Bdn,1); 
         
         I       = speye(size(B_mass));
-        dindx   = find(speye(size(B_mass))); % get index for diagonal
+        dindx   = find(I); % get index for diagonal
         
         % Generate new surface-only matrix
         B_mass(dindx) = B_mass(dindx) + Fdn'; 
@@ -211,7 +211,7 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
     ocean.B     =B+I;
 
     % remove any remaining negative fluxes
-    ocean.B(ocean.B<0)=0;
+    ocean.B(ocean.B<0)=0; % causes a bug for 'alldepths' case!!!
 
 
 
