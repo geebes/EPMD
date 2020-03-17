@@ -39,7 +39,7 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
 
     % load transport matrix data
     TM_boxes        = load('~/TM_data/MITgcm_ECCO_v4/Matrix13/Data/boxes.mat');
-    TM_matrices     = load('~/TM_data/MITgcm_ECCO_v4/Matrix13/TMs/matrix_nocorrection_annualmean.mat','Aexpms');
+    TM_matrices     = load('~/TM_data/MITgcm_ECCO_v4/Matrix13/TMs/matrix_nocorrection_annualmean.mat','Aexpms','Aimpms');
     TM_grid         = load('~/TM_data/MITgcm_ECCO_v4/grid.mat');
     TM_basin_mask   = load('~/TM_data/MITgcm_ECCO_v4/GCM/basin_mask.mat');
     gcmfaces_global
@@ -57,8 +57,6 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
     nb              = numel(TM_boxes.izBox);
     I               = speye(nb,nb);
     volb            = TM_boxes.volb;
-    % extract TM data
-    Aexpms          = TM_matrices.Aexpms;
     
     % get surface grid parameters
     ocean.lon       = TM_boxes.Xboxnom(ocean.Ib);
@@ -77,10 +75,8 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
     ocean.basins        = gcmfaces2vector(data,TM_boxes);
     ocean.basin_names	= TM_basin_mask.basin_names;
 
-    % Pre-process TMs
-    disp('Correcting TM for mass conservation')
-%     A_conc = no_negatives(Aexpms,volb);
-    A_conc = Aexpms;
+    % gather transport matrices (explicit and implicit)
+    Aexpms = TM_matrices.Aexpms;
     
 %%
 
@@ -89,42 +85,44 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
         disp('Generating surface-only transport matrix')
         disp(' - fluxes originating in interior are set to zero')
         disp(' - fluxes from surface to interior are kept at source (i.e. put on diagonal)')
-        
+        disp(' - implicit matrix can be ignored as it contains no horizontal fluxes')
+
         % convert from concentration flux to mass flux (* sink volume) [nb x nb]
-        [isnk,isrc,val]=find(A_conc);
+        [isnk,isrc,val]=find(Aexpms);
         val=val.*volb(isnk);
-        A_mass=sparse(isnk,isrc,val,size(A_conc,1),size(A_conc,2));
+        A_mass=sparse(isnk,isrc,val,size(Aexpms,1),size(Aexpms,2));
         
         % Fluxes within surface layer
-        B_mass  = A_mass(ocean.Ib,ocean.Ib); 
+        B_mass  = A_mass(ocean.Ib,ocean.Ib);
         % Downwelling fluxes (Ib to Ii) should loop back into surface (i.e. trapped particles)
-        Bdn     = A_mass(ocean.Ii,ocean.Ib); 
+        Bdn     = A_mass(ocean.Ii,ocean.Ib);
         % sum of downwelling fluxes out of each surface cell (prevented from leaving)
-        Fdn     = sum(Bdn,1); 
+        Fdn     = sum(Bdn,1);
         
         I       = speye(size(B_mass));
         dindx   = find(I); % get index for diagonal
         
         % Generate new surface-only matrix
-        B_mass(dindx) = B_mass(dindx) + Fdn'; 
+        B_mass(dindx) = B_mass(dindx) + Fdn';
         
-        % get volume of surface grid boxes to convert back to concentration flux 
+        % get volume of surface grid boxes to convert back to concentration flux
         ocean.volume=volb(ocean.Ib);
         
         % convert from concentration flux to mass flux (* sink volume) [nb x nb]
         [isnk,isrc,val]=find(B_mass);
         val=val./ocean.volume(isnk);
-        B_conc=sparse(isnk,isrc,val,size(B_mass,1),size(B_mass,2));
+        B=sparse(isnk,isrc,val,size(B_mass,1),size(B_mass,2));
         
     elseif strmatch(depth_scheme,'surface_depth_integ')
         disp('Generating surface-only transport matrix but save depth-integrated abundance')
         disp(' - fluxes originating in interior are set to zero')
         disp(' - fluxes from surface to interior are kept at source (i.e. put on diagonal)')
+        disp(' - implicit matrix can be ignored as it contains no horizontal fluxes')
         
         % convert from concentration flux to mass flux (* sink volume) [nb x nb]
-        [isnk,isrc,val]=find(A_conc);
+        [isnk,isrc,val]=find(Aexpms);
         val=val.*volb(isnk);
-        A_mass=sparse(isnk,isrc,val,size(A_conc,1),size(A_conc,2));
+        A_mass=sparse(isnk,isrc,val,size(Aexpms,1),size(Aexpms,2));
         
         % Fluxes within surface layer
         B_mass  = A_mass(ocean.Ib,ocean.Ib); 
@@ -145,7 +143,7 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
         % convert from concentration flux to mass flux (* sink volume) [nb x nb]
         [isnk,isrc,val]=find(B_mass);
         val=val./ocean.volume(isnk);
-        B_conc=sparse(isnk,isrc,val,size(B_mass,1),size(B_mass,2));
+        B=sparse(isnk,isrc,val,size(B_mass,1),size(B_mass,2));
         
         
         % get index for unique [x,y] locations
@@ -168,7 +166,8 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
         
     elseif strmatch(depth_scheme,'alldepths')
         disp('Generating depth-integrated transport matrix')
-        disp(' - All horizontal fluxes are mapped into a single layer')
+        disp(' - all horizontal fluxes are mapped into a single layer')
+        disp(' - implicit matrix can be ignored as it contains no horizontal fluxes')
         % get index for unique [x,y] locations
         [~,ia,ic] = unique([TM_boxes.Xboxnom TM_boxes.Yboxnom],'rows','stable');
 
@@ -188,9 +187,9 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
         int_abundance   = M1*ann_abundance;
         
         % convert from concentration flux to cell flux (* sink abundance) [nb x nb]
-        [isnk,isrc,val]=find(A_conc);
+        [isnk,isrc,val]=find(Aexpms);
         val=val.*ann_abundance(isnk); % scaled by volume and cell conc
-        A_cell=sparse(isnk,isrc,val,size(A_conc,1),size(A_conc,2));
+        A_cell=sparse(isnk,isrc,val,size(Aexpms,1),size(Aexpms,2));
         
         % map from full grid to single layer
         B_cell = M1*A_cell*M2;
@@ -198,25 +197,21 @@ function [ocean] = initialise_ocean(depth_scheme,cell_conc)
         % convert from cell flux to mass flux (* sink volume) [nb x nb]
         [isnk,isrc,val]=find(B_cell);
         val=val./int_abundance(isnk);
-        B_conc=sparse(isnk,isrc,val,size(B_cell,1),size(B_cell,2));
+        B=sparse(isnk,isrc,val,size(B_cell,1),size(B_cell,2));
         
         % get volume of water columns to convert back to concentration flux 
         ocean.volume        = M1*TM_boxes.volb;
         ocean.abundance     = M1*abundance;         % save water-column abundances
         ocean.ann_abundance = M1*ann_abundance;     % save annual water-column abundances
     end
-
-    B           =B_conc.*ocean.dt_sec;
-
-    % remove any remaining negative fluxes
-    B = no_negatives(B,ocean.volume);
-
-    I           = speye(size(B));
-    ocean.B     = B+I;
     
-    ocean.B(ocean.B<0)=0;
-
-
+    B1 =B.*ocean.dt_sec;
+    % remove any remaining negative fluxes
+    B2 = no_negatives(B1,ocean.volume);
+    
+    % Add identity matrix to get discrete time form
+    I           = speye(size(B2));
+    ocean.B     = B+I;
 end
 
 
