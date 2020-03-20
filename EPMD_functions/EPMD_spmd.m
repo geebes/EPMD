@@ -91,6 +91,9 @@ for yr=1:run_options.nyear
                     x=B*x;          % calculate probability of each population in each grid cell
                 end
                 
+                % set negative s to zero
+                x = max(x,0);
+                
                 % SELECTION (abundance and fitness weighted or just abundance weighted)
                 % calculate abundance and fitness weighted probability of
                 % selection in next generation, normalising so sum(x)=1                
@@ -99,7 +102,7 @@ for yr=1:run_options.nyear
                 global_comn_selected = gplus(comn_selected);
                 
                 p = popn_selected ./ global_comn_selected;
-                p(global_comn_selected<=0,:)=0;
+                p(global_comn_selected<=0,:)=0; % check divide by zero
                 
                 mu_x    = N.*p;   % mean = unselected + selected part
                 sigma_x = sqrt(N.*p.*(1-p)); % variance based only on selected part
