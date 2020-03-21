@@ -31,11 +31,11 @@ switch run_options.solver
     case 'parallel'
         myCluster               = parcluster('local');
         run_options.parp_size   = myCluster.NumWorkers;
-        [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD] ...
+        [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD] ...
             = setup_SPMD(run_options,x); % (Single Program Multiple Data)
     case 'serial'
         run_options.parp_size   = 1;
-        [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD] ...
+        [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD] ...
             = setup_SPMD(run_options,x); % (Single Program Multiple Data)
         nxc                     = run_options.nxc;
         indx                    = 1:nxc;
