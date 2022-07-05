@@ -16,7 +16,7 @@ default_run_options
 
 % set options
 run_options.TM_scheme       = 'GUD_X01_weighted_transport'; % 'surface_transport', 'GUD_X01_surface_transport' or 'GUD_X01_weighted_transport', or similar
-run_options.seed_dist       = 'equal';    % 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal'
+run_options.seed_dist       = 'equal_nonadaptive';    % 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal'
 run_options.trajectory      = 'stochastic'; % 'stochastic' or 'deterministic'
 run_options.annual_cycle    = 'static';     % 'static' or 'seasonal'
 run_options.seedseed        = 2;            % seed for global seeding sites

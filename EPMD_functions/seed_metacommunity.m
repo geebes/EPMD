@@ -61,6 +61,14 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.selection = true;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        case 'equal_nonadaptive' 
+            % share initial abundance among all types equally
+            x=ones(length(B),nphen)./nphen;            
+            run_options.solver    = 'parallel';	% serial or parallel
+            run_options.mutation  = false;	
+            run_options.selection = true;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'preadapted' 
             % set one completely dominant type preadapted to each location
             
