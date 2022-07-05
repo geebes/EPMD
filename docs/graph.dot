@@ -1,5 +1,6 @@
 /* Created by mdot for Matlab */
 digraph m2html {
+  plot_vector -> vector2gcmfaces;
   EPMD_spmd -> allocate_ocean;
   EPMD_spmd -> initialise_output;
   EPMD_spmd -> make_mutation_matrix;
@@ -7,6 +8,9 @@ digraph m2html {
   EPMD_spmd -> setup_SPMD;
   EPMD_spmd -> write_output;
   setup_SPMD -> open_parallel;
+  split_grid_test -> load_EPMD_output;
+  split_grid_test -> load_geo_grid;
+  split_grid_test -> plot_vector;
   preallocate_ocean -> gcmfaces2vector;
   preallocate_ocean -> no_negatives;
   Test_functions -> bray_curtis;
@@ -14,13 +18,16 @@ digraph m2html {
   Test_functions -> load_geo_grid;
   Test_functions -> plot_vector;
   run_EPMD -> EPMD_spmd;
+  run_EPMD -> default_run_options;
 
   bray_curtis [URL="EPMD/Diagnostic_funcs/bray_curtis.html"];
   load_EPMD_output [URL="EPMD/Diagnostic_funcs/load_EPMD_output.html"];
   load_geo_grid [URL="EPMD/Diagnostic_funcs/load_geo_grid.html"];
   plot_vector [URL="EPMD/Diagnostic_funcs/plot_vector.html"];
+  vector2gcmfaces [URL="EPMD/Diagnostic_funcs/vector2gcmfaces.html"];
   EPMD_spmd [URL="EPMD/EPMD_functions/EPMD_spmd.html"];
   allocate_ocean [URL="EPMD/EPMD_functions/allocate_ocean.html"];
+  default_run_options [URL="EPMD/EPMD_functions/default_run_options.html"];
   gcmfaces2vector [URL="EPMD/EPMD_functions/gcmfaces2vector.html"];
   initialise_output [URL="EPMD/EPMD_functions/initialise_output.html"];
   make_mutation_matrix [URL="EPMD/EPMD_functions/make_mutation_matrix.html"];
@@ -28,6 +35,8 @@ digraph m2html {
   seed_metacommunity [URL="EPMD/EPMD_functions/seed_metacommunity.html"];
   setup_SPMD [URL="EPMD/EPMD_functions/setup_SPMD.html"];
   write_output [URL="EPMD/EPMD_functions/write_output.html"];
+  split_grid_test [URL="EPMD/Parallel_stuff/split_grid_test.html"];
+  conserve_mass [URL="EPMD/TM_data/conserve_mass.html"];
   extract_GUD [URL="EPMD/TM_data/extract_GUD.html"];
   no_negatives [URL="EPMD/TM_data/no_negatives.html"];
   preallocate_ocean [URL="EPMD/TM_data/preallocate_ocean.html"];

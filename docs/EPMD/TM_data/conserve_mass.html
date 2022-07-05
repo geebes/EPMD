@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of conserve_mass</title>
+  <meta name="keywords" content="conserve_mass">
+  <meta name="description" content="The original transport matrix is given as a concentration flux. This">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html EPMD --><!-- menu.html TM_data -->
+<h1>conserve_mass
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>The original transport matrix is given as a concentration flux. This</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Aex] = conserve_mass(TM,volb) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> The original transport matrix is given as a concentration flux. This
+ means that each element transfroms an upstream concentration into a
+ downstream concentration, implicitly accounting for changes in grid cell
+ size. We first convert the concentration flux matrix to a mass flux
+ matrix, with each element describing the actual water flux from one grid 
+ cell to another (irrespective of grid size).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Aex] = conserve_mass(TM,volb)</a>
+0002     <span class="comment">% The original transport matrix is given as a concentration flux. This</span>
+0003     <span class="comment">% means that each element transfroms an upstream concentration into a</span>
+0004     <span class="comment">% downstream concentration, implicitly accounting for changes in grid cell</span>
+0005     <span class="comment">% size. We first convert the concentration flux matrix to a mass flux</span>
+0006     <span class="comment">% matrix, with each element describing the actual water flux from one grid</span>
+0007     <span class="comment">% cell to another (irrespective of grid size).</span>
+0008     
+0009     disp(<span class="string">'Correcting mass conservation'</span>)
+0010     <span class="comment">% convert from concentration flux to mass flux (* sink volume) [nb x nb]</span>
+0011     [i,j,v]=find(TM);
+0012     v=v.*volb(i);
+0013     tm=sparse(i,j,v,size(TM,1),size(TM,2));
+0014     
+0015     <span class="comment">% This matrix *should* (ideally) have the following properties:</span>
+0016     <span class="comment">%   columns should sum to the local water mass</span>
+0017     <span class="comment">%       (because each column describes the sink (downstream) distribution for each location)</span>
+0018     <span class="comment">%   rows should also sum to the local water mass</span>
+0019     <span class="comment">%       (because each row describes the source (upstream) distribution for each location)</span>
+0020  
+0021     <span class="comment">% These properties are not exactly met, for various reasons, so we apply a mass correction.</span>
+0022     
+0023     <span class="comment">% First we get an index of all elements on the diagonal</span>
+0024     I = speye(size(tm));                <span class="comment">% create identity matrix [nb x nb]</span>
+0025     adindx      = find(I);              <span class="comment">% get index of diagonals [nb x 1]</span>
+0026     
+0027     <span class="comment">% We correct them by subtracting the column sum of the off diagonals from the local volume</span>
+0028     tm(adindx)  = volb - (sum(tm,1)' - tm(adindx));
+0029     <span class="comment">% This ensures that the columns of the mass transport matrix sum to exactly</span>
+0030     <span class="comment">% the local grid cell volume, such that mass is conserved during transport</span>
+0031     
+0032     <span class="comment">% Finally, we convert transport matrix back to concentration fluxes...</span>
+0033     [i,j,v]=find(tm);
+0034     v=v./volb(i);
+0035     Aex=sparse(i,j,v,size(tm,1),size(tm,2));
+0036     
+0037     
+0038     
+0039 <span class="keyword">end</span>
+0040 
+0041</pre></div>
+<hr><address>Generated on Fri 05-Mar-2021 14:26:08 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of split_grid_test</title>
+  <meta name="keywords" content="split_grid_test">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html EPMD --><!-- menu.html Parallel_stuff -->
+<h1>split_grid_test
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../EPMD/Diagnostic_funcs/load_EPMD_output.html" class="code" title="function [ocean,run_options,t_occ,x,i_lastyr] = load_EPMD_output(input_filename,pathname)">load_EPMD_output</a>	load_EPMD_output Load EPMD .mat output file</li><li><a href="../../EPMD/Diagnostic_funcs/load_geo_grid.html" class="code" title="function [coastlat coastlon mygrid land] = load_geo_grid(nctiles_path)">load_geo_grid</a>	LOAD_GEO_GRID Load ocean grid data</li><li><a href="../../EPMD/Diagnostic_funcs/plot_vector.html" class="code" title="function [ax] = plot_vector(x,cscale,mygrid,ocean,proj)">plot_vector</a>	plot ocean surface vector ('x') as a 2D map with projection 'proj'</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 clear
+0002 
+0003 clc
+0004 
+0005 <span class="comment">% Setup path to all subdirectories of EPMD</span>
+0006 addpath(genpath(<span class="string">'~/GitHub/EPMD'</span>))
+0007 clear
+0008 
+0009 <span class="comment">% Candidate simulation IDs</span>
+0010 fnames = {<span class="string">'neutral_stochastic_static_GUD_X01_weighted_transport_NULL'</span>};
+0011 <span class="comment">% Choose simulation ID</span>
+0012 filename=fnames{1};
+0013 
+0014 <span class="comment">%% load simulation data and metadata</span>
+0015 
+0016 pathname = <span class="string">'Output/'</span>;
+0017 
+0018 [ocean,run_options,t_occ,x,i_lastyr] = <a href="../../EPMD/Diagnostic_funcs/load_EPMD_output.html" class="code" title="function [ocean,run_options,t_occ,x,i_lastyr] = load_EPMD_output(input_filename,pathname)">load_EPMD_output</a>(filename,pathname);
+0019 
+0020 
+0021 <span class="comment">%% load geo grid data and Tara sites</span>
+0022 [coastlat coastlon mygrid land] = <a href="../../EPMD/Diagnostic_funcs/load_geo_grid.html" class="code" title="function [coastlat coastlon mygrid land] = load_geo_grid(nctiles_path)">load_geo_grid</a>(<span class="string">'~/GitHub/EPMD/nctiles_grid/'</span>);
+0023 <span class="comment">%%</span>
+0024 B=ocean.B;
+0025 
+0026 nvect=60646;
+0027 n=2;
+0028 indx=round(linspace(1,nvect,n+1));
+0029 
+0030 i1=indx(1):indx(2);
+0031 [j1 ~] = find(B(:,i1));
+0032 j1=unique(j1);
+0033 
+0034 i2=indx(2)+1:indx(3);
+0035 [j2 ~] = find(B(:,i2));
+0036 j2=unique(j2);
+0037 
+0038 x=ocean.lon;
+0039 
+0040 figure(1)
+0041 clf
+0042 <a href="../../EPMD/Diagnostic_funcs/plot_vector.html" class="code" title="function [ax] = plot_vector(x,cscale,mygrid,ocean,proj)">plot_vector</a>(x,<span class="string">'lin'</span>,mygrid,ocean,<span class="string">'mollweid'</span>);
+0043 colorbar
+0044 <span class="comment">% caxis([-90 90])</span>
+0045 caxis([0 360])
+0046 title(1)
+0047 drawnow
+0048 
+0049 nt=1000;
+0050 x1=repmat(x,1,nt);
+0051 <span class="keyword">for</span> t=2:nt
+0052     x1(:,t) = B*x1(:,t-1);
+0053     
+0054     clf
+0055     <a href="../../EPMD/Diagnostic_funcs/plot_vector.html" class="code" title="function [ax] = plot_vector(x,cscale,mygrid,ocean,proj)">plot_vector</a>(x1(:,t),<span class="string">'lin'</span>,mygrid,ocean,<span class="string">'mollweid'</span>);
+0056     colorbar
+0057 <span class="comment">%    caxis([-90 90])</span>
+0058     caxis([0 360])
+0059     title(t)
+0060     drawnow
+0061     
+0062 <span class="keyword">end</span>
+0063 <span class="comment">%%</span>
+0064 
+0065 nt=1000;
+0066 xx=repmat(x,nt,1);
+0067 <span class="keyword">for</span> t=2:nt
+0068     xx(t,i1) = xx(t-1,j1)*B(j1,i1);
+0069     xx(t,i2) = xx(t-1,j2)*B(j2,i2);
+0070     
+0071     clf
+0072     <a href="../../EPMD/Diagnostic_funcs/plot_vector.html" class="code" title="function [ax] = plot_vector(x,cscale,mygrid,ocean,proj)">plot_vector</a>(xx(t,:),<span class="string">'lin'</span>,mygrid,ocean,<span class="string">'mollweid'</span>);
+0073     colorbar
+0074     caxis([-90 90])
+0075     title(t)
+0076     drawnow
+0077     
+0078 <span class="keyword">end</span>
+0079 
+0080 
+0081</pre></div>
+<hr><address>Generated on Fri 05-Mar-2021 14:26:08 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

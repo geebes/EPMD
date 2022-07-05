@@ -32,7 +32,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../EPMD/EPMD_functions/EPMD_spmd.html" class="code" title="function EPMD_spmd(run_options)">EPMD_spmd</a>	Wrapper function for EPMD</li></ul>
+<li><a href="../EPMD/EPMD_functions/EPMD_spmd.html" class="code" title="function EPMD_spmd(run_options)">EPMD_spmd</a>	Wrapper function for EPMD</li><li><a href="../EPMD/EPMD_functions/default_run_options.html" class="code" title="">default_run_options</a>	set default run options</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 </ul>
@@ -53,35 +53,40 @@ This function is called by:
 0010 addpath(genpath(<span class="string">'~/GitHub/EPMD'</span>))
 0011 addpath EPMD_functions
 0012 
-0013 <span class="comment">%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0013 <a href="../EPMD/EPMD_functions/default_run_options.html" class="code" title="">default_run_options</a>
 0014 
-0015 <span class="comment">% set options</span>
-0016 run_options.TM_scheme       = <span class="string">'GUD_X01_weighted_transport'</span>; <span class="comment">% 'surface_transport' or 'GUD_X01_weighted_transport', or similar</span>
-0017 run_options.seed_dist       = <span class="string">'neutral'</span>;    <span class="comment">% 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal'</span>
-0018 run_options.trajectory      = <span class="string">'stochastic'</span>; <span class="comment">% 'stochastic' or 'deterministic'</span>
-0019 run_options.annual_cycle    = <span class="string">'static'</span>;     <span class="comment">% 'static' or 'seasonal'</span>
-0020 run_options.seedseed        = 2;            <span class="comment">% seed for global seeding sites</span>
-0021 
-0022 <span class="comment">% optional string to add to output filenames</span>
-0023 run_options.suffix          = <span class="string">'_NULL'</span>;
-0024 
-0025 <span class="comment">% note depth-integrated TMs are each associated with a particular abundance distribution</span>
-0026 <span class="comment">% (this will be overwritten if using depth-integrated biomass-weighted transport)</span>
-0027 run_options.DARWIN_pop      = <span class="string">'X01'</span>; 
-0028 
-0029 run_options.save_data       = true;
+0015 <span class="comment">%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0016 
+0017 <span class="comment">% set options</span>
+0018 run_options.TM_scheme       = <span class="string">'GUD_X01_weighted_transport'</span>; <span class="comment">% 'surface_transport', 'GUD_X01_surface_transport' or 'GUD_X01_weighted_transport', or similar</span>
+0019 run_options.seed_dist       = <span class="string">'neutral'</span>;    <span class="comment">% 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal'</span>
+0020 run_options.trajectory      = <span class="string">'stochastic'</span>; <span class="comment">% 'stochastic' or 'deterministic'</span>
+0021 run_options.annual_cycle    = <span class="string">'static'</span>;     <span class="comment">% 'static' or 'seasonal'</span>
+0022 run_options.seedseed        = 2;            <span class="comment">% seed for global seeding sites</span>
+0023 
+0024 <span class="comment">% optional string to add to output filenames</span>
+0025 run_options.suffix          = <span class="string">''</span>;
+0026 
+0027 <span class="comment">% note depth-integrated TMs are each associated with a particular abundance distribution</span>
+0028 <span class="comment">% (this will be overwritten if using depth-integrated biomass-weighted transport)</span>
+0029 run_options.DARWIN_pop      = <span class="string">'X01'</span>; 
 0030 
-0031 run_options.nyear           = 100;          
-0032 run_options.nday            = 365;          
-0033 
-0034 <span class="comment">% N.B. not applicable for neutral model</span>
-0035 run_options.nphen           = 77;           <span class="comment">% number of phenotypes</span>
-0036 run_options.w               = 6;               <span class="comment">% Niche breadth</span>
-0037 run_options.sigma_m         = 0.1;          <span class="comment">% Mutation size</span>
-0038 
-0039 <span class="comment">%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0040 <span class="comment">% Run EPMD_spmd</span>
-0041 <a href="../EPMD/EPMD_functions/EPMD_spmd.html" class="code" title="function EPMD_spmd(run_options)">EPMD_spmd</a>(run_options)</pre></div>
-<hr><address>Generated on Tue 10-Mar-2020 11:15:48 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0031 run_options.save_data       = true;
+0032 
+0033 run_options.nyear           = 100;          
+0034 run_options.nday            = 365;          
+0035 
+0036 <span class="comment">% N.B. not applicable for neutral model</span>
+0037 run_options.nphen           = 77;           <span class="comment">% number of phenotypes</span>
+0038 run_options.w               = 6;               <span class="comment">% Niche breadth</span>
+0039 run_options.sigma_m         = 0.1;          <span class="comment">% Mutation size</span>
+0040 
+0041 <span class="comment">% global warming run (zero for standard run)</span>
+0042 run_options.warming_rate    = 5/100; <span class="comment">% degrees per year</span>
+0043 
+0044 <span class="comment">%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0045 <span class="comment">% Run EPMD_spmd</span>
+0046 <a href="../EPMD/EPMD_functions/EPMD_spmd.html" class="code" title="function EPMD_spmd(run_options)">EPMD_spmd</a>(run_options)</pre></div>
+<hr><address>Generated on Fri 05-Mar-2021 14:26:08 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

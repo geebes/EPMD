@@ -44,6 +44,8 @@ spmd(run_options.parp_size)
         % replicate mutation array along diagonal according to size of block
         nrep=idiv(labindex)./nphen;
         mutmat=kron(eye(nrep),mutmat1); % order is important (identity first)
+    else
+        mutmat = []; % set as empty array
     end
 
     % create index to assign 'x' to workers

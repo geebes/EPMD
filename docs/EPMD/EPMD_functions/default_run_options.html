@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of default_run_options</title>
+  <meta name="keywords" content="default_run_options">
+  <meta name="description" content="set default run options">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html EPMD --><!-- menu.html EPMD_functions -->
+<h1>default_run_options
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>set default run options</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> set default run options</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../EPMD/run_EPMD.html" class="code" title="">run_EPMD</a>	Script to run EPMD</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% set default run options</span>
+0002 
+0003 run_options.TM_scheme       = <span class="string">'GUD_X01_weighted_transport'</span>; <span class="comment">% 'surface_transport', 'GUD_X01_surface_transport' or 'GUD_X01_weighted_transport', or similar</span>
+0004 run_options.seed_dist       = <span class="string">'selective_dispersal'</span>;    <span class="comment">% 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal'</span>
+0005 run_options.trajectory      = <span class="string">'stochastic'</span>; <span class="comment">% 'stochastic' or 'deterministic'</span>
+0006 run_options.annual_cycle    = <span class="string">'static'</span>;     <span class="comment">% 'static' or 'seasonal'</span>
+0007 run_options.seedseed        = 2;            <span class="comment">% seed for global seeding sites</span>
+0008 
+0009 <span class="comment">% optional string to add to output filenames</span>
+0010 run_options.suffix          = <span class="string">''</span>;
+0011 
+0012 <span class="comment">% note depth-integrated TMs are each associated with a particular abundance distribution</span>
+0013 <span class="comment">% (this will be overwritten if using depth-integrated biomass-weighted transport)</span>
+0014 run_options.DARWIN_pop      = <span class="string">'X01'</span>; 
+0015 
+0016 run_options.save_data       = true;
+0017 
+0018 run_options.nyear           = 100;          
+0019 run_options.nday            = 365;          
+0020 
+0021 <span class="comment">% N.B. not applicable for neutral model</span>
+0022 run_options.nphen           = 77;           <span class="comment">% number of phenotypes</span>
+0023 run_options.w               = 6;               <span class="comment">% Niche breadth</span>
+0024 run_options.sigma_m         = 0.1;          <span class="comment">% Mutation size</span>
+0025 
+0026 <span class="comment">% climate change scenario</span>
+0027 run_options.warming_rate    = 0; <span class="comment">% degrees per year</span></pre></div>
+<hr><address>Generated on Fri 05-Mar-2021 14:26:08 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

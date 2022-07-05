@@ -58,7 +58,7 @@ This function is called by:
 0009 
 0010 <span class="comment">%  Copyright (C) 2020 Ben Ward &lt;b.a.ward@soton.ac.uk&gt;</span>
 0011 
-0012     I = speye(size(TM));            <span class="comment">% create identity matrix [nb x nb]</span>
+0012     I = speye(size(TM));                <span class="comment">% create identity matrix [nb x nb]</span>
 0013     dindx = find(I);                    <span class="comment">% get index of diagonals [nb x 1]</span>
 0014     
 0015     <span class="comment">% convert from concentration flux to mass flux (* sink volume) [nb x nb]</span>
@@ -69,13 +69,13 @@ This function is called by:
 0020     Aneg        = Aex.*(Aex&lt;0);         <span class="comment">% identify negatives [nb x nb]</span>
 0021     Aneg(dindx) = 0;                    <span class="comment">% exclude diagonals  [nb x nb]</span>
 0022     
-0023     colneg      = sum(Aneg,1)';         <span class="comment">% sum of negatives in columns (downstream negative mass) [nb x 1]</span>
-0024     rowneg      = sum(Aneg,2);          <span class="comment">% sum of negatives in rows    (  upstream negative mass) [nb x 1]</span>
-0025     
-0026     Aex(dindx)  = Aex(dindx) + colneg;  <span class="comment">% add sum of column negatives to the diagonal [nb x nb]</span>
-0027     Aex(dindx)  = Aex(dindx) + rowneg;  <span class="comment">% add sum of row negatives to the diagonal    [nb x nb]</span>
-0028     
-0029     Aex = Aex - Aneg - Aneg';           <span class="comment">% transpose negative off-diagonals and change sign [nb x nb]</span>
+0023     Aex = Aex - Aneg + (-Aneg');        <span class="comment">% subtract negative off-diagonals</span>
+0024                                         <span class="comment">% then add transpose of negative off-diagonals, changing sign [nb x nb]</span>
+0025     colneg      = sum(Aneg,1)';         <span class="comment">% sum of negatives in columns (downstream negative mass) [nb x 1]</span>
+0026     rowneg      = sum(Aneg,2);          <span class="comment">% sum of negatives in rows    (  upstream negative mass) [nb x 1]</span>
+0027     
+0028     Aex(dindx)  = Aex(dindx) + colneg;  <span class="comment">% add sum of column negatives to the diagonal [nb x nb]</span>
+0029     Aex(dindx)  = Aex(dindx) + rowneg;  <span class="comment">% add sum of row negatives to the diagonal    [nb x nb]</span>
 0030     
 0031     <span class="comment">% convert back to concentration flux (/ snk volume) [nb x nb]    % convert from concentration flux to mass flux (* sink volume) [nb x nb]</span>
 0032     [i,j,v]=find(Aex);
@@ -85,6 +85,6 @@ This function is called by:
 0036 <span class="keyword">end</span>
 0037 
 0038</pre></div>
-<hr><address>Generated on Tue 10-Mar-2020 11:15:48 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Fri 05-Mar-2021 14:26:08 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

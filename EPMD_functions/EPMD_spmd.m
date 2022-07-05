@@ -60,6 +60,8 @@ nsubtime            = ocean.nsubtime;
 B                   = ocean.B;
 %%
 for yr=1:run_options.nyear
+    forcing_temp        = ocean.forcing_temp ...
+                        + yr.*run_options.warming_rate;
 
     disp('Opening SPMD block')
     spmd(run_options.parp_size)
@@ -120,6 +122,7 @@ for yr=1:run_options.nyear
 
             switch seed_dist
                 case {'neutral','selective_dispersal','nonadaptive_dispersal'}
+                    
                     % get current date
                     occdate=(yr-1 + dy./nday);
                     % find all pppulations and locations occupied for the first time

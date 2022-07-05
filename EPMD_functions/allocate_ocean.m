@@ -70,3 +70,5 @@ K = dsearchn([ocean.lon ocean.lat],[xs(K),ys(K)]);
 ocean.sample_points = K;
 
 disp(['Placed ' num2str(numel(K)) ' seed sites'])
+
+

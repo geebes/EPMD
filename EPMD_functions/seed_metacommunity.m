@@ -16,7 +16,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
         run_options.PCapacity = ocean.abundance;
     else
         % Abundance needs to be specified if using surface transport
-        load(['../GUD_forcing/GUD_' run_options.DARWIN_pop '_abundance.mat']);
+        load(['GUD_forcing/GUD_' run_options.DARWIN_pop '_abundance.mat']);
         run_options.PCapacity = abundance(ocean.Ib,:) .* ocean.volume;
     end
     
@@ -64,7 +64,7 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
         case 'preadapted' 
             % set one completely dominant type preadapted to each location
             
-            % bin  temperature according to T_opt range
+            % bin temperature according to T_opt range
             [~,~,bin] = histcounts(temp,[-inf T_opt(1:end-1)+delta_Topt/2 inf]);
             % initialise EiE matrix
             x=zeros(length(B),nphen);

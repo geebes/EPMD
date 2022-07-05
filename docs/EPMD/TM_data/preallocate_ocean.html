@@ -49,14 +49,14 @@ This function is called by:
 0003 
 0004 <span class="comment">%  Copyright (C) 2020 Ben Ward &lt;b.a.ward@soton.ac.uk&gt;</span>
 0005 
-0006 clear
+0006 <span class="comment">% clear</span>
 0007 <span class="comment">% clc</span>
 0008 cd ~/GitHub/EPMD/TM_data
 0009 addpath(genpath(<span class="string">'~/GitHub/EPMD'</span>))
 0010 
 0011 <span class="comment">%%</span>
-0012 depth_scheme = <span class="string">'surface_depth_integ'</span>; <span class="comment">% 'surface_transport', surface_depthinteg or 'alldepths'</span>
-0013 specID       = <span class="string">'GUD_X01'</span>;
+0012 depth_scheme = <span class="string">'alldepths'</span>; <span class="comment">% 'surface_transport', 'surface_depth_integ' or 'alldepths'</span>
+0013 specID       = <span class="string">'GUD_X17'</span>;
 0014 
 0015 <span class="comment">%%</span>
 0016 
@@ -84,10 +84,10 @@ This function is called by:
 0038     disp(<span class="string">'Initialising ocean metadata'</span>)
 0039 
 0040     <span class="comment">% load transport matrix data</span>
-0041     TM_boxes        = load(<span class="string">'~/Transport_Matrices/MITgcm_ECCO_v4/Matrix13/Data/boxes.mat'</span>);
-0042     TM_matrices     = load(<span class="string">'~/Transport_Matrices/MITgcm_ECCO_v4/Matrix13/TMs/matrix_nocorrection_annualmean.mat'</span>,<span class="string">'Aexpms'</span>);
-0043     TM_grid         = load(<span class="string">'~/Transport_Matrices/MITgcm_ECCO_v4/grid.mat'</span>);
-0044     TM_basin_mask   = load(<span class="string">'~/Transport_Matrices/MITgcm_ECCO_v4/GCM/basin_mask.mat'</span>);
+0041     TM_boxes        = load(<span class="string">'~/TM_data/MITgcm_ECCO_v4/Matrix13/Data/boxes.mat'</span>);
+0042     TM_matrices     = load(<span class="string">'~/TM_data/MITgcm_ECCO_v4/Matrix13/TMs/matrix_nocorrection_annualmean.mat'</span>,<span class="string">'Aexpms'</span>,<span class="string">'Aimpms'</span>);
+0043     TM_grid         = load(<span class="string">'~/TM_data/MITgcm_ECCO_v4/grid.mat'</span>);
+0044     TM_basin_mask   = load(<span class="string">'~/TM_data/MITgcm_ECCO_v4/GCM/basin_mask.mat'</span>);
 0045     gcmfaces_global
 0046     grid_load(<span class="string">'../nctiles_grid/'</span>,5,<span class="string">'nctiles'</span>);
 0047 
@@ -103,178 +103,148 @@ This function is called by:
 0057     nb              = numel(TM_boxes.izBox);
 0058     I               = speye(nb,nb);
 0059     volb            = TM_boxes.volb;
-0060     <span class="comment">% extract TM data</span>
-0061     Aexpms          = TM_matrices.Aexpms;
-0062     
-0063     <span class="comment">% get surface grid parameters</span>
-0064     ocean.lon       = TM_boxes.Xboxnom(ocean.Ib);
-0065     ocean.lat       = TM_boxes.Yboxnom(ocean.Ib);
-0066     ocean.ix        = TM_boxes.ixBox(ocean.Ib);
-0067     ocean.iy        = TM_boxes.iyBox(ocean.Ib);
-0068     ocean.iz        = TM_boxes.izBox(ocean.Ib);
-0069     ocean.volume    = TM_boxes.volb(ocean.Ib);
-0070     ocean.iface     = TM_boxes.boxfacenum(ocean.Ib);
-0071     <span class="comment">% temperatures are surface temperatures</span>
-0072     load(<span class="string">'~/GitHub/EPMD/GUD_forcing/Theta.mat'</span>);
-0073     ocean.theta         = theta(ocean.Ib,:);
-0074     ocean.ann_theta     = mean(theta(ocean.Ib,:),2);
-0075     
-0076     data                = TM_basin_mask.basin_mask;
-0077     ocean.basins        = <a href="../../EPMD/EPMD_functions/gcmfaces2vector.html" class="code" title="function vctr = gcmfaces2vector(data,TM_boxes)">gcmfaces2vector</a>(data,TM_boxes);
-0078     ocean.basin_names    = TM_basin_mask.basin_names;
-0079 
-0080     <span class="comment">% Pre-process TMs</span>
-0081     disp(<span class="string">'Correcting TM for mass conservation'</span>)
-0082     A_conc = <a href="no_negatives.html" class="code" title="function [Aex] = no_negatives(TM,volb)">no_negatives</a>(Aexpms,volb);
-0083 
-0084     
-0085 <span class="comment">%%</span>
-0086 
-0087     
-0088     <span class="keyword">if</span> strmatch(depth_scheme,<span class="string">'surface_transport'</span>)
-0089         disp(<span class="string">'Generating surface-only transport matrix'</span>)
-0090         disp(<span class="string">' - fluxes originating in interior are set to zero'</span>)
-0091         disp(<span class="string">' - fluxes from surface to interior are kept at source (i.e. put on diagonal)'</span>)
-0092         
-0093         <span class="comment">% convert from concentration flux to mass flux (* sink volume) [nb x nb]</span>
-0094         [isnk,isrc,val]=find(A_conc);
-0095         val=val.*volb(isnk);
-0096         A_mass=sparse(isnk,isrc,val,size(A_conc,1),size(A_conc,2));
-0097         
-0098         <span class="comment">% Fluxes within surface layer</span>
-0099         B_mass  = A_mass(ocean.Ib,ocean.Ib); 
-0100         <span class="comment">% Downwelling fluxes (Ib to Ii) should loop back into surface (i.e. trapped particles)</span>
-0101         Bdn     = A_mass(ocean.Ii,ocean.Ib); 
-0102         <span class="comment">% sum of downwelling fluxes out of each surface cell (prevented from leaving)</span>
-0103         Fdn     = sum(Bdn,1); 
+0060     
+0061     <span class="comment">% get surface grid parameters</span>
+0062     ocean.lon       = TM_boxes.Xboxnom(ocean.Ib);
+0063     ocean.lat       = TM_boxes.Yboxnom(ocean.Ib);
+0064     ocean.ix        = TM_boxes.ixBox(ocean.Ib);
+0065     ocean.iy        = TM_boxes.iyBox(ocean.Ib);
+0066     ocean.iz        = TM_boxes.izBox(ocean.Ib);
+0067     ocean.volume    = TM_boxes.volb(ocean.Ib);
+0068     ocean.iface     = TM_boxes.boxfacenum(ocean.Ib);
+0069     <span class="comment">% temperatures are surface temperatures</span>
+0070     load(<span class="string">'~/GitHub/EPMD/GUD_forcing/Theta.mat'</span>);
+0071     ocean.theta         = theta(ocean.Ib,:);
+0072     ocean.ann_theta     = mean(theta(ocean.Ib,:),2);
+0073     
+0074     data                = TM_basin_mask.basin_mask;
+0075     ocean.basins        = <a href="../../EPMD/EPMD_functions/gcmfaces2vector.html" class="code" title="function vctr = gcmfaces2vector(data,TM_boxes)">gcmfaces2vector</a>(data,TM_boxes);
+0076     ocean.basin_names    = TM_basin_mask.basin_names;
+0077 
+0078     <span class="comment">% gather transport matrices (explicit and implicit)</span>
+0079     Aexpms = TM_matrices.Aexpms;
+0080     
+0081 <span class="comment">%%</span>
+0082 
+0083     
+0084     <span class="keyword">if</span> strmatch(depth_scheme,{<span class="string">'surface_transport'</span>,<span class="string">'surface_depth_integ'</span>})
+0085         disp(<span class="string">'Generating surface-only transport matrix'</span>)
+0086         disp(<span class="string">' - fluxes originating in interior are set to zero'</span>)
+0087         disp(<span class="string">' - fluxes from surface to interior are kept at source (i.e. put on diagonal)'</span>)
+0088         disp(<span class="string">' - implicit matrix can be ignored as it contains no horizontal fluxes'</span>)
+0089 
+0090         <span class="comment">% convert from concentration flux to mass flux (* sink volume) [nb x nb]</span>
+0091         [isnk,isrc,val]=find(Aexpms);
+0092         val=val.*volb(isnk);
+0093         A_mass=sparse(isnk,isrc,val,size(Aexpms,1),size(Aexpms,2));
+0094         
+0095         <span class="comment">% Fluxes within surface layer</span>
+0096         B_mass  = A_mass(ocean.Ib,ocean.Ib);
+0097         <span class="comment">% Downwelling fluxes (Ib to Ii) should loop back into surface (i.e. trapped particles)</span>
+0098         Bdn     = A_mass(ocean.Ii,ocean.Ib);
+0099         <span class="comment">% sum of downwelling fluxes out of each surface cell (prevented from leaving)</span>
+0100         Fdn     = sum(Bdn,1);
+0101         
+0102         I       = speye(size(B_mass));
+0103         dindx   = find(I); <span class="comment">% get index for diagonal</span>
 0104         
-0105         I       = speye(size(B_mass));
-0106         dindx   = find(speye(size(B_mass))); <span class="comment">% get index for diagonal</span>
-0107         
-0108         <span class="comment">% Generate new surface-only matrix</span>
-0109         B_mass(dindx) = B_mass(dindx) + Fdn'; 
-0110         
-0111         <span class="comment">% get volume of surface grid boxes to convert back to concentration flux</span>
-0112         ocean.volume=volb(ocean.Ib);
-0113         
-0114         <span class="comment">% convert from concentration flux to mass flux (* sink volume) [nb x nb]</span>
-0115         [isnk,isrc,val]=find(B_mass);
-0116         val=val./ocean.volume(isnk);
-0117         B_conc=sparse(isnk,isrc,val,size(B_mass,1),size(B_mass,2));
-0118         
-0119     <span class="keyword">elseif</span> strmatch(depth_scheme,<span class="string">'surface_depth_integ'</span>)
-0120         disp(<span class="string">'Generating surface-only transport matrix with depth-integrated abundance'</span>)
-0121         disp(<span class="string">' - fluxes originating in interior are set to zero'</span>)
-0122         disp(<span class="string">' - fluxes from surface to interior are kept at source (i.e. put on diagonal)'</span>)
-0123         
-0124         <span class="comment">% convert from concentration flux to mass flux (* sink volume) [nb x nb]</span>
-0125         [isnk,isrc,val]=find(A_conc);
-0126         val=val.*volb(isnk);
-0127         A_mass=sparse(isnk,isrc,val,size(A_conc,1),size(A_conc,2));
-0128         
-0129         <span class="comment">% Fluxes within surface layer</span>
-0130         B_mass  = A_mass(ocean.Ib,ocean.Ib); 
-0131         <span class="comment">% Downwelling fluxes (Ib to Ii) should loop back into surface (i.e. trapped particles)</span>
-0132         Bdn     = A_mass(ocean.Ii,ocean.Ib); 
-0133         <span class="comment">% sum of downwelling fluxes out of each surface cell (prevented from leaving)</span>
-0134         Fdn     = sum(Bdn,1); 
-0135         
-0136         I       = speye(size(B_mass));
-0137         dindx   = find(speye(size(B_mass))); <span class="comment">% get index for diagonal</span>
-0138         
-0139         <span class="comment">% Generate new surface-only matrix</span>
-0140         B_mass(dindx) = B_mass(dindx) + Fdn'; 
-0141         
-0142         <span class="comment">% get volume of surface grid boxes to convert back to concentration flux</span>
-0143         ocean.volume=volb(ocean.Ib);
-0144         
-0145         <span class="comment">% convert from concentration flux to mass flux (* sink volume) [nb x nb]</span>
-0146         [isnk,isrc,val]=find(B_mass);
-0147         val=val./ocean.volume(isnk);
-0148         B_conc=sparse(isnk,isrc,val,size(B_mass,1),size(B_mass,2));
-0149         
-0150         
-0151         <span class="comment">% get index for unique [x,y] locations</span>
-0152         [~,ia,ic] = unique([TM_boxes.Xboxnom TM_boxes.Yboxnom],<span class="string">'rows'</span>,<span class="string">'stable'</span>);
-0153         <span class="comment">% Create sparse mapping matrix [60646,2406992]</span>
-0154         <span class="comment">% This maps all fluxes with a non-surface component to within the surface</span>
-0155         <span class="comment">% Vertical fluxes with no horizontal component go on diagonal</span>
-0156         <span class="comment">% Any horizontal fluxes are mapped to off diagonal</span>
-0157         <span class="comment">% ones in each row correspond to spatial indices for one location</span>
-0158         <span class="comment">% e.g. location n has 50 depth levels, corresponding to index n1:n50</span>
-0159         <span class="comment">% so row n has ones in columns n1:n50</span>
-0160         M1=sparse(ic,1:size(ic,1),1,size(ia,1),size(ic,1));
-0161         M2=M1';    
-0162         <span class="comment">% Need to weight layers by fraction of column total biomass</span>
-0163         abundance       = max(cell_conc.*volb,1);   <span class="comment">% get cell abundance in grid boxes</span>
-0164         ann_abundance   = mean(abundance,2);        <span class="comment">% get annual mean abundance in grid boxes</span>
-0165         <span class="comment">% get volume of water columns to convert back to concentration flux</span>
-0166         ocean.abundance     = M1*abundance;         <span class="comment">% save water-column abundances</span>
-0167         ocean.ann_abundance = M1*ann_abundance;     <span class="comment">% save annual water-column abundances</span>
+0105         <span class="comment">% Generate new surface-only matrix</span>
+0106         divergent=true;
+0107         <span class="keyword">if</span> divergent <span class="comment">% divergent version</span>
+0108             B_mass(dindx) = B_mass(dindx) + Fdn';
+0109         <span class="keyword">else</span> <span class="comment">% mass-conservative version</span>
+0110             B_mass(dindx) = 0 - (sum(B_mass,2) - B_mass(dindx));
+0111         <span class="keyword">end</span>
+0112        
+0113         <span class="comment">% get volume of surface grid boxes to convert back to concentration flux</span>
+0114         ocean.volume=volb(ocean.Ib);
+0115         
+0116         <span class="comment">% convert from concentration flux to mass flux (* sink volume) [nb x nb]</span>
+0117         [isnk,isrc,val]=find(B_mass);
+0118         val=val./ocean.volume(isnk);
+0119         B=sparse(isnk,isrc,val,size(B_mass,1),size(B_mass,2));
+0120 
+0121         <span class="keyword">if</span> strmatch(depth_scheme,<span class="string">'surface_depth_integ'</span>)
+0122             disp(<span class="string">'Also save depth-integrated abundances'</span>)
+0123             
+0124             <span class="comment">% get index for unique [x,y] locations</span>
+0125             [~,ia,ic] = unique([TM_boxes.Xboxnom TM_boxes.Yboxnom],<span class="string">'rows'</span>,<span class="string">'stable'</span>);
+0126             <span class="comment">% Create sparse mapping matrix [60646,2406992]</span>
+0127             <span class="comment">% This maps all fluxes with a non-surface component to within the surface</span>
+0128             <span class="comment">% Vertical fluxes with no horizontal component go on diagonal</span>
+0129             <span class="comment">% Any horizontal fluxes are mapped to off diagonal</span>
+0130             <span class="comment">% ones in each row correspond to spatial indices for one location</span>
+0131             <span class="comment">% e.g. location n has 50 depth levels, corresponding to index n1:n50</span>
+0132             <span class="comment">% so row n has ones in columns n1:n50</span>
+0133             M1=sparse(ic,1:size(ic,1),1,size(ia,1),size(ic,1));
+0134             M2=M1';
+0135             <span class="comment">% Need to weight layers by fraction of column total biomass</span>
+0136             abundance       = max(cell_conc.*volb,1);   <span class="comment">% get cell abundance in grid boxes</span>
+0137             ann_abundance   = mean(abundance,2);        <span class="comment">% get annual mean abundance in grid boxes</span>
+0138             <span class="comment">% get volume of water columns to convert back to concentration flux</span>
+0139             ocean.abundance     = M1*abundance;         <span class="comment">% save water-column abundances</span>
+0140             ocean.ann_abundance = M1*ann_abundance;     <span class="comment">% save annual water-column abundances</span>
+0141         <span class="keyword">end</span>
+0142     <span class="keyword">elseif</span> strmatch(depth_scheme,<span class="string">'alldepths'</span>)
+0143         disp(<span class="string">'Generating depth-integrated transport matrix'</span>)
+0144         disp(<span class="string">' - all horizontal fluxes are mapped into a single layer'</span>)
+0145         disp(<span class="string">' - implicit matrix can be ignored as it contains no horizontal fluxes'</span>)
+0146         <span class="comment">% get index for unique [x,y] locations</span>
+0147         [~,ia,ic] = unique([TM_boxes.Xboxnom TM_boxes.Yboxnom],<span class="string">'rows'</span>,<span class="string">'stable'</span>);
+0148 
+0149         <span class="comment">% Create sparse mapping matrix [60646,2406992]</span>
+0150         <span class="comment">% This maps all fluxes with a non-surface component to within the surface</span>
+0151         <span class="comment">% Vertical fluxes with no horizontal component go on diagonal</span>
+0152         <span class="comment">% Any horizontal fluxes are mapped to off diagonal</span>
+0153         <span class="comment">% ones in each row correspond to spatial indices for one location</span>
+0154         <span class="comment">% e.g. location n has 50 depth levels, corresponding to index n1:n50</span>
+0155         <span class="comment">% so row n has ones in columns n1:n50</span>
+0156         M1=sparse(ic,1:size(ic,1),1,size(ia,1),size(ic,1));
+0157         M2=M1';
+0158     
+0159         <span class="comment">% Need to weight layers by fraction of column total biomass</span>
+0160         abundance       = max(cell_conc.*volb,1);   <span class="comment">% get cell abundance in grid boxes</span>
+0161         ann_abundance   = mean(abundance,2);        <span class="comment">% get annual mean abundance in grid boxes</span>
+0162         int_abundance   = M1*ann_abundance;
+0163         
+0164         <span class="comment">% convert from concentration flux to cell flux (* sink abundance) [nb x nb]</span>
+0165         [isnk,isrc,val]=find(Aexpms);
+0166         val=val.*ann_abundance(isnk); <span class="comment">% scaled by volume and cell conc</span>
+0167         A_cell=sparse(isnk,isrc,val,size(Aexpms,1),size(Aexpms,2));
 0168         
-0169     <span class="keyword">elseif</span> strmatch(depth_scheme,<span class="string">'alldepths'</span>)
-0170         disp(<span class="string">'Generating depth-integrated transport matrix'</span>)
-0171         disp(<span class="string">' - All horizontal fluxes are mapped into a single layer'</span>)
-0172         <span class="comment">% get index for unique [x,y] locations</span>
-0173         [~,ia,ic] = unique([TM_boxes.Xboxnom TM_boxes.Yboxnom],<span class="string">'rows'</span>,<span class="string">'stable'</span>);
-0174 
-0175         <span class="comment">% Create sparse mapping matrix [60646,2406992]</span>
-0176         <span class="comment">% This maps all fluxes with a non-surface component to within the surface</span>
-0177         <span class="comment">% Vertical fluxes with no horizontal component go on diagonal</span>
-0178         <span class="comment">% Any horizontal fluxes are mapped to off diagonal</span>
-0179         <span class="comment">% ones in each row correspond to spatial indices for one location</span>
-0180         <span class="comment">% e.g. location n has 50 depth levels, corresponding to index n1:n50</span>
-0181         <span class="comment">% so row n has ones in columns n1:n50</span>
-0182         M1=sparse(ic,1:size(ic,1),1,size(ia,1),size(ic,1));
-0183         M2=M1';
-0184     
-0185         <span class="comment">% Need to weight layers by fraction of column total biomass</span>
-0186         abundance       = max(cell_conc.*volb,1);   <span class="comment">% get cell abundance in grid boxes</span>
-0187         ann_abundance   = mean(abundance,2);        <span class="comment">% get annual mean abundance in grid boxes</span>
-0188         int_abundance   = M1*ann_abundance;
-0189         
-0190         <span class="comment">% convert from concentration flux to cell flux (* sink abundance) [nb x nb]</span>
-0191         [isnk,isrc,val]=find(A_conc);
-0192         val=val.*ann_abundance(isnk); <span class="comment">% scaled by volume and cell conc</span>
-0193         A_cell=sparse(isnk,isrc,val,size(A_conc,1),size(A_conc,2));
-0194         
-0195         <span class="comment">% map from full grid to single layer</span>
-0196         B_cell = M1*A_cell*M2;
-0197         
-0198         <span class="comment">% convert from cell flux to mass flux (* sink volume) [nb x nb]</span>
-0199         [isnk,isrc,val]=find(B_cell);
-0200         val=val./int_abundance(isnk);
-0201         B_conc=sparse(isnk,isrc,val,size(B_cell,1),size(B_cell,2));
-0202         
-0203         <span class="comment">% get volume of water columns to convert back to concentration flux</span>
-0204         ocean.volume        = M1*TM_boxes.volb;
-0205         ocean.abundance     = M1*abundance;         <span class="comment">% save water-column abundances</span>
-0206         ocean.ann_abundance = M1*ann_abundance;     <span class="comment">% save annual water-column abundances</span>
-0207     <span class="keyword">end</span>
-0208 
-0209     B           =B_conc.*ocean.dt_sec;<span class="comment">%.*1e-3;</span>
-0210     I           =speye(size(B));
-0211     ocean.B     =B+I;
-0212 
-0213     <span class="comment">% remove any remaining negative fluxes</span>
-0214     ocean.B(ocean.B&lt;0)=0;
-0215 
-0216 
-0217 
-0218 
-0219 <span class="keyword">end</span>
-0220 
-0221 
-0222 
-0223 
-0224 
-0225 
-0226 
-0227 
-0228 
-0229 
-0230 
-0231</pre></div>
-<hr><address>Generated on Tue 10-Mar-2020 11:15:48 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0169         <span class="comment">% map from full grid to single layer</span>
+0170         B_cell = M1*A_cell*M2;
+0171         
+0172         <span class="comment">% convert from cell flux to mass flux (* sink volume) [nb x nb]</span>
+0173         [isnk,isrc,val]=find(B_cell);
+0174         val=val./int_abundance(isnk);
+0175         B=sparse(isnk,isrc,val,size(B_cell,1),size(B_cell,2));
+0176             
+0177 <span class="comment">%         % correct mass conservation</span>
+0178 <span class="comment">%         B = conserve_mass(B,ocean.volume);</span>
+0179         
+0180         <span class="comment">% get volume of water columns to convert back to concentration flux</span>
+0181         ocean.volume        = M1*TM_boxes.volb;
+0182         ocean.abundance     = M1*abundance;         <span class="comment">% save water-column abundances</span>
+0183         ocean.ann_abundance = M1*ann_abundance;     <span class="comment">% save annual water-column abundances</span>
+0184 
+0185     <span class="keyword">end</span>
+0186     
+0187     <span class="comment">% correct negatives</span>
+0188     B = <a href="no_negatives.html" class="code" title="function [Aex] = no_negatives(TM,volb)">no_negatives</a>(B,ocean.volume);
+0189     
+0190     <span class="comment">% Timestep</span>
+0191     B = B.*ocean.dt_sec;
+0192     
+0193     <span class="comment">% Add identity matrix to get discrete time form</span>
+0194     ocean.B = B + speye(size(B));
+0195 
+0196 <span class="keyword">end</span>
+0197 
+0198 
+0199 
+0200 
+0201</pre></div>
+<hr><address>Generated on Fri 05-Mar-2021 14:26:08 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

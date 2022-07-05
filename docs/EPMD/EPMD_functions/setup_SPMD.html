@@ -23,7 +23,7 @@
 <div class="box"><strong>Initialise SPMD variables...</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]= setup_SPMD(run_options,x) </strong></div>
+<div class="box"><strong>function [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]= setup_SPMD(run_options,x) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> Initialise SPMD variables...
@@ -47,7 +47,7 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [T_opt T_optD X XD codistr indx nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]</a><span class="keyword">...</span>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]</a><span class="keyword">...</span>
 0002           = setup_SPMD(run_options,x)
 0003 <span class="comment">% Initialise SPMD variables...</span>
 0004 <span class="comment">%</span>
@@ -93,42 +93,42 @@ This function is called by:
 0044         <span class="comment">% replicate mutation array along diagonal according to size of block</span>
 0045         nrep=idiv(labindex)./nphen;
 0046         mutmat=kron(eye(nrep),mutmat1); <span class="comment">% order is important (identity first)</span>
-0047     <span class="keyword">end</span>
-0048 
-0049     <span class="comment">% create index to assign 'x' to workers</span>
-0050     codistr = codistributor1d(2, idiv, [nxr nxc]);
-0051 
-0052     <span class="comment">% assign 'x' to workers according to codistr</span>
-0053     xD=codistributed(x,codistr);
-0054     XD=xD.*0; <span class="comment">% also initialise X</span>
-0055     t_occD = XD; <span class="comment">% and t_occupied</span>
-0056 
-0057     T_optD=codistributed(T_opt,codistr); <span class="comment">% distribute</span>
-0058     
-0059     <span class="comment">% indexing needs to be done manually</span>
-0060     <span class="comment">% https://uk.mathworks.com/help/parallel-computing/codistributed.colon.html</span>
-0061     indx=(ii(labindex)+1):(ii(labindex+1));
-0062     
-0063     tseries_xD  = codistributed(zeros(n_tseries_loc,nxc,nday),codistr);
+0047     <span class="keyword">else</span>
+0048         mutmat = []; <span class="comment">% set as empty array</span>
+0049     <span class="keyword">end</span>
+0050 
+0051     <span class="comment">% create index to assign 'x' to workers</span>
+0052     codistr = codistributor1d(2, idiv, [nxr nxc]);
+0053 
+0054     <span class="comment">% assign 'x' to workers according to codistr</span>
+0055     xD=codistributed(x,codistr);
+0056     XD=xD.*0; <span class="comment">% also initialise X</span>
+0057     t_occD = XD; <span class="comment">% and t_occupied</span>
+0058 
+0059     T_optD=codistributed(T_opt,codistr); <span class="comment">% distribute</span>
+0060     
+0061     <span class="comment">% indexing needs to be done manually</span>
+0062     <span class="comment">% https://uk.mathworks.com/help/parallel-computing/codistributed.colon.html</span>
+0063     indx=(ii(labindex)+1):(ii(labindex+1));
 0064     
-0065     xD          = full(xD);
-0066     XD          = full(XD);
-0067     T_optD      = full(T_optD);
-0068     tseries_xD  = full(tseries_xD);
-0069     t_occD      = full(t_occD);
-0070     t_occupied  = full(t_occupied);
-0071     
-0072     <span class="comment">% Initialise local arrays</span>
-0073     x      = getLocalPart(xD);
-0074     X      = getLocalPart(XD);
-0075     T_opt  = getLocalPart(T_optD);
-0076     tser_x = getLocalPart(tseries_xD);
-0077     t_occ  = getLocalPart(t_occD);
-0078     nxc    = size(x,2);
-0079     
-0080 <span class="keyword">end</span>
-0081 
-0082 
+0065     tseries_xD  = codistributed(zeros(n_tseries_loc,nxc,nday),codistr);
+0066     
+0067     xD          = full(xD);
+0068     XD          = full(XD);
+0069     T_optD      = full(T_optD);
+0070     tseries_xD  = full(tseries_xD);
+0071     t_occD      = full(t_occD);
+0072     t_occupied  = full(t_occupied);
+0073     
+0074     <span class="comment">% Initialise local arrays</span>
+0075     x      = getLocalPart(xD);
+0076     X      = getLocalPart(XD);
+0077     T_opt  = getLocalPart(T_optD);
+0078     tser_x = getLocalPart(tseries_xD);
+0079     t_occ  = getLocalPart(t_occD);
+0080     nxc    = size(x,2);
+0081     
+0082 <span class="keyword">end</span>
 0083 
 0084 
 0085 
@@ -137,8 +137,10 @@ This function is called by:
 0088 
 0089 
 0090 
-0091     
-0092</pre></div>
-<hr><address>Generated on Tue 10-Mar-2020 11:15:48 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0091 
+0092 
+0093     
+0094</pre></div>
+<hr><address>Generated on Fri 05-Mar-2021 14:26:08 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

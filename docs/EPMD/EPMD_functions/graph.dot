@@ -10,6 +10,7 @@ digraph m2html {
 
   EPMD_spmd [URL="EPMD_spmd.html"];
   allocate_ocean [URL="allocate_ocean.html"];
+  default_run_options [URL="default_run_options.html"];
   gcmfaces2vector [URL="gcmfaces2vector.html"];
   initialise_output [URL="initialise_output.html"];
   make_mutation_matrix [URL="make_mutation_matrix.html"];

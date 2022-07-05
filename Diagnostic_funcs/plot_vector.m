@@ -15,9 +15,9 @@ fld=vector2gcmfaces(x,ocean.iface,ocean.ix,ocean.iy,ocean.iz);
 
 [lon lat Xmap]=convert2pcol(mygrid.XC,mygrid.YC,fld);
 
-Xmap(Xmap==0)=NaN;
 
 if cscale=='log'
+    Xmap(Xmap==0)=NaN;
     Xmap=log10(Xmap);
 end
 
