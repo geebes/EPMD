@@ -18,7 +18,7 @@ default_run_options
 run_options.TM_scheme       = 'GUD_X01_weighted_transport'; % 'surface_transport', 'GUD_X01_surface_transport' or 'GUD_X01_weighted_transport', or similar
 run_options.seed_dist       = 'equal_nonadaptive';    % 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal'
 run_options.trajectory      = 'stochastic'; % 'stochastic' or 'deterministic'
-run_options.annual_cycle    = 'static';     % 'static' or 'seasonal'
+run_options.annual_cycle    = 'seasonal';     % 'static' or 'seasonal'
 run_options.seedseed        = 2;            % seed for global seeding sites
 
 % optional string to add to output filenames
@@ -29,13 +29,13 @@ run_options.suffix          = '';
 run_options.DARWIN_pop      = 'X01'; 
 
 run_options.save_data       = true;
-run_options.save_daily_data = true;
+run_options.save_daily_data = true; % Can lead to very large output files
 
-run_options.nyear           = 2;          
+run_options.nyear           = 5;          
 run_options.nday        	= 365;          
 
 % N.B. not applicable for neutral model
-run_options.nphen           = 10;           % number of phenotypes
+run_options.nphen           = 77;           % number of phenotypes
 run_options.w               = 6;           	% Niche breadth
 run_options.sigma_m         = 0.1;          % Mutation size
 

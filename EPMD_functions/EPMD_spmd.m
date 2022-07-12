@@ -65,6 +65,7 @@ for yr=1:run_options.nyear
                         + yr.*run_options.warming_rate;
 
     disp('Opening SPMD block')
+    tyear = tic;
     spmd(run_options.parp_size)
         tser_x  = zeros(n_tseries_loc,nxc,nday);
         if save_daily_data 
@@ -163,6 +164,7 @@ for yr=1:run_options.nyear
     end  % end spmd block (exiting to write data)
     disp('----------------------------------')
     disp('Closed SPMD block to write output data')
+    disp(['Year ' num2str(yr) ' evaluated in ' num2str(toc(tyear)) ' seconds.'])
 
     % Gather x data
     xG                       = gather(xD);
