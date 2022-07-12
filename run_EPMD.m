@@ -29,12 +29,13 @@ run_options.suffix          = '';
 run_options.DARWIN_pop      = 'X01'; 
 
 run_options.save_data       = true;
+run_options.save_daily_data = true;
 
-run_options.nyear           = 1;          
+run_options.nyear           = 2;          
 run_options.nday        	= 365;          
 
 % N.B. not applicable for neutral model
-run_options.nphen           = 77;           % number of phenotypes
+run_options.nphen           = 10;           % number of phenotypes
 run_options.w               = 6;           	% Niche breadth
 run_options.sigma_m         = 0.1;          % Mutation size
 

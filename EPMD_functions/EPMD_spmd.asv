@@ -31,11 +31,11 @@ switch run_options.solver
     case 'parallel'
         myCluster               = parcluster('local');
         run_options.parp_size   = myCluster.NumWorkers;
-        [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x daily_x tseries_xD daily_xD x xD] ...
+        [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x daily_x tseries_xD x xD] ...
             = setup_SPMD(run_options,x); % (Single Program Multiple Data)
     case 'serial'
         run_options.parp_size   = 1;
-        [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x daily_x tseries_xD daily_xD x xD] ...
+        [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x daily_x tseries_xD x xD] ...
             = setup_SPMD(run_options,x); % (Single Program Multiple Data)
         nxc                     = run_options.nxc;
         indx                    = 1:nxc;
@@ -142,7 +142,7 @@ for yr=1:run_options.nyear
             if save_data 
                 tser_x(:,:,dy) = full(x(site_indices,:));
             end
-            if save_daily_data && yr==run_options.nyear
+            if save_daily_data 
                 daily_x(:,:,dy) = full(x);
             end
             
@@ -153,12 +153,12 @@ for yr=1:run_options.nyear
         end % end day loops
    
         % put local data back in global codistributed array
-        xD(:,indx)             = x;
-        tseries_xD(:,indx,:)   = tser_x;
-        if save_daily_data  && yr==run_options.nyear
+        xD(:,indx)           = x;
+        tseries_xD(:,indx,:) = tser_x;
+        if save_daily_data 
             daily_xD(:,indx,:) = daily_x;
         end
-        t_occD(:,indx)         = t_occ;
+        t_occD(:,indx)       = t_occ;
         
     end  % end spmd block (exiting to write data)
     disp('----------------------------------')
@@ -167,15 +167,13 @@ for yr=1:run_options.nyear
     % Gather x data
     xG                       = gather(xD);
     tseries_xG               = gather(tseries_xD);
-    if save_daily_data  && yr==run_options.nyear
+    if save_daily_data 
         daily_xG             = gather(daily_xD);
-    else
-        daily_xG             = [];
     end
     run_options.t_occupied   = gather(t_occD);
     
     if run_options.save_data
-        [cmat] = write_output(yr,xG,tseries_xG,daily_xG,run_options,cmat);
+        [cmat] = write_output(yr,xG,tseries_xG,run_options,cmat);
         disp('----------------------------------')
     end
     

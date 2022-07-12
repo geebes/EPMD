@@ -46,9 +46,7 @@ function [cmat] = write_output(yr,x,tseries_x,daily_x,run_options,cmat)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % SAVE DAILY TIMESERIES DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        switch run_options.seed_dist
-            case {'selective_dispersal','nonadaptive_dispersal'}
-                % Do not write x time-series for huge selective_dispersal runs
+        
             otherwise
                 disp('Saving time-series ...')
                 cmat.tseries_x(yr,1)       = {[tseries_x]};
@@ -57,14 +55,9 @@ function [cmat] = write_output(yr,x,tseries_x,daily_x,run_options,cmat)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % SAVE COMPLETE DAILY DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        switch run_options.seed_dist
-            case {'selective_dispersal','nonadaptive_dispersal'}
-                % Do not write daily data for huge selective_dispersal runs
-            otherwise
-                if run_options.save_daily_data && ~isempty(daily_x)
-                    disp('Saving daily data at all locations for last year...')
-                    cmat.daily_x       = daily_x;
-                end
+        if run_options.save_daily_data && ~isempty(daily_x)
+                disp('Saving daily data at all locations for last year...')
+                cmat.daily_x       = daily_x;
         end
     end
 

@@ -63,6 +63,9 @@ function [cmat,run_options] = initialise_output(run_options,ocean)
         cmat.run_options =run_options;
         cmat.ocean       =ocean;        
         cmat.yrs_saved   = 0;
+        
+        % daily output data (last year only)
+        cmat.daily_x = [];
     else
         cmat=[];
     end

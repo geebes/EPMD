@@ -1,4 +1,4 @@
-function [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x tseries_xD x xD]...
+function [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x daily_x tseries_xD daily_xD x xD]...
           = setup_SPMD(run_options,x)
 % Initialise SPMD variables...
 % 
@@ -63,21 +63,24 @@ spmd(run_options.parp_size)
     indx=(ii(labindex)+1):(ii(labindex+1));
     
     tseries_xD  = codistributed(zeros(n_tseries_loc,nxc,nday),codistr);
+    daily_xD    = codistributed(zeros(nxr,nxc,nday),codistr);
     
     xD          = full(xD);
     XD          = full(XD);
     T_optD      = full(T_optD);
     tseries_xD  = full(tseries_xD);
+    daily_xD    = full(daily_xD);
     t_occD      = full(t_occD);
     t_occupied  = full(t_occupied);
     
     % Initialise local arrays
-    x      = getLocalPart(xD);
-    X      = getLocalPart(XD);
-    T_opt  = getLocalPart(T_optD);
-    tser_x = getLocalPart(tseries_xD);
-    t_occ  = getLocalPart(t_occD);
-    nxc    = size(x,2);
+    x       = getLocalPart(xD);
+    X       = getLocalPart(XD);
+    T_opt   = getLocalPart(T_optD);
+    tser_x  = getLocalPart(tseries_xD);
+    daily_x = getLocalPart(daily_xD);
+    t_occ   = getLocalPart(t_occD);
+    nxc     = size(x,2);
     
 end
 
