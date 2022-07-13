@@ -26,3 +26,5 @@ run_options.sigma_m         = 0.1;          % Mutation size
 
 % climate change scenario
 run_options.warming_rate    = 0; % degrees per year
+
+run_options.dispersal       = true; % Plankton transported if true

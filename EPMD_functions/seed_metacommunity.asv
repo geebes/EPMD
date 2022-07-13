@@ -11,9 +11,10 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
 %  Copyright (C) 2020 Ben Ward <b.a.ward@soton.ac.uk>
 
     % Load carrying capacity
-    if startsWith(run_options.TM_scheme,'GUD_X')
+    if startsWith(run_options.TM_scheme,'GUD')
         % Predefined if using depth-integrated abundance
         run_options.PCapacity = ocean.abundance;
+        xloc = strfind(run_options.TM_scheme,'GUD_X')
         run_options.DARWIN_pop = run_options.TM_scheme(5:7);
     else
         % Abundance needs to be specified if using surface transport

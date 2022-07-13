@@ -69,6 +69,11 @@ K = dsearchn([ocean.lon ocean.lat],[xs(K),ys(K)]);
 % place in structural array
 ocean.sample_points = K;
 
+% Option to turn off dispersal
+if ~run_options.dispersal
+    ocean.B = speye(size(ocean.B));
+end
+
 disp(['Placed ' num2str(numel(K)) ' seed sites'])
 
 

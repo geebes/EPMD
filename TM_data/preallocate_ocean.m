@@ -19,8 +19,7 @@ load(['~/GitHub/EPMD/GUD_forcing/' specID '_abundance.mat']);
 if strmatch(depth_scheme,'alldepths')
     TM_filename = ['pre-rolled/' specID '_weighted_transport.mat'];
 elseif strmatch(depth_scheme,'surface_depth_integ')
-    TM_filename = ['pre-rolled/' specID '_surface_transport.mat'];
-    
+    TM_filename = ['pre-rolled/' specID '_surface_transport.mat'];    
 elseif strmatch(depth_scheme,'surface_transport')
     TM_filename = ['pre-rolled/surface_transport.mat'];
 end
