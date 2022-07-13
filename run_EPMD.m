@@ -42,7 +42,7 @@ run_options.sigma_m         = 0.1;          % Mutation size
 % global warming run (zero for standard run)
 run_options.warming_rate    = 0/100; % degrees per year
 
-run_options.dispersal       = false;
+run_options.dispersal       = true;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Run EPMD_spmd
 EPMD_spmd(run_options)

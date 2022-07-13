@@ -25,7 +25,7 @@ function [cmat,run_options] = initialise_output(run_options,ocean)
     % generate output filename
     if run_options.save_data
         
-        if run_options.dispersal && strmatch(run_options.TM_scheme,'surface_transport')
+        if run_options.dispersal && strcmp(run_options.TM_scheme,'surface_transport')
             transport_scheme = ['GUD_' run_options.DARWIN_pop '_surface_transport'];
         elseif run_options.dispersal
             transport_scheme = run_options.TM_scheme;
