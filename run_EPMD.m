@@ -16,9 +16,9 @@ default_run_options
 
 % set options
 run_options.TM_scheme       = 'GUD_X01_weighted_transport'; % 'surface_transport', 'GUD_X01_surface_transport' or 'GUD_X01_weighted_transport', or similar
-run_options.seed_dist       = 'equal_nonadaptive';    % 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal', 'equal_nonadaptive'
+run_options.seed_dist       = 'nonadaptive_dispersal';    % 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal', 'equal_nonadaptive'
 run_options.trajectory      = 'stochastic'; % 'stochastic' or 'deterministic'
-run_options.annual_cycle    = 'seasonal';     % 'static' or 'seasonal'
+run_options.annual_cycle    = 'static';     % 'static' or 'seasonal'
 run_options.seedseed        = 2;            % seed for global seeding sites
 
 % optional string to add to output filenames
@@ -29,9 +29,9 @@ run_options.suffix          = '';
 run_options.DARWIN_pop      = 'X01'; 
 
 run_options.save_data       = true;
-run_options.save_daily_data = true; % Can lead to very large output files
+run_options.save_daily_data = false; % Can lead to very large output files
 
-run_options.nyear           = 5;          
+run_options.nyear           = 100;          
 run_options.nday        	= 365;          
 
 % N.B. not applicable for neutral model
@@ -46,3 +46,15 @@ run_options.dispersal       = true;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Run EPMD_spmd
 EPMD_spmd(run_options)
+
+
+%                      'neutral_stochastic_static_GUD_X01_surface_transport',...
+%                      'neutral_stochastic_seasonal_GUD_X01_surface_transport',...
+%                      'neutral_stochastic_static_GUD_X01_weighted_transport',...
+%                      'neutral_stochastic_seasonal_GUD_X01_weighted_transport',...
+%        'nonadaptive_dispersal_stochastic_static_GUD_X01_weighted_transport',...
+%        'nonadaptive_dispersal_stochastic_seasonal_GUD_X01_weighted_transport',...
+%          'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_0.01',...
+%          'selective_dispersal_stochastic_seasonal_GUD_X01_weighted_transport_0.01_slow',...
+%          'selective_dispersal_stochastic_static_GUD_X01_weighted_transport_0.1',...
+%          'selective_dispersal_stochastic_seasonal_GUD_X01_weighted_transport_0.1_slow'};

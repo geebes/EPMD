@@ -63,13 +63,17 @@ spmd(run_options.parp_size)
     indx=(ii(labindex)+1):(ii(labindex+1));
     
     tseries_xD  = codistributed(zeros(n_tseries_loc,nxc,nday),codistr);
-    daily_xD    = codistributed(zeros(nxr,nxc,nday),codistr);
+    if run_options.save_daily_data
+        daily_xD    = codistributed(zeros(nxr,nxc,nday),codistr);
+    end
     
     xD          = full(xD);
     XD          = full(XD);
     T_optD      = full(T_optD);
     tseries_xD  = full(tseries_xD);
-    daily_xD    = full(daily_xD);
+    if run_options.save_daily_data
+        daily_xD    = full(daily_xD);
+    end
     t_occD      = full(t_occD);
     t_occupied  = full(t_occupied);
     
@@ -78,15 +82,19 @@ spmd(run_options.parp_size)
     X       = getLocalPart(XD);
     T_opt   = getLocalPart(T_optD);
     tser_x  = getLocalPart(tseries_xD);
-    daily_x = getLocalPart(daily_xD);
+    if run_options.save_daily_data
+        daily_x = getLocalPart(daily_xD);
+    end
     t_occ   = getLocalPart(t_occD);
     nxc     = size(x,2);
     
 end
 
 
-
-
+if ~run_options.save_daily_data
+    daily_xD = [];
+    daily_x  = [];
+end
 
 
 
