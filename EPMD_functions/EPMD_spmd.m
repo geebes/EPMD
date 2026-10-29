@@ -26,20 +26,22 @@ disp('Set up initial seed populations')
 disp('Initialise output files')
 [cmat,run_options] = initialise_output(run_options,ocean);
 
-% setup Serial or Parallel 
+% Set the number of parallel workers.
 switch run_options.solver
     case 'parallel'
-        myCluster               = parcluster('local');
-        run_options.parp_size   = myCluster.NumWorkers;
-        [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x daily_x tseries_xD daily_xD x xD] ...
-            = setup_SPMD(run_options,x); % (Single Program Multiple Data)
+        pool = gcp('nocreate');
+        if isempty(pool)
+            run_options.parp_size = parcluster('local').NumWorkers;
+        else
+            run_options.parp_size = pool.NumWorkers;
+        end
     case 'serial'
-        run_options.parp_size   = 1;
-        [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x daily_x tseries_xD daily_xD x xD] ...
-            = setup_SPMD(run_options,x); % (Single Program Multiple Data)
-        nxc                     = run_options.nxc;
-        indx                    = 1:nxc;
+        run_options.parp_size = 1;
 end
+
+% Distribute lineage blocks without codistributed arrays.
+[x,T_opt,mutmat,indx,nxc,t_occ,run_options] = ...
+    setup_SPMD(run_options,x);
 
 %% Extract data from structural arrays for use inside SPMD block
 nday                = run_options.nday;
@@ -152,29 +154,44 @@ for yr=1:run_options.nyear
             end
 
         end % end day loops
-   
-        % put local data back in global codistributed array
-        xD(:,indx)             = x;
-        tseries_xD(:,indx,:)   = tser_x;
-        if save_daily_data  && yr==run_options.nyear
-            daily_xD(:,indx,:) = daily_x;
-        end
-        t_occD(:,indx)         = t_occ;
+
         
     end  % end spmd block (exiting to write data)
     disp('----------------------------------')
     disp('Closed SPMD block to write output data')
     disp(['Year ' num2str(yr) ' evaluated in ' num2str(toc(tyear)) ' seconds.'])
 
-    % Gather x data
-    xG                       = gather(xD);
-    tseries_xG               = gather(tseries_xD);
-    if save_daily_data  && yr==run_options.nyear
-        daily_xG             = gather(daily_xD);
+    % Reconstruct global arrays from worker-owned lineage blocks.
+    xG = zeros(nxr,run_options.nxc);
+
+    tseries_xG = zeros(n_tseries_loc,run_options.nxc,nday);
+
+    run_options.t_occupied = zeros(nxr,run_options.nxc);
+
+    if save_daily_data && yr==run_options.nyear
+        daily_xG = zeros(nxr,run_options.nxc,nday);
     else
-        daily_xG             = [];
+        daily_xG = [];
     end
-    run_options.t_occupied   = gather(t_occD);
+
+    % Collect each worker's populations.
+    for worker = 1:run_options.parp_size
+
+        ids = indx{worker};
+
+        xG(:,ids) = x{worker};
+
+        run_options.t_occupied(:,ids) = t_occ{worker};
+
+        if save_data
+            tseries_xG(:,ids,:) = tser_x{worker};
+        end
+
+        if save_daily_data && yr==run_options.nyear
+            daily_xG(:,ids,:) = daily_x{worker};
+        end
+
+    end
     
     if run_options.save_data
         [cmat] = write_output(yr,xG,tseries_xG,daily_xG,run_options,cmat);

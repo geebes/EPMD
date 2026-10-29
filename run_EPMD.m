@@ -10,16 +10,18 @@ cd ~/GitHub/EPMD
 addpath(genpath('~/GitHub/EPMD'))
 addpath EPMD_functions
 
+dbstop if error
+
 default_run_options
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % set options
-run_options.TM_scheme       = 'GUD_X01_weighted_transport'; % 'surface_transport', 'GUD_X01_surface_transport' or 'GUD_X01_weighted_transport', or similar
-run_options.seed_dist       = 'nonadaptive_dispersal';    % 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal', 'equal_nonadaptive'
+run_options.TM_scheme       = 'surface_transport'; % 'surface_transport', 'GUD_X01_surface_transport' or 'GUD_X01_weighted_transport', or similar
+run_options.seed_dist       = 'neutral';    % 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal', 'equal_nonadaptive'
 run_options.trajectory      = 'stochastic'; % 'stochastic' or 'deterministic'
 run_options.annual_cycle    = 'static';     % 'static' or 'seasonal'
-run_options.seedseed        = 2;            % seed for global seeding sites
+run_options.seedseed        = 3;            % seed for global seeding sites
 
 % optional string to add to output filenames
 run_options.suffix          = '';
@@ -44,6 +46,21 @@ run_options.warming_rate    = 0/100; % degrees per year
 
 run_options.dispersal       = true;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Configure parallel pool.
+numWorkers = 10;
+
+pool = gcp('nocreate');
+
+if ~isempty(pool) && pool.NumWorkers ~= numWorkers
+    delete(pool);
+    pool = [];
+end
+
+if isempty(pool)
+    parpool('Processes',numWorkers);
+end
+
 % Run EPMD_spmd
 EPMD_spmd(run_options)
 

@@ -1,5 +1,4 @@
-function [T_opt T_optD X XD codistr indx mutmat nxc run_options t_occ t_occD t_occupied tser_x daily_x tseries_xD daily_xD x xD]...
-          = setup_SPMD(run_options,x)
+function [x,T_opt,mutmat,indx,nxc,t_occ,run_options] = setup_SPMD(run_options,xInitial)
 % Initialise SPMD variables...
 % 
 %  Syntax:
@@ -38,68 +37,29 @@ ii=[0 cumsum(idiv)];                   % sort ii as for idiv
 
 mutation = run_options.mutation;
 
+% Retain the global initial conditions before entering SPMD.
+ToptInitial = T_opt;
+toccInitial = t_occupied;
+
 spmd(run_options.parp_size)
-    
+
+    % Assign complete lineages to each worker.
+    indx = (ii(spmdIndex)+1):ii(spmdIndex+1);
+
+    % Number of populations assigned to this worker.
+    nxc = numel(indx);
+
+    % Extract the worker's population arrays.
+    x = full(xInitial(:,indx));
+    T_opt = full(ToptInitial(:,indx));
+    t_occ = full(toccInitial(:,indx));
+
+    % Construct the mutation matrix for local populations.
     if mutation
-        % replicate mutation array along diagonal according to size of block
-        nrep=idiv(labindex)./nphen;
-        mutmat=kron(eye(nrep),mutmat1); % order is important (identity first)
+        nrep = nxc/nphen;
+        mutmat = kron(eye(nrep),mutmat1);
     else
-        mutmat = []; % set as empty array
+        mutmat = [];
     end
 
-    % create index to assign 'x' to workers
-    codistr = codistributor1d(2, idiv, [nxr nxc]);
-
-    % assign 'x' to workers according to codistr
-    xD=codistributed(x,codistr);
-    XD=xD.*0; % also initialise X
-    t_occD = XD; % and t_occupied
-
-    T_optD=codistributed(T_opt,codistr); % distribute
-    
-    % indexing needs to be done manually 
-    % https://uk.mathworks.com/help/parallel-computing/codistributed.colon.html
-    indx=(ii(labindex)+1):(ii(labindex+1));
-    
-    tseries_xD  = codistributed(zeros(n_tseries_loc,nxc,nday),codistr);
-    if run_options.save_daily_data
-        daily_xD    = codistributed(zeros(nxr,nxc,nday),codistr);
-    end
-    
-    xD          = full(xD);
-    XD          = full(XD);
-    T_optD      = full(T_optD);
-    tseries_xD  = full(tseries_xD);
-    if run_options.save_daily_data
-        daily_xD    = full(daily_xD);
-    end
-    t_occD      = full(t_occD);
-    t_occupied  = full(t_occupied);
-    
-    % Initialise local arrays
-    x       = getLocalPart(xD);
-    X       = getLocalPart(XD);
-    T_opt   = getLocalPart(T_optD);
-    tser_x  = getLocalPart(tseries_xD);
-    if run_options.save_daily_data
-        daily_x = getLocalPart(daily_xD);
-    end
-    t_occ   = getLocalPart(t_occD);
-    nxc     = size(x,2);
-    
 end
-
-
-if ~run_options.save_daily_data
-    daily_xD = [];
-    daily_x  = [];
-end
-
-
-
-
-
-
-    
-    
