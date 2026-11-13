@@ -144,6 +144,69 @@ function [x,run_options,ocean] = seed_metacommunity(run_options,ocean)
             run_options.solver    = 'parallel';	% serial or parallel
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        case 'neutral_provinces'
+            % Initialise one neutral population per coarse ECCO province.
+            % Every native ECCO cell initially contains the population
+            % associated with its province, at relative abundance 1.
+
+            % Load province assignments in native TMM surface-cell order.
+            provinceFile = '/Users/baw1d17/GitHub/dLBM_support/data/generated/ecco_coarse_ocean_1972.mat';
+
+            Q = load(provinceFile,'region','nRegions');
+
+            % Number of native ECCO cells.
+            nCells = size(B,1);
+
+            % Number of populations.
+            nPopulations = Q.nRegions;
+
+            % Native cell to province mapping.
+            provinceID = double(Q.region(:));
+
+            % Validate mapping.
+            assert(nPopulations == 1972, ...
+                'Expected 1972 provinces.');
+
+            assert(numel(provinceID) == nCells, ...
+                'Province mapping does not match native ECCO grid size.');
+
+            assert(all(isfinite(provinceID)) && ...
+                   all(provinceID == floor(provinceID)) && ...
+                   all(provinceID >= 1) && ...
+                   all(provinceID <= nPopulations), ...
+                'Invalid province assignments.');
+
+            assert(numel(unique(provinceID)) == nPopulations, ...
+                'Some provinces contain no native ECCO cells.');
+
+            % Initialise one population per province.
+            % Rows = native ECCO cells.
+            % Columns = populations.
+            x = sparse((1:nCells)',provinceID,1,nCells,nPopulations);
+
+            % Verify that every cell initially contains one population.
+            assert(all(full(sum(x,2)) == 1), ...
+                'Invalid initial population abundances.');
+
+            % Configure neutral stochastic dynamics.
+            run_options.nlineages = nPopulations;
+            run_options.nphen = 1;
+            run_options.T_opt = zeros(1,nPopulations);
+            run_options.selection = false;
+            run_options.mutation = false;
+            run_options.rel_s = 1;
+            run_options.solver = 'parallel';
+
+            % First-arrival tracking is unnecessary for this experiment.
+            run_options.t_occupied = [];
+
+            % Preserve province assignments in the saved run options.
+            run_options.provinceID = provinceID;
+
+            fprintf('Initialised %d populations across %d native ECCO cells.\n', ...
+                nPopulations,nCells);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         case 'neutral'
             % set ecologically neutral types at seed locations
 

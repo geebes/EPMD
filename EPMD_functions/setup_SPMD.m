@@ -52,7 +52,13 @@ spmd(run_options.parp_size)
     % Extract the worker's population arrays.
     x = full(xInitial(:,indx));
     T_opt = full(ToptInitial(:,indx));
-    t_occ = full(toccInitial(:,indx));
+    
+    % Allocate first-arrival tracking only when required.
+    if isempty(toccInitial)
+        t_occ = [];
+    else
+        t_occ = full(toccInitial(:,indx));
+    end
 
     % Construct the mutation matrix for local populations.
     if mutation

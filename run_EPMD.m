@@ -10,17 +10,16 @@ cd ~/GitHub/EPMD
 addpath(genpath('~/GitHub/EPMD'))
 addpath EPMD_functions
 
-dbstop if error
+% dbstop if error
 
 default_run_options
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % set options
-run_options.TM_scheme       = 'surface_transport'; % 'surface_transport', 'GUD_X01_surface_transport' or 'GUD_X01_weighted_transport', or similar
-run_options.seed_dist       = 'neutral';    % 'preadapted', 'equal', 'lineages', 'neutral', 'selective_dispersal', 'equal_nonadaptive'
-run_options.trajectory      = 'stochastic'; % 'stochastic' or 'deterministic'
-run_options.annual_cycle    = 'static';     % 'static' or 'seasonal'
+run_options.TM_scheme       = 'GUD_X01_upper50m_buoyant_transport'; % 'surface_transport', 'GUD_X01_surface_transport' or 'GUD_X01_weighted_transport', or similar
+run_options.seed_dist       = 'neutral';    % 'neutral_provinces', 'neutral', 'selective_dispersal', etc.run_options.trajectory      = 'stochastic'; % 'stochastic' or 'deterministic'
+run_options.annual_cycle    = 'seasonal';     % 'static' or 'seasonal'
 run_options.seedseed        = 3;            % seed for global seeding sites
 
 % optional string to add to output filenames
@@ -33,7 +32,7 @@ run_options.DARWIN_pop      = 'X01';
 run_options.save_data       = true;
 run_options.save_daily_data = false; % Can lead to very large output files
 
-run_options.nyear           = 100;          
+run_options.nyear           = 10000;          
 run_options.nday        	= 365;          
 
 % N.B. not applicable for neutral model
@@ -44,6 +43,7 @@ run_options.sigma_m         = 0.1;          % Mutation size
 % global warming run (zero for standard run)
 run_options.warming_rate    = 0/100; % degrees per year
 
+run_options.ecology_on      = true;
 run_options.dispersal       = true;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

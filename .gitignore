@@ -3,6 +3,7 @@ Workspace/*
 Plotting/*
 Figures/*
 TM_data/full_matrix.mat
+TM_data/MITgcm_ECCO_v4
 *.m~
 *.txt.gz
 Article_plotfigs

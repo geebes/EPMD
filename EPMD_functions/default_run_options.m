@@ -15,6 +15,7 @@ run_options.DARWIN_pop      = 'X01';
 
 run_options.save_data       = true;
 run_options.save_daily_data = false;
+run_options = default_output_options(run_options);
 
 run_options.nyear           = 100;          
 run_options.nday        	= 365;          
@@ -28,3 +29,4 @@ run_options.sigma_m         = 0.1;          % Mutation size
 run_options.warming_rate    = 0; % degrees per year
 
 run_options.dispersal       = true; % Plankton transported if true
+run_options.ecology_on      = true;
