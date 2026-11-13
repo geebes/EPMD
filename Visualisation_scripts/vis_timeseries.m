@@ -7,7 +7,7 @@ clearvars
 
 %% Settings
 
-outputFile = '/Users/baw1d17/GitHub/EPMD/Output/neutral_stochastic_static_GUD_X01_surface_transport.mat';
+outputFile = '/Users/baw1d17/GitHub/EPMD/Output/neutral_provinces_stochastic_static_GUD_X01_surface_transport.mat';
 
 nSample = 1000;              % Number of native locations to compare
 detectionThreshold = 0;      % Minimum relative abundance for detection
@@ -31,7 +31,7 @@ nTimes = find(~cellfun('isempty',x),1,'last');
 nLocations = size(x_restart,1);
 
 % Number of explicitly tracked founding lineages.
-nLineages = size(x_restart,2)-1;
+nLineages = size(x_restart,2);
 
 fprintf('Loaded %d time slices, %d locations and %d tracked lineages.\n', ...
     nTimes,nLocations,nLineages);
